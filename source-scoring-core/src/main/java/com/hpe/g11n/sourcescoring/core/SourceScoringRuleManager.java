@@ -2,8 +2,10 @@ package com.hpe.g11n.sourcescoring.core;
 
 
 import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.hpe.g11n.sourcescoring.pojo.ReportData;
-import com.hpe.g11n.sourcescoring.utils.SourceScoringConfigUtil;
+import com.typesafe.config.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,33 +15,28 @@ import java.util.List;
 public class SourceScoringRuleManager implements ISourceScoring{
     private final Logger log = LoggerFactory.getLogger(getClass());
     List<IRule> checkRules;
+    @Inject
+    @Named("ruleClasses")
+    List<Class> rules;
+
+    @Inject
+    @Named("sourceScoringConfig")
+    Config config;
 
     public SourceScoringRuleManager() {
-    	checkRules = new ArrayList<>();
-        if(log.isDebugEnabled()){
-            log.debug("init ALL source scoring check Rules.");
-        }
-        List<Class> list = SourceScoringConfigUtil.ruleClassList();
-        for (Class c : list) {
-            try {
-            	checkRules.add(((IRule) c.newInstance()));
-            } catch (InstantiationException e) {
-                log.error("can't instance IRule:" + c, e);
-            } catch (IllegalAccessException e) {
-                log.error("can't instance IRule:" + c, e);
-            }
-        }
+
     }
-    public SourceScoringRuleManager(List<Integer> rulesIndex){
-        List<Class> list = SourceScoringConfigUtil.ruleClassList();
+    public void build(List<Integer> rulesChecked){
         checkRules = new ArrayList<>();
         if(log.isDebugEnabled()){
             log.debug("init Selected source scoring check rules.");
         }
-        rulesIndex.forEach( i -> {
-            Class c= list.get(i);
+        rulesChecked.forEach( i -> {
+            Class c= rules.get(i);
             try {
-            	checkRules.add(((IRule) c.newInstance()));
+                IRule rule= (IRule) c.newInstance();
+                rule.setConfig(config);
+                checkRules.add((rule));
             } catch (InstantiationException e) {
                 log.error("can't instance IRule:" + c, e);
             } catch (IllegalAccessException e) {
@@ -47,6 +44,7 @@ public class SourceScoringRuleManager implements ISourceScoring{
             }
         });
     }
+
 
     @Override
     public String check(String key, String value) {

@@ -1,8 +1,10 @@
 package com.hpe.g11n.sourcescoring.gui.control;
 
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.hpe.g11n.sourcescoring.gui.tasks.SourceScoringTask;
-import com.hpe.g11n.sourcescoring.utils.SourceScoringConfigUtil;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -47,6 +49,12 @@ public class MainViewController implements Initializable {
 
     private FileChooser fileChooser;
 
+    @Inject
+    @Named("ruleNames")
+    List<String> checkBoxs;
+
+    @Inject
+    SourceScoringTask task;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -56,7 +64,7 @@ public class MainViewController implements Initializable {
         if(fileChooser == null){
             fileChooser=new FileChooser();
         }
-        SourceScoringConfigUtil.checkBoxs().forEach(checkBoxValue -> {
+        checkBoxs.forEach(checkBoxValue -> {
             checkRules.getChildren().add(new CheckBox(checkBoxValue));
         });
     }
@@ -85,7 +93,7 @@ public class MainViewController implements Initializable {
                 rules.add(i);
             }
         }
-        SourceScoringTask task = new SourceScoringTask();
+
         progressBar.progressProperty().bind(task.progressProperty());
         task.setUp(sourceUrl.getText(), outputUrl.getText() + "/" + getFileName(sourceUrl.getText()) + ".csv", rules);
         Thread t =new Thread(task);

@@ -1,6 +1,7 @@
 package com.hpe.g11n.sourcescoring.gui.tasks;
 
 
+import com.google.inject.Inject;
 import com.hp.g11n.sdl.psl.interop.core.IPslSourceList;
 import com.hp.g11n.sdl.psl.interop.core.IPslSourceString;
 import com.hpe.g11n.sourcescoring.core.ISourceScoring;
@@ -19,6 +20,8 @@ public class SourceScoringTask extends Task<Void> {
 	private String source;
 	private String report;
 	private List<Integer> rulesCheckedIdx;
+	@Inject
+	ISourceScoring checkReport;
 
 	public void setUp(String sourceDir, String reportDir,List<Integer> rulesCheckedIdx) {
 		this.source = sourceDir;
@@ -32,9 +35,7 @@ public class SourceScoringTask extends Task<Void> {
 		// output
 		final FileWriter fw = new FileWriter(report);
 
-		//init
-		ISourceScoring checkReport = (rulesCheckedIdx == null || rulesCheckedIdx.size() < 1) ?
-				ISourceScoring.getInstance():ISourceScoring.getInstance(rulesCheckedIdx);
+
 		PassoloTemplate.build(source).process((p,sourceLists) -> {
 			int progress=0;
 			for (IPslSourceList sourceList : sourceLists.toList()) {

@@ -7,17 +7,21 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>source-scoring-cli</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>source-scoring-config</artifactId>
+    <packaging>jar</packaging>
 
-    <name>source-scoring-cli</name>
-    <modules>
-        <module>../source-scoring-config</module>
-    </modules>
+    <name>source-scoring-config</name>
 
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.hpe.g11n.sourcescoring</groupId>
+            <artifactId>source-scoring-core</artifactId>
+            <version>${source.scoring.version}</version>
+        </dependency>
+    </dependencies>
 </project>

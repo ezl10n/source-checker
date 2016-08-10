@@ -6,7 +6,7 @@ import com.hpe.g11n.sourcescoring.core.IRule;
 import com.hpe.g11n.sourcescoring.core.annotation.RuleData;
 import com.hpe.g11n.sourcescoring.pojo.ReportData;
 import com.hpe.g11n.sourcescoring.utils.Constant;
-import com.hpe.g11n.sourcescoring.utils.SourceScoringConfigUtil;
+import com.typesafe.config.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,9 +28,10 @@ private static final String KEY_WORDS="psl.psl-generate-sourcescoring-report.con
 
 	private List<String> keywords;
 	private final List<ReportData> report = new ArrayList<>();
+	private Config config;
 
 	public ConcatenationCheckRule(){
-		keywords = SourceScoringConfigUtil.getConfig().getStringList(KEY_WORDS);
+
 	}
 
 	@Override
@@ -59,6 +60,12 @@ private static final String KEY_WORDS="psl.psl-generate-sourcescoring-report.con
 	@Override
 	public List<ReportData> gatherReport() {
 		return report;
+	}
+
+	@Override
+	public void setConfig(Config config) {
+		this.config=config;
+		keywords=this.config.getStringList(KEY_WORDS);
 	}
 
 }
