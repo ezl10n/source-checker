@@ -1,6 +1,5 @@
 package com.hpe.g11n.sourcescoring.gui.tasks;
 
-
 import com.hp.g11n.sdl.psl.interop.core.IPslSourceList;
 import com.hp.g11n.sdl.psl.interop.core.IPslSourceString;
 import com.hpe.g11n.sourcescoring.core.ISourceScoring;
@@ -20,7 +19,8 @@ public class SourceScoringTask extends Task<Void> {
 	private String report;
 	private List<Integer> rulesCheckedIdx;
 
-	public void setUp(String sourceDir, String reportDir,List<Integer> rulesCheckedIdx) {
+	public void setUp(String sourceDir, String reportDir,
+			List<Integer> rulesCheckedIdx) {
 		this.source = sourceDir;
 		this.report = reportDir;
 		this.rulesCheckedIdx = rulesCheckedIdx;
@@ -32,30 +32,35 @@ public class SourceScoringTask extends Task<Void> {
 		// output
 		final FileWriter fw = new FileWriter(report);
 
-		//init
-		ISourceScoring checkReport = (rulesCheckedIdx == null || rulesCheckedIdx.size() < 1) ?
-				ISourceScoring.getInstance():ISourceScoring.getInstance(rulesCheckedIdx);
-		PassoloTemplate.build(source).process((p,sourceLists) -> {
-			int progress=0;
+		// init
+		ISourceScoring checkReport = (rulesCheckedIdx == null || rulesCheckedIdx
+				.size() < 1) ? ISourceScoring.getInstance() : ISourceScoring
+				.getInstance(rulesCheckedIdx);
+		PassoloTemplate.build(source).process((p, sourceLists) -> {
+			int progress = 0;
 			for (IPslSourceList sourceList : sourceLists.toList()) {
-				//iterator this SourceString
-				for (IPslSourceString sourceString : sourceList.getSourceStrings()) {
-					//iterator the rule which from the UI checkBoxes
-					checkReport.check(sourceString.getID(),sourceString.getText());
+				// iterator this SourceString
+				for (IPslSourceString sourceString : sourceList
+						.getSourceStrings()) {
+					// iterator the rule which from the UI checkBoxes
+					checkReport.check(sourceString.getID(),
+							sourceString.getText());
 				}
 				progress++;
-				this.updateProgress(progress,sourceLists.getCount());
+				this.updateProgress(progress, sourceLists.getCount());
 			}
 
 		});
 
-		//report
+		// report
 		List<ReportData> report = checkReport.report();
-		report.forEach( r -> {
+		report.forEach(r -> {
 			try {
-				fw.write(r.getId()+","+r.getValue()+"\n");
+				fw.write(r.getLpuName() + "," + r.getFileName() + ","
+						+ r.getStringId() + "," + r.getSourceStrings() + ","
+						+ r.getErrorType() + "," + r.getDetails() + "\n");
 			} catch (IOException e) {
-				log.error("write report CSV failure.",e);
+				log.error("write report CSV failure.", e);
 			}
 
 		});

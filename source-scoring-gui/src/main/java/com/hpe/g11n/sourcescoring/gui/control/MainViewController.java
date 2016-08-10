@@ -3,6 +3,7 @@ package com.hpe.g11n.sourcescoring.gui.control;
 
 import com.hpe.g11n.sourcescoring.gui.tasks.SourceScoringTask;
 import com.hpe.g11n.sourcescoring.utils.SourceScoringConfigUtil;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,6 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +23,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import javax.swing.WindowConstants;
 
 /**
  * Created by foy on 2016-08-05.
@@ -91,6 +95,19 @@ public class MainViewController implements Initializable {
         Thread t =new Thread(task);
         t.setDaemon(true);
         t.start();
+    }
+    
+   /**
+    * 
+    * @Descripation when click the "Cancel" button to close the UI
+    * @CreatedBy: Ali Cao
+    * @Date: 2016年8月10日
+    * @Time: 下午3:34:30
+    * @param event
+    */
+    @FXML
+    public void close(ActionEvent event){
+    	System.exit(WindowConstants.DO_NOTHING_ON_CLOSE);
     }
     
     public String getFileName(String filePath){

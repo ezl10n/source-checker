@@ -33,8 +33,7 @@ public class SourceScoringConfigUtil {
 	private static ConfigParseOptions parseOptions = ConfigParseOptions.defaults().setAllowMissing(false);
 	private static ConfigResolveOptions resolveOptions = ConfigResolveOptions.defaults().setAllowUnresolved(true);
 
-	static Config config = parse(Paths.get(CONFIG_DIR,
-			CONFIG_PATH));
+	static Config config = parse(Paths.get(CONFIG_DIR,CONFIG_PATH));
 	private static final Reflections REFLECTIONS = buildReflections("com.hpe.g11n.sourcescoring.core.rules");
 	private static List<String> checkboxNames = new ArrayList<>();
 	private static List<Class> rules = new ArrayList<>();

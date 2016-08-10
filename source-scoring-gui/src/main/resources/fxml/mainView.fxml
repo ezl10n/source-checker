@@ -26,7 +26,7 @@
             <Button id="runBtn" mnemonicParsing="false" onAction="#scoring" text="Run" />
          </children>
       </HBox>
-      <Button layoutX="395.0" layoutY="345.0" mnemonicParsing="false" text="Cancel" />
+      <Button layoutX="395.0" layoutY="345.0" mnemonicParsing="false" onAction="#close" text="Cancel" />
       <HBox fx:id="checkRules" layoutX="27.0" layoutY="140.0" prefHeight="185.0" prefWidth="547.0">
          <children>
 
