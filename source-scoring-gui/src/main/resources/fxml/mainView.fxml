@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="484.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox layoutX="27.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="563.0">
+         <children>
+            <Label prefHeight="14.0" prefWidth="147.0" text="File to be processed: " />
+            <TextField fx:id="sourceUrl" prefHeight="22.0" prefWidth="333.0" text="" />
+            <Button id="sourceBrowserBtn" mnemonicParsing="false" onAction="#chooseSource" text="Browser..." />
+         </children>
+      </HBox>
+      <HBox layoutX="27.0" layoutY="100.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="557.0">
+         <children>
+            <Label prefHeight="14.0" prefWidth="149.0" text="Write Output to the folder:" />
+            <TextField fx:id="outputUrl" prefHeight="22.0" prefWidth="334.0" text="" />
+            <Button id="descBrowserBtn" mnemonicParsing="false" onAction="#chooseOutput" text="Browser..." />
+         </children>
+      </HBox>
+
+      <HBox layoutX="135.0" layoutY="345.0" prefHeight="22.0" prefWidth="141.0">
+         <children>
+            <Button id="runBtn" mnemonicParsing="false" onAction="#scoring" text="Run" />
+         </children>
+      </HBox>
+      <Button layoutX="395.0" layoutY="345.0" mnemonicParsing="false" text="Cancel" />
+      <HBox fx:id="checkRules" layoutX="27.0" layoutY="140.0" prefHeight="185.0" prefWidth="547.0">
+         <children>
+
+         </children>
+      </HBox>
+      <ProgressBar fx:id="progressBar" layoutX="3.0" layoutY="403.0" prefHeight="17.0" prefWidth="594.0" progress="0.0" />
+
+   </children>
+</Pane>
