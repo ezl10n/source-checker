@@ -11,9 +11,9 @@ public interface ISourceScoring {
     String check(String key, String value);
     List<ReportData> report();
     static ISourceScoring getInstance(){
-        return new SourceScoringPipelineManager();
+        return new SourceScoringRuleManager();
     }
     static ISourceScoring getInstance(List<Integer> rulesIndex){
-        return new SourceScoringPipelineManager(rulesIndex);
+        return new SourceScoringRuleManager(rulesIndex);
     }
 }

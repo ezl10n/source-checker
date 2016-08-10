@@ -10,11 +10,11 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SourceScoringPipelineManager implements ISourceScoring{
+public class SourceScoringRuleManager implements ISourceScoring{
     private final Logger log = LoggerFactory.getLogger(getClass());
     List<IRule> checkRules;
 
-    public SourceScoringPipelineManager() {
+    public SourceScoringRuleManager() {
     	checkRules = new ArrayList<>();
         if(log.isDebugEnabled()){
             log.debug("init ALL source scoring check Rules.");
@@ -30,7 +30,7 @@ public class SourceScoringPipelineManager implements ISourceScoring{
             }
         }
     }
-    public SourceScoringPipelineManager(List<Integer> rulesIndex){
+    public SourceScoringRuleManager(List<Integer> rulesIndex){
         List<Class> list = SourceScoringConfigUtil.ruleClassList();
         checkRules = new ArrayList<>();
         if(log.isDebugEnabled()){
