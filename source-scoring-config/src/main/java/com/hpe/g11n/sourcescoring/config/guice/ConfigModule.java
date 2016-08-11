@@ -27,11 +27,12 @@ public class ConfigModule extends AbstractModule {
     @Provides
     @Singleton
     public static Config loadConfig(){
-        String fileName="config"+ File.separator +"source-scoring-standalone-config.conf";
+        String preFix=String.format("%1$ssrc%1$smain%1$sconfig",File.separator);
+        String fileName=String.format("%1$ssource-scoring-standalone-config.conf",File.separator);
         String passInDir=System.getProperty("source.scoring.config.basedir");
         if(passInDir == null){
             passInDir = System.getProperty("user.dir");
-            fileName=File.separator+"src"+File.separator+"main"+File.separator+fileName;
+            fileName=preFix+fileName;
         }
         return ConfigFactory.parseFileAnySyntax(Paths.get(passInDir, fileName).toFile());
     }

@@ -34,6 +34,135 @@
         <jassolo.version>1.2.0</jassolo.version>
         <jacbo.version>1.18-M2</jacbo.version>
     </properties>
+    <profiles>
+    <profile>
+        <id>dist</id>
+        <build>
+            <pluginManagement>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>buildnumber-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>create</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <configuration>
+                            <outputDirectory>${dist.directory}/lib</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <includeScope>compile</includeScope>
+                            <excludeArtifactIds>junit</excludeArtifactIds>
+                            <!--<excludeTransitive>true</excludeTransitive>-->
+                            <stripVersion>false</stripVersion>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>appassembler-maven-plugin</artifactId>
+                        <configuration>
+                            <configurationDirectory>config</configurationDirectory>
+                            <copyConfigurationDirectory>true</copyConfigurationDirectory>
+                            <filterConfigurationDirectory>true</filterConfigurationDirectory>
+                            <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
+                            <extraJvmArguments>-Xms512m</extraJvmArguments>
+                            <assembleDirectory>${dist.directory}</assembleDirectory>
+                            <logsDirectory>logs</logsDirectory>
+                            <repositoryLayout>flat</repositoryLayout>
+                            <repositoryName>lib</repositoryName>
+                            <useTimestampInSnapshotFileName>false</useTimestampInSnapshotFileName>
+                            <useWildcardClassPath>true</useWildcardClassPath>
+                            <platforms>
+                                <platform>windows</platform>
+                            </platforms>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </pluginManagement>
+        </build>
+    </profile>
+    </profiles>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.1</version>
+                    <configuration>
+                        <source>${maven.compiler.source}</source>
+                        <target>${maven.compiler.target}</target>
+                        <fork>true</fork>
+                        <compilerArgs>
+                            <arg>-Xlint</arg>
+                            <arg>-J-Duser.language=en_US</arg>
+                        </compilerArgs>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.6</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.6</version>
+                    <configuration>
+                        <!--<outputDirectory>${project.dist.dir}</outputDirectory>-->
+                        <archive>
+                            <addMavenDescriptor>false</addMavenDescriptor>
+                            <manifest>
+                                <!--<addClasspath>true</addClasspath>-->
+                                <!--<classpathPrefix>lib</classpathPrefix>-->
+                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                            </manifest>
+                            <manifestEntries>
+                                <Implementation-Title>${project.artifactId}</Implementation-Title>
+                                <Specification-Version>${project.version}</Specification-Version>
+                                <Implementation-Version>${project.version}</Implementation-Version>
+                            </manifestEntries>
+                        </archive>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>appassembler-maven-plugin</artifactId>
+                    <version>1.10</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>2.5.3</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>2.10</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencyManagement>
     <dependencies>
         <dependency>
@@ -131,6 +260,7 @@
         </dependency>
     </dependencies>
     </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -167,6 +297,7 @@
     </dependencies>
     <modules>
         <module>source-scoring-core</module>
+    <!--    <module>source-scoring-config</module>-->
         <module>source-scoring-cli</module>
         <module>source-scoring-gui</module>
         <module>source-scoring-ezl10n-adapter</module>

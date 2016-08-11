@@ -14,19 +14,21 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jacob.debug>true</jacob.debug>
+        <console.logging>DEBUG</console.logging>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.hpe.g11n.sourcescoring</groupId>
-            <artifactId>source-scoring-core</artifactId>
-            <version>${source.scoring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.hpe.g11n.sourcescoring</groupId>
             <artifactId>source-scoring-config</artifactId>
             <version>${source.scoring.version}</version>
         </dependency>
+        <dependency>
+        <groupId>com.hpe.g11n.sourcescoring</groupId>
+        <artifactId>source-scoring-core</artifactId>
+        <version>${source.scoring.version}</version>
+    </dependency>
         <!-- jassolo core -->
         <dependency>
             <groupId>com.hp.g11n</groupId>
@@ -44,4 +46,102 @@
         </dependency>
 
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>dist</id>
+            <build>
+
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>appassembler-maven-plugin</artifactId>
+<!--                        <executions>
+                             <execution>
+                             <goals>
+                                <goal>assemble</goal>
+                             </goals>-->
+                        <configuration>
+                            <configurationSourceDirectory>src/main/config</configurationSourceDirectory>
+                            <extraJvmArguments>-Djava.library.path=@BASEDIR@\lib -Dsource.scoring.config.basedir=@BASEDIR@\config -Dcom.jacob.debug=${jacob.debug} -Dconsole.log-level=${console.logging}</extraJvmArguments>
+                            <programs>
+                                <program>
+                                    <id>sourceScoring-Standalone-GUI</id>
+                                    <mainClass>
+                                        com.hpe.g11n.sourcescoring.gui.Application
+                                    </mainClass>
+                                    <jvmSettings>
+                                        <initialMemorySize>256m</initialMemorySize>
+                                        <maxMemorySize>1024m</maxMemorySize>
+                                        <systemProperties>
+
+                                        </systemProperties>
+                                        <extraArguments>
+                                            <extraArgument>-Djava.library.path=@BASEDIR@\lib</extraArgument>
+                                            <extraArgument>-Dsource.scoring.config.basedir=@BASEDIR@\config</extraArgument>
+                                            <extraArgument>-Dconsole.log-level=${console.logging}</extraArgument>
+                                            <extraArgument>-Dcom.jacob.debug=${jacob.debug}</extraArgument>
+                                        </extraArguments>
+                                    </jvmSettings>
+                                </program>
+                            </programs>
+                        </configuration>
+<!--                        </execution>
+                        </executions>-->
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-config-resources</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <overwrite>true</overwrite>
+                                    <outputDirectory>${dist.directory}/config</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>/src/main/config</directory>
+                                            <includes>
+                                                <include>*.conf</include>
+                                            </includes>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>copy-jacob-dll-resources</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <overwrite>true</overwrite>
+                                    <outputDirectory>${dist.directory}/lib</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>/src/main/resources/lib</directory>
+                                            <includes>
+                                                <include>*.dll</include>
+                                            </includes>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
 </project>
