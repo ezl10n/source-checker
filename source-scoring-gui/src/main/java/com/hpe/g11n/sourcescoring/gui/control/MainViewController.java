@@ -1,10 +1,15 @@
 package com.hpe.g11n.sourcescoring.gui.control;
 
 
+import com.google.inject.Guice;
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.google.inject.name.Named;
+import com.hpe.g11n.sourcescoring.config.guice.ConfigModule;
+import com.hpe.g11n.sourcescoring.core.guice.CoreModule;
+import com.hpe.g11n.sourcescoring.gui.guice.GUIModule;
 import com.hpe.g11n.sourcescoring.gui.tasks.SourceScoringTask;
-
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -53,8 +58,14 @@ public class MainViewController implements Initializable {
     @Named("ruleNames")
     List<String> checkBoxs;
 
-    @Inject
-    SourceScoringTask task;
+
+    SourceScoringTask task = new SourceScoringTask();
+
+    public MainViewController(){
+        Injector injector= Guice.createInjector(new CoreModule(), new ConfigModule(), new GUIModule());
+        injector.injectMembers(this);
+        injector.injectMembers(task);
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

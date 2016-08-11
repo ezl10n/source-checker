@@ -10,4 +10,5 @@ import java.util.List;
 public interface ISourceScoring {
     String check(String key, String value);
     List<ReportData> report();
+    void build(List<Integer> rulesChecked);
 }

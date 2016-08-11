@@ -27,7 +27,7 @@ public class ConfigModule extends AbstractModule {
 
     @Provides
     @Singleton
-    public Config loadConfig(){
+    public static Config loadConfig(){
         String fileName="config"+ File.separator +"source-scoring-standalone-config.conf";
         String passInDir=System.getProperty("source.scoring.config.basedir");
         if(passInDir == null){

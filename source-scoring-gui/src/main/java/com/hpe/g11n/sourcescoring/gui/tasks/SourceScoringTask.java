@@ -27,6 +27,7 @@ public class SourceScoringTask extends Task<Void> {
 		this.source = sourceDir;
 		this.report = reportDir;
 		this.rulesCheckedIdx = rulesCheckedIdx;
+		checkReport.build(rulesCheckedIdx);
 	}
 
 	@Override

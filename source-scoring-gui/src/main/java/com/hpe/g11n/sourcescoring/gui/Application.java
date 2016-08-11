@@ -21,7 +21,7 @@ import java.io.InputStream;
 public class Application extends javafx.application.Application {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-    MainViewController mainController;
+    MainViewController mainController = new MainViewController();
 
     public Parent getMainView() throws IOException {
         return loadView("fxml/mainView.fxml", mainController);
@@ -51,9 +51,8 @@ public class Application extends javafx.application.Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Injector injector= Guice.createInjector(new CoreModule(),new ConfigModule(),new GUIModule());
-        mainController = new MainViewController();
-        injector.injectMembers(mainController);
+
+
         stage.setTitle("Source Scoring");
         stage.setScene(new Scene(getMainView()));
         stage.setResizable(true);
