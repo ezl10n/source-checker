@@ -11,3 +11,6 @@
 /source-scoring-core/target
 /source-scoring-gui/target
 *.idea
+*.project
+*.settings
+*.classpath
