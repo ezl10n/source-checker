@@ -23,6 +23,7 @@ import javafx.stage.FileChooser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.*;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
@@ -94,7 +95,10 @@ public class MainViewController implements Initializable {
             outputUrl.setText(file.getAbsolutePath());
         }
     }
+    @FXML
+    public void close(ActionEvent event){
 
+    }
     @FXML
     public void scoring(ActionEvent event){
         List<Integer> rules=new ArrayList<Integer>();

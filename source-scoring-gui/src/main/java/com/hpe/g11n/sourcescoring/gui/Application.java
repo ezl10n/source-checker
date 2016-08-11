@@ -1,12 +1,7 @@
 package com.hpe.g11n.sourcescoring.gui;
 
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.hpe.g11n.sourcescoring.config.guice.ConfigModule;
-import com.hpe.g11n.sourcescoring.core.guice.CoreModule;
 import com.hpe.g11n.sourcescoring.gui.control.MainViewController;
-import com.hpe.g11n.sourcescoring.gui.guice.GUIModule;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

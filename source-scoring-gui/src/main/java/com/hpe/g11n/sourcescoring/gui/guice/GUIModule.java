@@ -1,7 +1,6 @@
 package com.hpe.g11n.sourcescoring.gui.guice;
 
 import com.google.inject.AbstractModule;
-import com.hpe.g11n.sourcescoring.gui.tasks.SourceScoringTask;
 
 /**
  * Created with IntelliJ IDEA.
