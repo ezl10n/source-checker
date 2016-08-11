@@ -59,11 +59,11 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>appassembler-maven-plugin</artifactId>
-                        <executions>
+<!--                        <executions>
                              <execution>
                              <goals>
                                 <goal>assemble</goal>
-                             </goals>
+                             </goals>-->
                         <configuration>
                             <configurationSourceDirectory>src/main/config</configurationSourceDirectory>
                             <extraJvmArguments>-Djava.library.path=@BASEDIR@\lib -Dsource.scoring.config.basedir=@BASEDIR@\config -Dcom.jacob.debug=${jacob.debug} -Dconsole.log-level=${console.logging}</extraJvmArguments>
@@ -89,8 +89,8 @@
                                 </program>
                             </programs>
                         </configuration>
-                        </execution>
-                        </executions>
+<!--                        </execution>
+                        </executions>-->
                     </plugin>
                     <plugin>
                         <artifactId>maven-assembly-plugin</artifactId>

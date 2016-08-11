@@ -70,11 +70,10 @@
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>appassembler-maven-plugin</artifactId>
                         <configuration>
-                            <configurationDirectory>conf</configurationDirectory>
+                            <configurationDirectory>config</configurationDirectory>
                             <copyConfigurationDirectory>true</copyConfigurationDirectory>
                             <filterConfigurationDirectory>true</filterConfigurationDirectory>
-                            <includeConfigurationDirectoryInClasspath>true
-                            </includeConfigurationDirectoryInClasspath>
+                            <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
                             <extraJvmArguments>-Xms512m</extraJvmArguments>
                             <assembleDirectory>${dist.directory}</assembleDirectory>
                             <logsDirectory>logs</logsDirectory>
