@@ -11,9 +11,7 @@
     <packaging>pom</packaging>
 
     <name>source-scoring-cli</name>
-    <modules>
-        <module>../source-scoring-config</module>
-    </modules>
+
 
 
     <properties>

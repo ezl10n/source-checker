@@ -10,3 +10,4 @@
 /source-scoring-config/source-scoring-config.iml
 /source-scoring-core/target
 /source-scoring-gui/target
+*.idea
