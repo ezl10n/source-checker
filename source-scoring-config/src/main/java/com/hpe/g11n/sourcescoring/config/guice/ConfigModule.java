@@ -1,15 +1,14 @@
 package com.hpe.g11n.sourcescoring.config.guice;
 
+import java.io.File;
+import java.nio.file.Paths;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-
-import java.io.File;
-import java.nio.file.Paths;
 
 /**
  * Created with IntelliJ IDEA.

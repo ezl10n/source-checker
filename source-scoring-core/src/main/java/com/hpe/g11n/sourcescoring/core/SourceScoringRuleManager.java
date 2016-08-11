@@ -4,8 +4,10 @@ package com.hpe.g11n.sourcescoring.core;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.hpe.g11n.sourcescoring.pojo.InputDataObj;
 import com.hpe.g11n.sourcescoring.pojo.ReportData;
 import com.typesafe.config.Config;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,10 +49,10 @@ public class SourceScoringRuleManager implements ISourceScoring{
 
 
     @Override
-    public String check(String key, String value) {
+    public String check(List<InputDataObj> lstIdo) {
         Preconditions.checkNotNull(checkRules);
         Preconditions.checkArgument(checkRules.size() > 0, "checkRules should not be empty");
-        checkRules.forEach( c -> c.check(key,value));
+        checkRules.forEach( c -> c.check(lstIdo));
         return "OK";
     }
 
