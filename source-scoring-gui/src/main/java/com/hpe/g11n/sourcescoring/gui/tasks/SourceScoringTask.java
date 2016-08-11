@@ -55,7 +55,7 @@ public class SourceScoringTask extends Task<Void> {
 		List<ReportData> report = checkReport.report();
 		report.forEach( r -> {
 			try {
-				fw.write(r.getId()+","+r.getValue()+"\n");
+				fw.write(r.getStringId()+","+r.getSourceStrings()+"\n");
 			} catch (IOException e) {
 				log.error("write report CSV failure.",e);
 			}

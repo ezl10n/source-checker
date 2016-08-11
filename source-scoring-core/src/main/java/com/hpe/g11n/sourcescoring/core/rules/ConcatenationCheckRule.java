@@ -44,7 +44,7 @@ private static final String KEY_WORDS="psl.psl-generate-sourcescoring-report.con
 
 		for(String v : keywords) {
 			if (value.startsWith(v) || value.endsWith(v)) {
-				report.add(new ReportData(key, value));
+				report.add(new ReportData("XXX.LPU","file name",key, value,"errortype",""));
 				if(log.isDebugEnabled()){
 					log.debug("ConcatenationCheckRule, value:"+ value +" start or end with:+"+v);
 				}
