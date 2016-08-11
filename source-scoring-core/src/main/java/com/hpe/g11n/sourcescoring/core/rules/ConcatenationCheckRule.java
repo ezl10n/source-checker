@@ -4,9 +4,11 @@ package com.hpe.g11n.sourcescoring.core.rules;
 import com.google.common.base.Preconditions;
 import com.hpe.g11n.sourcescoring.core.IRule;
 import com.hpe.g11n.sourcescoring.core.annotation.RuleData;
+import com.hpe.g11n.sourcescoring.pojo.InputDataObj;
 import com.hpe.g11n.sourcescoring.pojo.ReportData;
 import com.hpe.g11n.sourcescoring.utils.Constant;
 import com.typesafe.config.Config;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,28 +36,28 @@ private static final String KEY_WORDS="psl.psl-generate-sourcescoring-report.con
 
 	}
 
-	@Override
-	public boolean check(String key, String value) {
-		Preconditions.checkNotNull(keywords);
-		Preconditions.checkNotNull(value);
-		if(log.isDebugEnabled()){
-			log.debug("Start ConcatenationCheckRule check key/value:"+key+"/"+value);
-		}
-
-		for(String v : keywords) {
-			if (value.startsWith(v) || value.endsWith(v)) {
-				report.add(new ReportData("XXX.LPU","file name",key, value,"errortype",""));
-				if(log.isDebugEnabled()){
-					log.debug("ConcatenationCheckRule, value:"+ value +" start or end with:+"+v);
-				}
-				return true;
-			}
-		}
-		if(log.isDebugEnabled()){
-			log.debug("END ConcatenationCheckRule check key/value:"+key+"/"+value);
-		}
-		return false;
-	}
+//	@Override
+//	public boolean check(String key, String value) {
+//		Preconditions.checkNotNull(keywords);
+//		Preconditions.checkNotNull(value);
+//		if(log.isDebugEnabled()){
+//			log.debug("Start ConcatenationCheckRule check key/value:"+key+"/"+value);
+//		}
+//
+//		for(String v : keywords) {
+//			if (value.startsWith(v) || value.endsWith(v)) {
+//				report.add(new ReportData("XXX.LPU","file name",key, value,"errortype",""));
+//				if(log.isDebugEnabled()){
+//					log.debug("ConcatenationCheckRule, value:"+ value +" start or end with:+"+v);
+//				}
+//				return true;
+//			}
+//		}
+//		if(log.isDebugEnabled()){
+//			log.debug("END ConcatenationCheckRule check key/value:"+key+"/"+value);
+//		}
+//		return false;
+//	}
 
 	@Override
 	public List<ReportData> gatherReport() {
@@ -66,6 +68,12 @@ private static final String KEY_WORDS="psl.psl-generate-sourcescoring-report.con
 	public void setConfig(Config config) {
 		this.config=config;
 		keywords=this.config.getStringList(KEY_WORDS);
+	}
+
+	@Override
+	public boolean check(List<InputDataObj> lstIdo) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
