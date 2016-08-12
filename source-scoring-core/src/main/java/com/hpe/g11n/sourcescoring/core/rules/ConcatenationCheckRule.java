@@ -25,39 +25,18 @@ import java.util.List;
  */
 @RuleData(id="ConcatenationCheckRule",name=Constant.CONCATENATION,order=1,ruleClass = ConcatenationCheckRule.class)
 public class ConcatenationCheckRule implements IRule{
-private static final String KEY_WORDS="psl.psl-generate-sourcescoring-report.concatenation.key-words";
+	private static final String KEY_WORDS="psl.psl-generate-sourcescoring-report.concatenation.key-words";
+	private static final String VARIABLES="psl.psl-generate-sourcescoring-report.concatenation.variables";
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	private List<String> keywords;
+	private List<String> variables;
 	private final List<ReportData> report = new ArrayList<>();
 	private Config config;
 
 	public ConcatenationCheckRule(){
 
 	}
-
-//	@Override
-//	public boolean check(String key, String value) {
-//		Preconditions.checkNotNull(keywords);
-//		Preconditions.checkNotNull(value);
-//		if(log.isDebugEnabled()){
-//			log.debug("Start ConcatenationCheckRule check key/value:"+key+"/"+value);
-//		}
-//
-//		for(String v : keywords) {
-//			if (value.startsWith(v) || value.endsWith(v)) {
-//				report.add(new ReportData("XXX.LPU","file name",key, value,"errortype",""));
-//				if(log.isDebugEnabled()){
-//					log.debug("ConcatenationCheckRule, value:"+ value +" start or end with:+"+v);
-//				}
-//				return true;
-//			}
-//		}
-//		if(log.isDebugEnabled()){
-//			log.debug("END ConcatenationCheckRule check key/value:"+key+"/"+value);
-//		}
-//		return false;
-//	}
 
 	@Override
 	public List<ReportData> gatherReport() {
@@ -68,12 +47,50 @@ private static final String KEY_WORDS="psl.psl-generate-sourcescoring-report.con
 	public void setConfig(Config config) {
 		this.config=config;
 		keywords=this.config.getStringList(KEY_WORDS);
+		variables=this.config.getStringList(VARIABLES);
 	}
 
 	@Override
 	public boolean check(List<InputDataObj> lstIdo) {
-		// TODO Auto-generated method stub
-		return false;
+		Preconditions.checkNotNull(keywords);
+		Preconditions.checkNotNull(lstIdo);
+		boolean flag = false;
+		for(InputDataObj ido:lstIdo){
+			if(log.isDebugEnabled()){
+				log.debug("Start ConcatenationCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceStrings());
+			}
+			for(String k : keywords) {
+				if (ido.getSourceStrings().startsWith(k.trim().concat(" ")) 
+						|| ido.getSourceStrings().endsWith(" ".concat(k.trim()))
+						) {
+					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceStrings(),
+							Constant.CONCATENATION,"Warning: starting or ending with keyword \""+k+"\". Possible concatenated strings."));
+					if(log.isDebugEnabled()){
+						log.debug("ConcatenationCheckRule, value:"+ ido.getSourceStrings() +" start or end with:+"+k);
+					}
+					flag = true;
+				}
+				
+				if (ido.getSourceStrings().toLowerCase().equals(k.trim().toLowerCase())
+						&& ido.getSourceStrings().hashCode()-32 ==k.trim().hashCode()) {
+					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceStrings(),
+							Constant.CONCATENATION,""));
+					flag = true;
+				}
+			}
+			for(String v:variables){
+				if (ido.getSourceStrings().contains(v.trim().toLowerCase())
+						|| ido.getSourceStrings().contains(v.trim().toUpperCase())) {
+					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceStrings(),
+							Constant.CONCATENATION,""));
+					flag = true;
+				}
+			}
+			if(log.isDebugEnabled()){
+				log.debug("END ConcatenationCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceStrings());
+			}
+		}
+		return flag;
 	}
 
 }
