@@ -14,8 +14,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jacob.debug>true</jacob.debug>
-        <console.logging>DEBUG</console.logging>
+        <jacob.debug>false</jacob.debug>
+        <console.logging>INFO</console.logging>
     </properties>
 
     <dependencies>
@@ -82,7 +82,7 @@
                                         <extraArguments>
                                             <extraArgument>-Djava.library.path=@BASEDIR@\lib</extraArgument>
                                             <extraArgument>-Dsource.scoring.config.basedir=@BASEDIR@\config</extraArgument>
-                                            <extraArgument>-Dconsole.log-level=${INFO}</extraArgument>
+                                            <extraArgument>-Dconsole.log-level=${console.logging}</extraArgument>
                                             <extraArgument>-Dcom.jacob.debug=${jacob.debug}</extraArgument>
                                         </extraArguments>
                                     </jvmSettings>
