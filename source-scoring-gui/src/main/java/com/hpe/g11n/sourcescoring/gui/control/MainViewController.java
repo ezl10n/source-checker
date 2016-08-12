@@ -86,9 +86,18 @@ public class MainViewController implements Initializable {
 
 	@FXML
 	public void chooseSource(ActionEvent event) {
-		File file = fileChooser.showOpenDialog(root.getScene().getWindow());
-		if (file != null) {
-			sourceUrl.setText(file.getAbsolutePath());
+		fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("LPU", "*.lpu"),
+                new FileChooser.ExtensionFilter("JSON", "*.json"),
+                new FileChooser.ExtensionFilter("properties", "*.properties")
+            );
+		List<File> lstFile = fileChooser.showOpenMultipleDialog(root.getScene().getWindow());
+		if (lstFile != null) {
+			String path = "";
+			for(File file:lstFile){
+				path = path+file.getAbsolutePath()+";";
+			}
+			sourceUrl.setText(path.substring(0,path.length()-1));
 		}
 	}
 
@@ -121,18 +130,10 @@ public class MainViewController implements Initializable {
 		}
 
 		progressBar.progressProperty().bind(task.progressProperty());
-		task.setUp(sourceUrl.getText(), outputUrl.getText() + "/"
-				+ getFileName(sourceUrl.getText()) + ".csv", rules);
+		task.setUp(sourceUrl.getText(), outputUrl.getText() + "/", rules);
 		t = new Thread(task);
 		t.setDaemon(true);
 		t.start();
-	}
-
-	public String getFileName(String filePath) {
-		File file = new File(filePath);
-		String name = file.getName();
-		int index = name.lastIndexOf(".");
-		return name.substring(0, index);
 	}
 
 	public void deletedFile(String filePath) {

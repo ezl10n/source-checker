@@ -82,7 +82,7 @@
                                         <extraArguments>
                                             <extraArgument>-Djava.library.path=@BASEDIR@\lib</extraArgument>
                                             <extraArgument>-Dsource.scoring.config.basedir=@BASEDIR@\config</extraArgument>
-                                            <extraArgument>-Dconsole.log-level=${console.logging}</extraArgument>
+                                            <extraArgument>-Dconsole.log-level=${INFO}</extraArgument>
                                             <extraArgument>-Dcom.jacob.debug=${jacob.debug}</extraArgument>
                                         </extraArguments>
                                     </jvmSettings>

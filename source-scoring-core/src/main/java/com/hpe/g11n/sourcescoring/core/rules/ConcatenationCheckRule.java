@@ -31,7 +31,7 @@ public class ConcatenationCheckRule implements IRule{
 
 	private List<String> keywords;
 	private List<String> variables;
-	private final List<ReportData> report = new ArrayList<>();
+	private List<ReportData> report =null;
 	private Config config;
 
 	public ConcatenationCheckRule(){
@@ -55,6 +55,7 @@ public class ConcatenationCheckRule implements IRule{
 		Preconditions.checkNotNull(keywords);
 		Preconditions.checkNotNull(lstIdo);
 		boolean flag = false;
+		report = new ArrayList<>();
 		for(InputDataObj ido:lstIdo){
 			if(log.isDebugEnabled()){
 				log.debug("Start ConcatenationCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceStrings());

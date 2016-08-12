@@ -29,7 +29,9 @@ public class SourceScoringTask extends Task<Void> {
 	InputDataObj ido;
 	@Inject
 	ISourceScoring checkReport;
-	public List<InputDataObj> lstIdo = new ArrayList<InputDataObj>();
+	public List<InputDataObj> lstIdo = null;
+	int totalProgress =0;
+	int totalCount =0;
 
 	public void setUp(String sourceDir, String reportDir,List<Integer> rulesCheckedIdx) {
 		this.source = sourceDir;
@@ -40,44 +42,54 @@ public class SourceScoringTask extends Task<Void> {
 
 	@Override
 	protected Void call() throws Exception {
-
 		// output
-		final FileWriter fw = new FileWriter(report);
-
-
-		PassoloTemplate.build(source).process((p,sourceLists) -> {
-			int progress=0;
-			for (IPslSourceList sourceList : sourceLists.toList()) {
-				for (IPslSourceString sourceString : sourceList.getSourceStrings()) {
-					ido = new InputDataObj();
-					ido.setLpuName(new File(source).getName());
-					ido.setFileName(sourceString.getIDName());
-					ido.setSourceStrings(sourceString.getText());
-					ido.setStringId(sourceString.getID());
-					lstIdo.add(ido);
+		String[] sourcePaths = source.split(";");
+		for(String sourcePath:sourcePaths){
+			lstIdo = new ArrayList<InputDataObj>();
+			final FileWriter fw = new FileWriter(report+getFileName(sourcePath)+".csv");
+			PassoloTemplate.build(sourcePath).process((p,sourceLists) -> {
+				int progress=totalProgress;
+				totalCount=totalCount + sourceLists.getCount();
+				for (int i=0;i<sourceLists.toList().size();i++) {
+					for (IPslSourceString sourceString : sourceLists.toList().get(i).getSourceStrings()) {
+						ido = new InputDataObj();
+						ido.setLpuName(new File(sourcePath).getName());
+						ido.setFileName(sourceString.getIDName());
+						ido.setSourceStrings(sourceString.getText());
+						ido.setStringId(sourceString.getID());
+						lstIdo.add(ido);
+					}
+					progress++;
+					if(i== sourceLists.toList().size()-1){
+						totalProgress = progress;
+					}
+					this.updateProgress(progress,totalCount);
 				}
-				progress++;
-				this.updateProgress(progress,sourceLists.getCount());
-			}
 
-		});
-		checkReport.check(lstIdo);
-		//report
-		List<ReportData> report = checkReport.report();
-		fw.write("LPU NAME,FILE NAME,STRING ID,SOURCE STRINGS,ERROR TYPE,DETAILS\n");
-		report.forEach( r -> {
-			try {
-				fw.write(r.getLpuName()+","+r.getFileName()+","+r.getStringId()
-						+","+r.getSourceStrings()+","+r.getErrorType()+","+r.getDetails()+"\n");
-				
-			} catch (IOException e) {
-				log.error("write report CSV failure.",e);
-			}
+			});
+			checkReport.check(lstIdo);
+			//report
+			List<ReportData> report = checkReport.report();
+			fw.write("LPU NAME,FILE NAME,STRING ID,SOURCE STRINGS,ERROR TYPE,DETAILS\n");
+			report.forEach( r -> {
+				try {
+					fw.write(r.getLpuName()+","+r.getFileName()+","+r.getStringId()
+							+","+r.getSourceStrings()+","+r.getErrorType()+","+r.getDetails()+"\n");
+					
+				} catch (IOException e) {
+					log.error("write report CSV failure.",e);
+				}
 
-		});
-//		fw.write("hit strings:"+report.size());
-		fw.close();
-
+			});
+			fw.close();
+		}
 		return null;
+	}
+	
+	public String getFileName(String filePath) {
+		File file = new File(filePath);
+		String name = file.getName();
+		int index = name.lastIndexOf(".");
+		return name.substring(0, index);
 	}
 }
