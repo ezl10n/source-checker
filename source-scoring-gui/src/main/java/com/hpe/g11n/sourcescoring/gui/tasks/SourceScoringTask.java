@@ -50,8 +50,8 @@ public class SourceScoringTask extends Task<Void> {
 			for (IPslSourceList sourceList : sourceLists.toList()) {
 				for (IPslSourceString sourceString : sourceList.getSourceStrings()) {
 					ido = new InputDataObj();
-					ido.setFileName(new File(source).getName());
-					ido.setLpuName(sourceString.getIDName());
+					ido.setLpuName(new File(source).getName());
+					ido.setFileName(sourceString.getIDName());
 					ido.setSourceStrings(sourceString.getText());
 					ido.setStringId(sourceString.getID());
 					lstIdo.add(ido);
@@ -64,15 +64,18 @@ public class SourceScoringTask extends Task<Void> {
 		checkReport.check(lstIdo);
 		//report
 		List<ReportData> report = checkReport.report();
+		fw.write("LPU NAME,FILE NAME,STRING ID,SOURCE STRINGS,ERROR TYPE,DETAILS\n");
 		report.forEach( r -> {
 			try {
-				fw.write(r.getStringId()+","+r.getSourceStrings()+"\n");
+				fw.write(r.getLpuName()+","+r.getFileName()+","+r.getStringId()
+						+","+r.getSourceStrings()+","+r.getErrorType()+","+r.getDetails()+"\n");
+				
 			} catch (IOException e) {
 				log.error("write report CSV failure.",e);
 			}
 
 		});
-
+//		fw.write("hit strings:"+report.size());
 		fw.close();
 
 		return null;
