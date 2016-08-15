@@ -16,6 +16,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.GridPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
@@ -47,7 +48,7 @@ public class MainViewController implements Initializable {
 	private TextField outputUrl;
 
 	@FXML
-	private HBox checkRules;
+	private GridPane checkRules;
 
 	@FXML
 	private ProgressBar progressBar;
@@ -79,9 +80,18 @@ public class MainViewController implements Initializable {
 		if (fileChooser == null) {
 			fileChooser = new FileChooser();
 		}
-		checkBoxs.forEach(checkBoxValue -> {
-			checkRules.getChildren().add(new CheckBox(checkBoxValue));
-		});
+		
+		int k = 0;
+		int j = 0;
+		for(String checkBoxValue:checkBoxs){
+			checkRules.add(new CheckBox(checkBoxValue), j, k);
+			j++;
+			if(j==4){
+				k++;
+				j=0;
+			}
+		}
+			
 	}
 
 	@FXML

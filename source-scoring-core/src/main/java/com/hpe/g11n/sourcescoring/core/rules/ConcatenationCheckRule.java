@@ -63,7 +63,7 @@ public class ConcatenationCheckRule implements IRule{
 			for(String k : keywords) {
 				if (ido.getSourceStrings().startsWith(k.trim().concat(" ")) 
 						|| ido.getSourceStrings().endsWith(" ".concat(k.trim()))
-						) {
+						){
 					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceStrings(),
 							Constant.CONCATENATION,"Warning: starting or ending with keyword \""+k+"\". Possible concatenated strings."));
 					if(log.isDebugEnabled()){
