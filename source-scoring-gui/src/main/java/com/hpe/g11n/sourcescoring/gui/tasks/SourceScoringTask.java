@@ -3,21 +3,34 @@ package com.hpe.g11n.sourcescoring.gui.tasks;
 
 import com.google.inject.Inject;
 import com.hp.g11n.sdl.psl.interop.core.IPslSourceList;
+import com.hp.g11n.sdl.psl.interop.core.IPslSourceLists;
 import com.hp.g11n.sdl.psl.interop.core.IPslSourceString;
+import com.hp.g11n.sdl.psl.interop.core.enums.PslState;
 import com.hpe.g11n.sourcescoring.core.ISourceScoring;
 import com.hpe.g11n.sourcescoring.gui.utils.PassoloTemplate;
 import com.hpe.g11n.sourcescoring.pojo.InputDataObj;
 import com.hpe.g11n.sourcescoring.pojo.ReportData;
 
+
+import com.typesafe.config.Config;
+
 import javafx.concurrent.Task;
+
+
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class SourceScoringTask extends Task<Void> {
@@ -29,7 +42,10 @@ public class SourceScoringTask extends Task<Void> {
 	InputDataObj ido;
 	@Inject
 	ISourceScoring checkReport;
-	public List<InputDataObj> lstIdo = null;
+	private Config config;
+	public List<InputDataObj> lstIdo = new ArrayList<InputDataObj>();
+	private static final String STATE="psl.psl-generate-sourcescoring-report.concatenation.state";
+	private List<String> lstState;
 	int totalProgress =0;
 	int totalCount =0;
 
@@ -44,20 +60,27 @@ public class SourceScoringTask extends Task<Void> {
 	protected Void call() throws Exception {
 		// output
 		String[] sourcePaths = source.split(";");
+		SimpleDateFormat sdf = new SimpleDateFormat("YYYYMMddHHmmss");
+		final FileWriter fw = new FileWriter(report+"SourceScoring"+sdf.format(new Date())+".csv");
+		List<IPslSourceLists> lstIPslSourceLists = new ArrayList<IPslSourceLists>();
 		for(String sourcePath:sourcePaths){
-			lstIdo = new ArrayList<InputDataObj>();
-			final FileWriter fw = new FileWriter(report+getFileName(sourcePath)+".csv");
 			PassoloTemplate.build(sourcePath).process((p,sourceLists) -> {
+				lstIPslSourceLists.add(sourceLists);
 				int progress=totalProgress;
 				totalCount=totalCount + sourceLists.getCount();
 				for (int i=0;i<sourceLists.toList().size();i++) {
 					for (IPslSourceString sourceString : sourceLists.toList().get(i).getSourceStrings()) {
-						ido = new InputDataObj();
-						ido.setLpuName(new File(sourcePath).getName());
-						ido.setFileName(sourceString.getIDName());
-						ido.setSourceStrings(sourceString.getText());
-						ido.setStringId(sourceString.getID());
-						lstIdo.add(ido);
+						for(String sourceStringState:lstState){
+							if(sourceString.hasState(PslState.valueOf(sourceStringState))){
+								ido = new InputDataObj();
+								ido.setLpuName(new File(sourcePath).getName());
+								ido.setFileName(sourceString.getIDName());
+								ido.setSourceStrings(sourceString.getText());
+								ido.setStringId(sourceString.getID());
+								lstIdo.add(ido);
+								break;
+							}
+						}
 					}
 					progress++;
 					if(i== sourceLists.toList().size()-1){
@@ -67,29 +90,26 @@ public class SourceScoringTask extends Task<Void> {
 				}
 
 			});
-			checkReport.check(lstIdo);
-			//report
-			List<ReportData> report = checkReport.report();
-			fw.write("LPU NAME,FILE NAME,STRING ID,SOURCE STRINGS,ERROR TYPE,DETAILS\n");
-			report.forEach( r -> {
-				try {
-					fw.write(r.getLpuName()+","+r.getFileName()+","+r.getStringId()
-							+","+r.getSourceStrings()+","+r.getErrorType()+","+r.getDetails()+"\n");
-					
-				} catch (IOException e) {
-					log.error("write report CSV failure.",e);
-				}
-
-			});
-			fw.close();
 		}
+		checkReport.check(lstIdo);
+		//report
+		List<ReportData> report = checkReport.report();
+		fw.write("LPU NAME,FILE NAME,STRING ID,SOURCE STRINGS,ERROR TYPE,DETAILS\n");
+		report.forEach( r -> {
+			try {
+				fw.write(r.getLpuName()+","+r.getFileName()+","+r.getStringId()
+						+","+r.getSourceStrings()+","+r.getErrorType()+","+r.getDetails()+"\n");
+				
+			} catch (IOException e) {
+				log.error("write report CSV failure.",e);
+			}
+
+		});
+		fw.close();
 		return null;
 	}
-	
-	public String getFileName(String filePath) {
-		File file = new File(filePath);
-		String name = file.getName();
-		int index = name.lastIndexOf(".");
-		return name.substring(0, index);
+	public void setConfig(Config config) {
+		this.config=config;
+		lstState=this.config.getStringList(STATE);
 	}
 }
