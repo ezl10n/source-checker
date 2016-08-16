@@ -17,6 +17,7 @@ import javafx.stage.WindowEvent;
 
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 /**
@@ -60,10 +61,15 @@ public class RulesConfigViewController extends BaseController implements Initial
             logger.debug(concatenationVariables.getText());
             logger.debug(camelCaseFormat.getText());
         }
-        config=config.withValue(Constant.CONCATENATION_KEYWORDS_KEY, ConfigValueFactory.fromAnyRef(concatenationKeyWords.getText()));
-        config=config.withValue(Constant.CONCATENATION_KEYWORDS_VARIABLES, ConfigValueFactory.fromAnyRef(concatenationVariables.getText()));
+
+        //TODO just demo, need more work, like rule validate.. e.g. list should use ""
+        String keywords=concatenationKeyWords.getText().replaceAll("\\[","").replaceAll("\\]","");
+        config=config.withValue(Constant.CONCATENATION_KEYWORDS_KEY, ConfigValueFactory.fromAnyRef(Arrays.asList(keywords.split(","))));
+
+        String varibales=concatenationVariables.getText().replaceAll("\\[","").replaceAll("\\]","");
+        config=config.withValue(Constant.CONCATENATION_KEYWORDS_VARIABLES, ConfigValueFactory.fromAnyRef(Arrays.asList(varibales.split(","))));
+
         config=config.withValue(Constant.CAMELCASE_FORMAT, ConfigValueFactory.fromAnyRef(camelCaseFormat.getText()));
-        //TODO need more work, like rule validate..
         ConfigModule.saveConfig(config);
         close(event);
     }
