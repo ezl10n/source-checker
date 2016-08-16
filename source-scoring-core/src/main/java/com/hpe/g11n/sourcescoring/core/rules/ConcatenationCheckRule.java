@@ -53,6 +53,7 @@ public class ConcatenationCheckRule implements IRule{
 	@Override
 	public boolean check(List<InputDataObj> lstIdo) {
 		Preconditions.checkNotNull(keywords);
+		Preconditions.checkNotNull(variables);
 		Preconditions.checkNotNull(lstIdo);
 		boolean flag = false;
 		report = new ArrayList<>();
