@@ -3,9 +3,13 @@ package com.hpe.g11n.sourcescoring.gui.control;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.typesafe.config.Config;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.stage.WindowEvent;
 
-import java.awt.event.ActionEvent;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -16,7 +20,8 @@ import java.util.ResourceBundle;
  * Time: 14:50
  */
 public class RulesConfigViewController extends BaseController {
-
+    @FXML
+    private Parent root;
     @Inject
     @Named("sourceScoringConfig")
     Config config;
@@ -34,8 +39,8 @@ public class RulesConfigViewController extends BaseController {
     }
 
     @FXML
-    public void cancelAndClose(ActionEvent event){
-
+    public void close(ActionEvent event){
+        Event.fireEvent(root.getScene().getWindow(),new WindowEvent(root.getScene().getWindow(), WindowEvent.WINDOW_CLOSE_REQUEST));
     }
 
 }
