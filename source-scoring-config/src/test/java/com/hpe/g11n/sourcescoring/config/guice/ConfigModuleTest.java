@@ -23,7 +23,13 @@ public class ConfigModuleTest {
         System.out.println(c.getString("psl.psl-generate-sourcescoring-report.camel-case"));
         System.out.println("###############################################");
         System.out.println("####################date-time-format##################");
-        c.getStringList("psl.psl-generate-sourcescoring-report.date-time-format").stream().forEach(e -> System.out.println(e));
         System.out.println("###############################################");
+        c.getStringList("psl.psl-generate-sourcescoring-report.date-time-format").stream().forEach(e -> System.out.println(e));
+        System.out.println("####################many_variablest##################");
+        System.out.println("###############################################");
+        c.getStringList("psl.psl-generate-sourcescoring-report.many-variables").stream().forEach(e -> System.out.println(e));
+        System.out.println("####################state##################");
+        System.out.println("###############################################");
+        c.getStringList("psl.psl-generate-sourcescoring-report.state").stream().forEach(e -> System.out.println(e));
     }
 }

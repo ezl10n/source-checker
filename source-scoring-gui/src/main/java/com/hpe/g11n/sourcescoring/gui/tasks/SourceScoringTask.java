@@ -2,6 +2,7 @@ package com.hpe.g11n.sourcescoring.gui.tasks;
 
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.hp.g11n.sdl.psl.interop.core.IPslSourceList;
 import com.hp.g11n.sdl.psl.interop.core.IPslSourceLists;
 import com.hp.g11n.sdl.psl.interop.core.IPslSourceString;
@@ -19,8 +20,10 @@ import javafx.concurrent.Task;
 
 
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 
 
@@ -42,9 +45,11 @@ public class SourceScoringTask extends Task<Void> {
 	InputDataObj ido;
 	@Inject
 	ISourceScoring checkReport;
+	@Inject
+	@Named("sourceScoringConfig")
 	private Config config;
 	public List<InputDataObj> lstIdo = new ArrayList<InputDataObj>();
-	private static final String STATE="psl.psl-generate-sourcescoring-report.concatenation.state";
+	private static final String STATE="psl.psl-generate-sourcescoring-report.state";
 	private List<String> lstState;
 	int totalProgress =0;
 	int totalCount =0;
@@ -55,11 +60,13 @@ public class SourceScoringTask extends Task<Void> {
 		this.rulesCheckedIdx = rulesCheckedIdx;
 		checkReport.build(rulesCheckedIdx);
 	}
+	
 
 	@Override
 	protected Void call() throws Exception {
 		// output
 		String[] sourcePaths = source.split(";");
+		lstState=config.getStringList(STATE);
 		SimpleDateFormat sdf = new SimpleDateFormat("YYYYMMddHHmmss");
 		final FileWriter fw = new FileWriter(report+"SourceScoring"+sdf.format(new Date())+".csv");
 		List<IPslSourceLists> lstIPslSourceLists = new ArrayList<IPslSourceLists>();
@@ -74,11 +81,10 @@ public class SourceScoringTask extends Task<Void> {
 							if(sourceString.hasState(PslState.valueOf(sourceStringState))){
 								ido = new InputDataObj();
 								ido.setLpuName(new File(sourcePath).getName());
-								ido.setFileName(sourceString.getIDName());
+								ido.setFileName(new File(sourceLists.toList().get(i).getSourceFile()).getName());
 								ido.setSourceStrings(sourceString.getText());
 								ido.setStringId(sourceString.getID());
 								lstIdo.add(ido);
-								break;
 							}
 						}
 					}
@@ -107,9 +113,5 @@ public class SourceScoringTask extends Task<Void> {
 		});
 		fw.close();
 		return null;
-	}
-	public void setConfig(Config config) {
-		this.config=config;
-		lstState=this.config.getStringList(STATE);
 	}
 }
