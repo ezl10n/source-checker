@@ -40,8 +40,8 @@ import com.hpe.g11n.sourcescoring.gui.tasks.SourceScoringTask;
  * Created by foy on 2016-08-05.
  */
 
-public class MainViewController extends BaseController {
-	protected final Logger logger = LoggerFactory.getLogger(getClass());
+public class MainViewController extends BaseController  implements Initializable{
+
 	@FXML
 	private Parent root;
 
@@ -142,6 +142,7 @@ public class MainViewController extends BaseController {
 		rulesConfigView.setResizable(false);
 		rulesConfigView.setTitle("Global Rules Setting!");
 		rulesConfigView.initModality(Modality.APPLICATION_MODAL);
+		//rulesConfigView.initModality(Modality.WINDOW_MODAL);
 		rulesConfigView.initOwner(root.getScene().getWindow());
 		rulesConfigView.show();
 	}

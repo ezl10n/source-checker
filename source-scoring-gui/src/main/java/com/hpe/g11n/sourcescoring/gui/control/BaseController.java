@@ -8,6 +8,8 @@ import com.hpe.g11n.sourcescoring.gui.guice.GUIModule;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,7 +21,8 @@ import java.io.InputStream;
  * Date: 2016-08-16
  * Time: 14:33
  */
-public abstract class BaseController implements Initializable {
+public abstract class BaseController {
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
     protected Injector injector= Guice.createInjector(new CoreModule(),
             new ConfigModule(), new GUIModule());
     public BaseController(){

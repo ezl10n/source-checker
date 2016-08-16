@@ -2,7 +2,10 @@ package com.hpe.g11n.sourcescoring.utils;
 
 public class Constant {
    public static final String CONCATENATION ="Concatenation";
+   public static final String CONCATENATION_KEYWORDS_KEY="psl.psl-generate-sourcescoring-report.concatenation.key-words";
+   public static final String CONCATENATION_KEYWORDS_VARIABLES="psl.psl-generate-sourcescoring-report.concatenation.variables";
    public static final String CAMELCASE ="CamelCase";
+   public static final String CAMELCASE_FORMAT="psl.psl-generate-sourcescoring-report.camel-case";
    public static final String DATETIMEFORMAT="Date&Time Format";
    public static final String VARIABLES ="Variables";
    public static final String CAPITAL ="Capital";
