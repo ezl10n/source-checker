@@ -138,7 +138,7 @@ public class MainViewController implements Initializable {
 				rules.add(i);
 			}
 		}
-
+		progressBar.setVisible(true);
 		progressBar.progressProperty().bind(task.progressProperty());
 		task.setUp(sourceUrl.getText(), outputUrl.getText() + "/", rules);
 		t = new Thread(task);
