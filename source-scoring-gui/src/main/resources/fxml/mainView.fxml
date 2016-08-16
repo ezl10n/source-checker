@@ -46,7 +46,7 @@
         <menus>
           <Menu mnemonicParsing="false" text="Settings">
             <items>
-              <MenuItem mnemonicParsing="false" text="Rules" />
+              <MenuItem fx:id="rulesConfig" mnemonicParsing="false" text="Rules" onAction="#rulesConfigPage"/>
             </items>
           </Menu>
         </menus>
