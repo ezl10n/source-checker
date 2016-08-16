@@ -2,8 +2,10 @@ package com.hpe.g11n.sourcescoring.gui.control;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.hpe.g11n.sourcescoring.config.guice.ConfigModule;
 import com.hpe.g11n.sourcescoring.utils.Constant;
 import com.typesafe.config.Config;
+import com.typesafe.config.ConfigValueFactory;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -45,8 +47,8 @@ public class RulesConfigViewController extends BaseController implements Initial
     }
 
     @FXML
-    public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-       concatenationKeyWords.setText(config.getStringList(Constant.CONCATENATION_KEYWORDS_KEY).toString());
+    public void initialize(URL location,ResourceBundle resources) {
+        concatenationKeyWords.setText(config.getStringList(Constant.CONCATENATION_KEYWORDS_KEY).toString());
         concatenationVariables.setText(config.getStringList(Constant.CONCATENATION_KEYWORDS_VARIABLES).toString());
         camelCaseFormat.setText(config.getString(Constant.CAMELCASE_FORMAT));
     }
@@ -58,7 +60,12 @@ public class RulesConfigViewController extends BaseController implements Initial
             logger.debug(concatenationVariables.getText());
             logger.debug(camelCaseFormat.getText());
         }
-
+        config=config.withValue(Constant.CONCATENATION_KEYWORDS_KEY, ConfigValueFactory.fromAnyRef(concatenationKeyWords.getText()));
+        config=config.withValue(Constant.CONCATENATION_KEYWORDS_VARIABLES, ConfigValueFactory.fromAnyRef(concatenationVariables.getText()));
+        config=config.withValue(Constant.CAMELCASE_FORMAT, ConfigValueFactory.fromAnyRef(camelCaseFormat.getText()));
+        //TODO need more work, like rule validate..
+        ConfigModule.saveConfig(config);
+        close(event);
     }
 
     @FXML
