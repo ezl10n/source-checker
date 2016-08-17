@@ -1,14 +1,14 @@
 package com.hpe.g11n.sourcescoring.pojo;
 
-public class InputDataObj {
+public class InputData {
 	private String lpuName;
 	private String fileName;
 	private String stringId;
 	private String sourceStrings;
-	public InputDataObj(){
+	public InputData(){
 		super();
 	}
-	public InputDataObj(String lpuName, String fileName, String stringId,
+	public InputData(String lpuName, String fileName, String stringId,
 			String sourceStrings) {
 		super();
 		this.lpuName = lpuName;

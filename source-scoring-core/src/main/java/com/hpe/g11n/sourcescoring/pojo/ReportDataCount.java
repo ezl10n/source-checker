@@ -8,7 +8,7 @@ package com.hpe.g11n.sourcescoring.pojo;
  * @Time: 下午4:45:20
  *
  */
-public class EndReportData {
+public class ReportDataCount {
 	private String errorType;
 	private int hitStrCount;
 	private int dupliCount;

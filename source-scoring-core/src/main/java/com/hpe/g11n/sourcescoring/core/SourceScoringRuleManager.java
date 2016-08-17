@@ -4,7 +4,7 @@ package com.hpe.g11n.sourcescoring.core;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.hpe.g11n.sourcescoring.pojo.InputDataObj;
+import com.hpe.g11n.sourcescoring.pojo.InputData;
 import com.hpe.g11n.sourcescoring.pojo.ReportData;
 import com.typesafe.config.Config;
 
@@ -49,7 +49,7 @@ public class SourceScoringRuleManager implements ISourceScoring{
 
 
     @Override
-    public String check(List<InputDataObj> lstIdo) {
+    public String check(List<InputData> lstIdo) {
         Preconditions.checkNotNull(checkRules);
         Preconditions.checkArgument(checkRules.size() > 0, "checkRules should not be empty");
         checkRules.forEach( c -> c.check(lstIdo));

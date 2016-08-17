@@ -15,10 +15,10 @@ public class ReportData {
 	private String sourceStrings;
 	private String errorType;
 	private String details;
-	private EndReportData endReportData;
+	private ReportDataCount endReportData;
 
 	public ReportData(String lpuName, String fileName, String stringId,
-			String sourceStrings, String errorType, String details,EndReportData endReportData) {
+			String sourceStrings, String errorType, String details,ReportDataCount endReportData) {
 		super();
 		this.lpuName = lpuName;
 		this.fileName = fileName;
@@ -77,11 +77,11 @@ public class ReportData {
 		this.details = details;
 	}
 
-	public EndReportData getEndReportData() {
+	public ReportDataCount getEndReportData() {
 		return endReportData;
 	}
 
-	public void setEndReportData(EndReportData endReportData) {
+	public void setEndReportData(ReportDataCount endReportData) {
 		this.endReportData = endReportData;
 	}
 

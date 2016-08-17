@@ -1,6 +1,6 @@
 package com.hpe.g11n.sourcescoring.utils;
 
-import com.hpe.g11n.sourcescoring.pojo.EndReportData;
+import com.hpe.g11n.sourcescoring.pojo.ReportDataCount;
 
 /**
  * 
@@ -10,10 +10,10 @@ import com.hpe.g11n.sourcescoring.pojo.EndReportData;
  * @Time: 上午11:21:57
  *
  */
-public class EndReportDataUtil {
-	public EndReportData getEndReportData(String errorType, int hitStrCount,
+public class ReportDataUtil {
+	public ReportDataCount getEndReportData(String errorType, int hitStrCount,
 			int validatCount, int totalNCCount, int hitNCCount) {
-		EndReportData endReportData = new EndReportData();
+		ReportDataCount endReportData = new ReportDataCount();
 		endReportData.setErrorType(errorType);
 		endReportData.setHitNCCount(hitNCCount);
 		endReportData.setHitStrCount(hitStrCount);

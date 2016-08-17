@@ -11,11 +11,11 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.hpe.g11n.sourcescoring.core.IRule;
 import com.hpe.g11n.sourcescoring.core.annotation.RuleData;
-import com.hpe.g11n.sourcescoring.pojo.EndReportData;
-import com.hpe.g11n.sourcescoring.pojo.InputDataObj;
+import com.hpe.g11n.sourcescoring.pojo.ReportDataCount;
+import com.hpe.g11n.sourcescoring.pojo.InputData;
 import com.hpe.g11n.sourcescoring.pojo.ReportData;
 import com.hpe.g11n.sourcescoring.utils.Constant;
-import com.hpe.g11n.sourcescoring.utils.EndReportDataUtil;
+import com.hpe.g11n.sourcescoring.utils.ReportDataUtil;
 import com.typesafe.config.Config;
 
 /**
@@ -54,7 +54,7 @@ public class ConcatenationCheckRule implements IRule{
 	}
 
 	@Override
-	public boolean check(List<InputDataObj> lstIdo) {
+	public boolean check(List<InputData> lstIdo) {
 		Preconditions.checkNotNull(keywords);
 		Preconditions.checkNotNull(variables);
 		Preconditions.checkNotNull(lstIdo);
@@ -64,7 +64,7 @@ public class ConcatenationCheckRule implements IRule{
 		int hitStrCount=0;
 		int totalNCCount=0;
 		int hitNCCount =0;
-		for(InputDataObj ido:lstIdo){
+		for(InputData ido:lstIdo){
 			if(log.isDebugEnabled()){
 				log.debug("Start ConcatenationCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceStrings());
 			}
@@ -110,8 +110,8 @@ public class ConcatenationCheckRule implements IRule{
 				log.debug("END ConcatenationCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceStrings());
 			}
 		}
-		EndReportDataUtil erdu = new EndReportDataUtil();
-		EndReportData endReportData = erdu.getEndReportData(Constant.CONCATENATION, hitStrCount, hashSet.size(), totalNCCount, hitNCCount);
+		ReportDataUtil erdu = new ReportDataUtil();
+		ReportDataCount endReportData = erdu.getEndReportData(Constant.CONCATENATION, hitStrCount, hashSet.size(), totalNCCount, hitNCCount);
 		report.add(new ReportData(null,null,null,null,null,null,endReportData));
 		return flag;
 	}

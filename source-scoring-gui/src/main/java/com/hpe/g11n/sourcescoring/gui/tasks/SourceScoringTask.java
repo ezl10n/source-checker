@@ -9,8 +9,8 @@ import com.hp.g11n.sdl.psl.interop.core.IPslSourceString;
 import com.hp.g11n.sdl.psl.interop.core.enums.PslState;
 import com.hpe.g11n.sourcescoring.core.ISourceScoring;
 import com.hpe.g11n.sourcescoring.gui.utils.PassoloTemplate;
-import com.hpe.g11n.sourcescoring.pojo.EndReportData;
-import com.hpe.g11n.sourcescoring.pojo.InputDataObj;
+import com.hpe.g11n.sourcescoring.pojo.ReportDataCount;
+import com.hpe.g11n.sourcescoring.pojo.InputData;
 import com.hpe.g11n.sourcescoring.pojo.ReportData;
 
 
@@ -49,13 +49,13 @@ public class SourceScoringTask extends Task<Void> {
 	private String report;
 	private List<Integer> rulesCheckedIdx;
 	@Inject
-	InputDataObj ido;
+	InputData ido;
 	@Inject
 	ISourceScoring checkReport;
 	@Inject
 	@Named("sourceScoringConfig")
 	private Config config;
-	public List<InputDataObj> lstIdo = new ArrayList<InputDataObj>();
+	public List<InputData> lstIdo = new ArrayList<InputData>();
 	private static final String STATE="psl.psl-generate-sourcescoring-report.state";
 	private List<String> lstState;
 	int totalProgress =0;
@@ -86,7 +86,7 @@ public class SourceScoringTask extends Task<Void> {
 					for (IPslSourceString sourceString : sourceLists.toList().get(i).getSourceStrings()) {
 						for(String sourceStringState:lstState){
 							if(sourceString.hasState(PslState.valueOf(sourceStringState))){
-								ido = new InputDataObj();
+								ido = new InputData();
 								ido.setLpuName(new File(sourcePath).getName());
 								ido.setFileName(new File(sourceLists.toList().get(i).getSourceFile()).getName());
 								ido.setSourceStrings(sourceString.getText());
@@ -108,7 +108,7 @@ public class SourceScoringTask extends Task<Void> {
 		//report
 		List<ReportData> report = checkReport.report();
 		fw.write("LPU NAME,FILE NAME,STRING ID,SOURCE STRINGS,ERROR TYPE,DETAILS\n");
-		List<EndReportData> lstEndReportData = new ArrayList<EndReportData>();
+		List<ReportDataCount> lstEndReportData = new ArrayList<ReportDataCount>();
 		report.forEach( r -> {
 			try {
 				if(r.getStringId() !=null){
