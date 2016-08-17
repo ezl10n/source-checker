@@ -9,11 +9,14 @@ import com.hp.g11n.sdl.psl.interop.core.IPslSourceString;
 import com.hp.g11n.sdl.psl.interop.core.enums.PslState;
 import com.hpe.g11n.sourcescoring.core.ISourceScoring;
 import com.hpe.g11n.sourcescoring.gui.utils.PassoloTemplate;
+import com.hpe.g11n.sourcescoring.pojo.EndReportData;
 import com.hpe.g11n.sourcescoring.pojo.InputDataObj;
 import com.hpe.g11n.sourcescoring.pojo.ReportData;
 
 
 import com.typesafe.config.Config;
+
+
 
 import javafx.concurrent.Task;
 
@@ -21,8 +24,12 @@ import javafx.concurrent.Task;
 
 
 
+
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+
 
 
 
@@ -101,16 +108,36 @@ public class SourceScoringTask extends Task<Void> {
 		//report
 		List<ReportData> report = checkReport.report();
 		fw.write("LPU NAME,FILE NAME,STRING ID,SOURCE STRINGS,ERROR TYPE,DETAILS\n");
+		List<EndReportData> lstEndReportData = new ArrayList<EndReportData>();
 		report.forEach( r -> {
 			try {
-				fw.write(r.getLpuName()+","+r.getFileName()+","+r.getStringId()
-						+","+r.getSourceStrings()+","+r.getErrorType()+","+r.getDetails()+"\n");
+				if(r.getStringId() !=null){
+					fw.write(r.getLpuName()+","+r.getFileName()+","+r.getStringId()
+							+","+r.getSourceStrings()+","+r.getErrorType()+","+r.getDetails()+"\n");
+				}
+				if(r.getEndReportData() !=null){
+					lstEndReportData.add(r.getEndReportData());
+					
+				}
 				
 			} catch (IOException e) {
 				log.error("write report CSV failure.",e);
 			}
 
 		});
+		if(lstEndReportData.size()>0){
+			fw.write("\n");
+			fw.write("\n");
+			fw.write("Error type,Hit string count,Duplicated count,Validated count,Total New & Change Word Count,Hit New & Change Word Count\n");
+			lstEndReportData.forEach( erd -> {
+				try {
+					fw.write(erd.getErrorType()+","+erd.getHitStrCount()+","+erd.getDupliCount()+","+erd.getValidatCount()
+							+","+erd.getTotalNCCount()+","+erd.getHitNCCount()+"\n");
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			});
+		}
 		fw.close();
 		return null;
 	}

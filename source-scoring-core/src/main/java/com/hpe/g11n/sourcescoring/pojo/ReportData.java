@@ -1,5 +1,13 @@
 package com.hpe.g11n.sourcescoring.pojo;
 
+/**
+ * 
+ * @Descripation
+ * @CreatedBy: Ali Cao
+ * @Date: 2016年8月16日
+ * @Time: 下午4:46:38
+ *
+ */
 public class ReportData {
 	private String lpuName;
 	private String fileName;
@@ -7,9 +15,10 @@ public class ReportData {
 	private String sourceStrings;
 	private String errorType;
 	private String details;
+	private EndReportData endReportData;
 
 	public ReportData(String lpuName, String fileName, String stringId,
-			String sourceStrings, String errorType, String details) {
+			String sourceStrings, String errorType, String details,EndReportData endReportData) {
 		super();
 		this.lpuName = lpuName;
 		this.fileName = fileName;
@@ -17,8 +26,9 @@ public class ReportData {
 		this.sourceStrings = sourceStrings;
 		this.errorType = errorType;
 		this.details = details;
+		this.endReportData = endReportData;
 	}
-
+	
 	public String getLpuName() {
 		return lpuName;
 	}
@@ -65,6 +75,14 @@ public class ReportData {
 
 	public void setDetails(String details) {
 		this.details = details;
+	}
+
+	public EndReportData getEndReportData() {
+		return endReportData;
+	}
+
+	public void setEndReportData(EndReportData endReportData) {
+		this.endReportData = endReportData;
 	}
 
 }

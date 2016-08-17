@@ -1,19 +1,24 @@
 package com.hpe.g11n.sourcescoring.core.rules;
 
 
-import com.google.common.base.Preconditions;
-import com.hpe.g11n.sourcescoring.core.IRule;
-import com.hpe.g11n.sourcescoring.core.annotation.RuleData;
-import com.hpe.g11n.sourcescoring.pojo.InputDataObj;
-import com.hpe.g11n.sourcescoring.pojo.ReportData;
-import com.hpe.g11n.sourcescoring.utils.Constant;
-import com.typesafe.config.Config;
-
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Preconditions;
+import com.hpe.g11n.sourcescoring.core.IRule;
+import com.hpe.g11n.sourcescoring.core.annotation.RuleData;
+import com.hpe.g11n.sourcescoring.pojo.EndReportData;
+import com.hpe.g11n.sourcescoring.pojo.InputDataObj;
+import com.hpe.g11n.sourcescoring.pojo.ReportData;
+import com.hpe.g11n.sourcescoring.utils.Constant;
+import com.hpe.g11n.sourcescoring.utils.EndReportDataUtil;
+import com.typesafe.config.Config;
 
 /**
  * 
@@ -54,26 +59,43 @@ public class VariablesCheckRule implements IRule{
 		Preconditions.checkNotNull(lstIdo);
 		boolean flag = false;
 		report = new ArrayList<>();
+		HashSet<String> hashSet = new HashSet<String>();
+		int hitStrCount=0;
+		int totalNCCount=0;
+		int hitNCCount =0;
 		for(InputDataObj ido:lstIdo){
 			if(log.isDebugEnabled()){
 				log.debug("Start VariablesCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceStrings());
 			}
+			totalNCCount = totalNCCount + ido.getSourceStrings().split(" ").length;
 			int wordsCount =ido.getSourceStrings().trim().split(" ").length;
 			int variablesCount =0;
 			for(String v:variables){
+				//check {0,xxx,xxx}
+				Pattern p = Pattern.compile(".*\\{0\\,.*\\,.*\\}.*");
+		        Matcher m = p.matcher(ido.getSourceStrings());
+				if(m.matches()){
+					variablesCount = variablesCount + 1;
+				}
 				if(ido.getSourceStrings().contains(" "+v+" ")){
 					variablesCount = variablesCount + ido.getSourceStrings().split(" "+v+" ").length-1;
 				}
-			}
-			if(new Float(variablesCount)/new Float(wordsCount) >new Float(0.5)){
-				report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceStrings(),
-						Constant.VARIABLES,""));
+				if(new Float(variablesCount)/new Float(wordsCount) >new Float(0.5)){
+					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceStrings(),
+							Constant.VARIABLES,"",null));
+					hitStrCount++;
+					hashSet.add(ido.getSourceStrings());
+					hitNCCount = hitNCCount + ido.getSourceStrings().split(" ").length;
+				}
 			}
 			
 			if(log.isDebugEnabled()){
 				log.debug("END VariablesCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceStrings());
 			}
 		}
+		EndReportDataUtil erdu = new EndReportDataUtil();
+		EndReportData endReportData = erdu.getEndReportData(Constant.VARIABLES, hitStrCount, hashSet.size(), totalNCCount, hitNCCount);
+		report.add(new ReportData(null,null,null,null,null,null,endReportData));
 		return flag;
 	}
 }
