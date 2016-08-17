@@ -93,9 +93,9 @@ public class VariablesCheckRule implements IRule{
 				log.debug("END VariablesCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceStrings());
 			}
 		}
-		ReportDataUtil erdu = new ReportDataUtil();
-		ReportDataCount endReportData = erdu.getEndReportData(Constant.VARIABLES, hitStrCount, hashSet.size(), totalNCCount, hitNCCount);
-		report.add(new ReportData(null,null,null,null,null,null,endReportData));
+		ReportDataUtil reportDataUtil = new ReportDataUtil();
+		ReportDataCount reportDataCount = reportDataUtil.getEndReportData(Constant.VARIABLES, hitStrCount, hashSet.size(), totalNCCount, hitNCCount);
+		report.add(new ReportData(null,null,null,null,null,null,reportDataCount));
 		return flag;
 	}
 }
