@@ -8,6 +8,8 @@ import com.hp.g11n.sdl.psl.interop.core.IPslSourceLists;
 import com.hp.g11n.sdl.psl.interop.core.IPslSourceString;
 import com.hp.g11n.sdl.psl.interop.core.enums.PslState;
 import com.hpe.g11n.sourcescoring.core.ISourceScoring;
+import com.hpe.g11n.sourcescoring.fileparser.FileParserManager;
+import com.hpe.g11n.sourcescoring.fileparser.IFileParser;
 import com.hpe.g11n.sourcescoring.gui.utils.PassoloTemplate;
 import com.hpe.g11n.sourcescoring.pojo.ReportDataCount;
 import com.hpe.g11n.sourcescoring.pojo.InputData;
@@ -15,6 +17,8 @@ import com.hpe.g11n.sourcescoring.pojo.ReportData;
 
 
 import com.typesafe.config.Config;
+
+
 
 
 
@@ -26,8 +30,12 @@ import javafx.concurrent.Task;
 
 
 
+
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+
 
 
 
@@ -53,11 +61,8 @@ public class SourceScoringTask extends Task<Void> {
 	@Inject
 	ISourceScoring checkReport;
 	@Inject
-	@Named("sourceScoringConfig")
-	private Config config;
+	IFileParser fileParser;
 	public List<InputData> lstIdo = new ArrayList<InputData>();
-	private static final String STATE="psl.psl-generate-sourcescoring-report.state";
-	private List<String> lstState;
 	int totalProgress =0;
 	int totalCount =0;
 
@@ -73,43 +78,19 @@ public class SourceScoringTask extends Task<Void> {
 	protected Void call() throws Exception {
 		// output
 		String[] sourcePaths = source.split(";");
-		lstState=config.getStringList(STATE);
 		SimpleDateFormat sdf = new SimpleDateFormat("YYYYMMddHHmmss");
 		final FileWriter fw = new FileWriter(report+"SourceScoring"+sdf.format(new Date())+".csv");
-		List<IPslSourceLists> lstIPslSourceLists = new ArrayList<IPslSourceLists>();
 		for(String sourcePath:sourcePaths){
-			PassoloTemplate.build(sourcePath).process((p,sourceLists) -> {
-				lstIPslSourceLists.add(sourceLists);
-				int progress=totalProgress;
-				totalCount=totalCount + sourceLists.getCount();
-				for (int i=0;i<sourceLists.toList().size();i++) {
-					for (IPslSourceString sourceString : sourceLists.toList().get(i).getSourceStrings()) {
-						for(String sourceStringState:lstState){
-							if(sourceString.hasState(PslState.valueOf(sourceStringState))){
-								ido = new InputData();
-								ido.setLpuName(new File(sourcePath).getName());
-								ido.setFileName(new File(sourceLists.toList().get(i).getSourceFile()).getName());
-								ido.setSourceStrings(sourceString.getText());
-								ido.setStringId(sourceString.getID());
-								lstIdo.add(ido);
-							}
-						}
-					}
-					progress++;
-					if(i== sourceLists.toList().size()-1){
-						totalProgress = progress;
-					}
-					this.updateProgress(progress,totalCount);
-				}
-
-			});
+			lstIdo.addAll(fileParser.parser(sourcePath));
 		}
 		checkReport.check(lstIdo);
 		//report
 		List<ReportData> report = checkReport.report();
 		fw.write("LPU NAME,FILE NAME,STRING ID,SOURCE STRINGS,ERROR TYPE,DETAILS\n");
 		List<ReportDataCount> lstEndReportData = new ArrayList<ReportDataCount>();
-		report.forEach( r -> {
+		int k=0;
+		for(ReportData r:report){
+			k++;
 			try {
 				if(r.getStringId() !=null){
 					fw.write(r.getLpuName()+","+r.getFileName()+","+r.getStringId()
@@ -123,8 +104,8 @@ public class SourceScoringTask extends Task<Void> {
 			} catch (IOException e) {
 				log.error("write report CSV failure.",e);
 			}
-
-		});
+            this.updateProgress(k, report.size());
+		}
 		if(lstEndReportData.size()>0){
 			fw.write("\n");
 			fw.write("\n");
