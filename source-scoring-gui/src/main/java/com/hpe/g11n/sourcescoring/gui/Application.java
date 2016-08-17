@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 
 
 public class Application extends javafx.application.Application {
@@ -46,15 +47,17 @@ public class Application extends javafx.application.Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-
-
         stage.setTitle("Source Scoring");
         stage.setScene(new Scene(getMainView()));
-        stage.setResizable(true);
+        stage.setResizable(false);
         stage.centerOnScreen();
+        setUpStyle();
         stage.show();
     }
-
+    private void setUpStyle() {
+        URL url = Application.class.getResource(String.format("/styles/themes/default/theme.css"));
+        javafx.application.Application.setUserAgentStylesheet(url.toExternalForm());
+    }
     public static void main(String[] args) {
         launch(args);
     }

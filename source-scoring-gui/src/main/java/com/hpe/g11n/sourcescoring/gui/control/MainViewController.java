@@ -1,6 +1,7 @@
 package com.hpe.g11n.sourcescoring.gui.control;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
@@ -20,6 +22,8 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,8 +40,8 @@ import com.hpe.g11n.sourcescoring.gui.tasks.SourceScoringTask;
  * Created by foy on 2016-08-05.
  */
 
-public class MainViewController implements Initializable {
-	protected final Logger logger = LoggerFactory.getLogger(getClass());
+public class MainViewController extends BaseController  implements Initializable{
+
 	@FXML
 	private Parent root;
 
@@ -66,9 +70,7 @@ public class MainViewController implements Initializable {
 	SourceScoringTask task = new SourceScoringTask();
 
 	public MainViewController() {
-		Injector injector = Guice.createInjector(new CoreModule(),
-				new ConfigModule(), new GUIModule());
-		injector.injectMembers(this);
+		super();
 		injector.injectMembers(task);
 	}
 
@@ -129,6 +131,22 @@ public class MainViewController implements Initializable {
 		}
 	}
 
+	public Parent getRulesConfigView() throws IOException {
+		return loadView("fxml/rulesConfigView.fxml", new RulesConfigViewController());
+	}
+
+	@FXML
+	public void rulesConfigPage(ActionEvent event) throws IOException {
+		Stage rulesConfigView=new Stage();
+		rulesConfigView.setScene(new Scene(getRulesConfigView()));
+		rulesConfigView.setResizable(false);
+		rulesConfigView.setTitle("Global Rules Setting!");
+		rulesConfigView.initModality(Modality.APPLICATION_MODAL);
+		//rulesConfigView.initModality(Modality.WINDOW_MODAL);
+		rulesConfigView.initOwner(root.getScene().getWindow());
+		rulesConfigView.show();
+	}
+
 	@FXML
 	public void scoring(ActionEvent event) {
 		List<Integer> rules = new ArrayList<Integer>();
@@ -138,7 +156,7 @@ public class MainViewController implements Initializable {
 				rules.add(i);
 			}
 		}
-
+		progressBar.setVisible(true);
 		progressBar.progressProperty().bind(task.progressProperty());
 		task.setUp(sourceUrl.getText(), outputUrl.getText() + "/", rules);
 		t = new Thread(task);
