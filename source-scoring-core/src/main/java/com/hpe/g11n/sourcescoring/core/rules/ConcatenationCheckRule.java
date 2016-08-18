@@ -4,6 +4,8 @@ package com.hpe.g11n.sourcescoring.core.rules;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,9 +85,8 @@ public class ConcatenationCheckRule implements IRule{
 					}
 					flag = true;
 				}
-				
-				if (ido.getSourceStrings().toLowerCase().equals(k.trim().toLowerCase())
-						&& ido.getSourceStrings().hashCode()-32 ==k.trim().hashCode()) {
+				if ((ido.getSourceStrings().trim().hashCode()-32==k.trim().hashCode()) 
+						&& pattern(ido.getSourceStrings(),"^[A-Z].*$")) {
 					hitStrCount++;
 					hashSet.add(ido.getSourceStrings());
 					hitNCCount = hitNCCount + ido.getSourceStrings().split(" ").length;
@@ -116,4 +117,9 @@ public class ConcatenationCheckRule implements IRule{
 		return flag;
 	}
 
+	private boolean pattern(String source,String rule){
+		Pattern pattern = Pattern.compile(rule);
+        Matcher matcher = pattern.matcher(source);
+        return matcher.matches();
+	}
 }

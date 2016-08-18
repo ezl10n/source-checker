@@ -13,9 +13,9 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.hpe.g11n.sourcescoring.core.IRule;
 import com.hpe.g11n.sourcescoring.core.annotation.RuleData;
-import com.hpe.g11n.sourcescoring.pojo.ReportDataCount;
 import com.hpe.g11n.sourcescoring.pojo.InputData;
 import com.hpe.g11n.sourcescoring.pojo.ReportData;
+import com.hpe.g11n.sourcescoring.pojo.ReportDataCount;
 import com.hpe.g11n.sourcescoring.utils.Constant;
 import com.hpe.g11n.sourcescoring.utils.ReportDataUtil;
 import com.typesafe.config.Config;
@@ -71,10 +71,17 @@ public class VariablesCheckRule implements IRule{
 			int wordsCount =ido.getSourceStrings().trim().split(" ").length;
 			int variablesCount =0;
 			for(String v:variables){
+				//check xxxx one{xxx} other{xxx} xxxx
+				if(pattern(ido.getSourceStrings(),".*one\\s?\\{.*\\}\\s?other\\s?\\{.*\\}.*$")){
+					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceStrings(),
+							Constant.VARIABLES,"",null));
+					hitStrCount++;
+					hashSet.add(ido.getSourceStrings());
+					hitNCCount = hitNCCount + ido.getSourceStrings().split(" ").length;
+					break;
+				}
 				//check {0,xxx,xxx}
-				Pattern p = Pattern.compile(".*\\{0\\,.*\\,.*\\}.*");
-		        Matcher m = p.matcher(ido.getSourceStrings());
-				if(m.matches()){
+				if(pattern(ido.getSourceStrings(),".*\\{0\\,.*\\,.*\\}.*")){
 					variablesCount = variablesCount + 1;
 				}
 				if(ido.getSourceStrings().contains(" "+v+" ")){
@@ -97,5 +104,11 @@ public class VariablesCheckRule implements IRule{
 		ReportDataCount reportDataCount = reportDataUtil.getEndReportData(Constant.VARIABLES, hitStrCount, hashSet.size(), totalNCCount, hitNCCount);
 		report.add(new ReportData(null,null,null,null,null,null,reportDataCount));
 		return flag;
+	}
+	
+	private boolean pattern(String source,String rule){
+		Pattern pattern = Pattern.compile(rule);
+        Matcher matcher = pattern.matcher(source);
+        return matcher.matches();
 	}
 }
