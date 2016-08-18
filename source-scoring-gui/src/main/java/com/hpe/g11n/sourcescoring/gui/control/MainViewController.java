@@ -8,18 +8,21 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.text.*;
 import javafx.scene.Scene;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.CheckBox;
 import javafx.scene.layout.GridPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import javax.swing.WindowConstants;
 
@@ -53,12 +56,16 @@ public class MainViewController extends BaseController  implements Initializable
 	private FileChooser fileChooser;
 
 	private Thread t;
+	
+	public String info;
 
 	@Inject
 	@Named("ruleNames")
 	List<String> checkBoxs;
 
 	SourceScoringTask task = new SourceScoringTask();
+	
+	List<Integer> rules = new ArrayList<Integer>();
 
 	public MainViewController() {
 		super();
@@ -125,27 +132,75 @@ public class MainViewController extends BaseController  implements Initializable
 	public Parent getRulesConfigView() throws IOException {
 		return loadView("fxml/rulesConfigView.fxml", new RulesConfigViewController());
 	}
-
-	@FXML
-	public void rulesConfigPage(ActionEvent event) throws IOException {
-		Stage rulesConfigView=new Stage();
-		rulesConfigView.setScene(new Scene(getRulesConfigView()));
-		rulesConfigView.setResizable(false);
-		rulesConfigView.setTitle("Global Rules Setting!");
-		rulesConfigView.initModality(Modality.APPLICATION_MODAL);
-		//rulesConfigView.initModality(Modality.WINDOW_MODAL);
-		rulesConfigView.initOwner(root.getScene().getWindow());
-		rulesConfigView.show();
+	
+	public Parent showInfoView(String info) throws IOException {
+		return loadView("fxml/showInfo.fxml", new ShowInfoController(info));
+	}
+	
+	/**
+	 * 
+	 * @Descripation display the warning information
+	 * @CreatedBy: Ali Cao
+	 * @Date: 2016年8月18日
+	 * @Time: 下午2:25:41
+	 * @param event
+	 * @throws IOException
+	 */
+	
+	public void showInfoPage(ActionEvent event) throws IOException {
+		openPage(showInfoView(info),"Warning");
 	}
 
 	@FXML
+	public void rulesConfigPage(ActionEvent event) throws IOException {
+		openPage(getRulesConfigView(),"Global Rules Setting!");
+	}
+
+	/**
+	 * 
+	 * @Descripation open a fxml on UI
+	 * @CreatedBy: Ali Cao
+	 * @Date: 2016年8月18日
+	 * @Time: 下午3:06:27
+	 * @param parent
+	 * @param title
+	 */
+	public void openPage(Parent parent,String title){
+		Stage stage=new Stage();
+		stage.setScene(new Scene(parent));
+		stage.setResizable(false);
+		stage.setTitle(title);
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.initOwner(root.getScene().getWindow());
+		stage.show();
+	}
+	
+	@FXML
 	public void scoring(ActionEvent event) {
-		List<Integer> rules = new ArrayList<Integer>();
 		for (int i = 0; i < checkRules.getChildren().size(); i++) {
 			CheckBox cb = (CheckBox) checkRules.getChildren().get(i);
 			if (cb.isSelected()) {
 				rules.add(i);
 			}
+		}
+		try {
+			if(sourceUrl.getText() ==null || "".equals(sourceUrl.getText())){
+			info="Please choose the source file!";
+			showInfoPage(event);
+			return;
+			}
+			if(outputUrl.getText() ==null || "".equals(outputUrl.getText())){
+				info="Please choose the folder that write output to it!";
+				showInfoPage(event);
+				return;
+			}
+			if(rules.size()==0){
+				info="Please select a check point or more than one!";
+				showInfoPage(event);
+				return;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		progressBar.setVisible(true);
 		progressBar.progressProperty().bind(task.progressProperty());
