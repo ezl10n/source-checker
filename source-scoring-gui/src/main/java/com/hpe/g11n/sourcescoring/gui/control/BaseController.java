@@ -1,18 +1,19 @@
 package com.hpe.g11n.sourcescoring.gui.control;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.hpe.g11n.sourcescoring.config.guice.ConfigModule;
 import com.hpe.g11n.sourcescoring.core.guice.CoreModule;
 import com.hpe.g11n.sourcescoring.gui.guice.GUIModule;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  *

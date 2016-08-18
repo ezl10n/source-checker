@@ -1,11 +1,9 @@
 package com.hpe.g11n.sourcescoring.gui.control;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import com.hpe.g11n.sourcescoring.config.guice.ConfigModule;
-import com.hpe.g11n.sourcescoring.utils.Constant;
-import com.typesafe.config.Config;
-import com.typesafe.config.ConfigValueFactory;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.ResourceBundle;
+
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -15,10 +13,12 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.WindowEvent;
 
-
-import java.net.URL;
-import java.util.Arrays;
-import java.util.ResourceBundle;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.hpe.g11n.sourcescoring.config.guice.ConfigModule;
+import com.hpe.g11n.sourcescoring.utils.Constant;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigValueFactory;
 
 /**
  * Created with IntelliJ IDEA.
