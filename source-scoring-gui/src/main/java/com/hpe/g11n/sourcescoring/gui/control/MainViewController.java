@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -23,6 +24,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 import javax.swing.WindowConstants;
 
@@ -120,37 +123,19 @@ public class MainViewController extends BaseController  implements Initializable
 	}
 
 	@FXML
-	public void close(ActionEvent event) {
-		if (t != null && t.isAlive()) {
-			t.stop();
-		} else {
-			deletedFile(outputUrl.getText());
+	public void close(ActionEvent event) throws IOException, InterruptedException {
+		Alert alert=new Alert(Alert.AlertType.CONFIRMATION,"Files ware processing,Do you want to cancle?");
+		alert.setHeaderText("Warning:");
+		alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 			System.exit(WindowConstants.DO_NOTHING_ON_CLOSE);
-		}
+			
+		});
 	}
 
 	public Parent getRulesConfigView() throws IOException {
 		return loadView("fxml/rulesConfigView.fxml", new RulesConfigViewController());
 	}
 	
-	public Parent showInfoView(String info) throws IOException {
-		return loadView("fxml/showInfo.fxml", new ShowInfoController(info));
-	}
-	
-	/**
-	 * 
-	 * @Descripation display the warning information
-	 * @CreatedBy: Ali Cao
-	 * @Date: 2016年8月18日
-	 * @Time: 下午2:25:41
-	 * @param event
-	 * @throws IOException
-	 */
-	
-	public void showInfoPage(ActionEvent event) throws IOException {
-		openPage(showInfoView(info),"Warning");
-	}
-
 	@FXML
 	public void rulesConfigPage(ActionEvent event) throws IOException {
 		openPage(getRulesConfigView(),"Global Rules Setting!");
@@ -183,40 +168,33 @@ public class MainViewController extends BaseController  implements Initializable
 				rules.add(i);
 			}
 		}
-		try {
-			if(sourceUrl.getText() ==null || "".equals(sourceUrl.getText())){
-			info="Please choose the source file!";
-			showInfoPage(event);
+		if(sourceUrl.getText() ==null || "".equals(sourceUrl.getText())){
+			Alert alert=new Alert(Alert.AlertType.CONFIRMATION,"Please choose the source file!");
+			alert.setHeaderText("Error:");
+			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
+			});
 			return;
-			}
-			if(outputUrl.getText() ==null || "".equals(outputUrl.getText())){
-				info="Please choose the folder that write output to it!";
-				showInfoPage(event);
-				return;
-			}
-			if(rules.size()==0){
-				info="Please select a check point or more than one!";
-				showInfoPage(event);
-				return;
-			}
-			progressBar.setVisible(true);
-			progressBar.progressProperty().bind(task.progressProperty());
-			task.setUp(sourceUrl.getText(), outputUrl.getText() + "/", rules);
-			t = new Thread(task);
-			t.setDaemon(true);
-			t.start();
-			try {
-				t.join();
-				if(!t.isAlive()){
-					info="It have be completed!";
-					showInfoPage(event);
-				}
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
+		if(outputUrl.getText() ==null || "".equals(outputUrl.getText())){
+			Alert alert=new Alert(Alert.AlertType.CONFIRMATION,"Please choose the folder that write output to it!");
+			alert.setHeaderText("Error:");
+			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
+			});
+			return;
+		}
+		if(rules.size()==0){
+			Alert alert=new Alert(Alert.AlertType.CONFIRMATION,"Please select a check point or more than one!");
+			alert.setHeaderText("Error:");
+			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
+			});
+			return;
+		}
+		progressBar.setVisible(true);
+		progressBar.progressProperty().bind(task.progressProperty());
+		task.setUp(sourceUrl.getText(), outputUrl.getText() + "/", rules);
+		t = new Thread(task);
+		t.setDaemon(true);
+		t.start();
 	}
 
 	public void deletedFile(String filePath) {
