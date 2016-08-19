@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<Pane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button fx:id="yesBtn" layoutX="145.0" layoutY="106.0" mnemonicParsing="false" text="Yes" onAction="#actionYesButton"/>
+      <Button fx:id="noBtn" layoutX="376.0" layoutY="106.0" mnemonicParsing="false" text="No" onAction="#close"/>
+      <Text fx:id="showInfo" layoutX="34.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" wrappingWidth="544.12109375" />
+   </children>
+</Pane>

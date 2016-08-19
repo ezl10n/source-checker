@@ -199,15 +199,24 @@ public class MainViewController extends BaseController  implements Initializable
 				showInfoPage(event);
 				return;
 			}
+			progressBar.setVisible(true);
+			progressBar.progressProperty().bind(task.progressProperty());
+			task.setUp(sourceUrl.getText(), outputUrl.getText() + "/", rules);
+			t = new Thread(task);
+			t.setDaemon(true);
+			t.start();
+			try {
+				t.join();
+				if(!t.isAlive()){
+					info="It have be completed!";
+					showInfoPage(event);
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		progressBar.setVisible(true);
-		progressBar.progressProperty().bind(task.progressProperty());
-		task.setUp(sourceUrl.getText(), outputUrl.getText() + "/", rules);
-		t = new Thread(task);
-		t.setDaemon(true);
-		t.start();
 	}
 
 	public void deletedFile(String filePath) {
