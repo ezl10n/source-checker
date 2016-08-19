@@ -1,24 +1,15 @@
 package com.hpe.g11n.sourcescoring.gui.tasks;
 
-import java.awt.Window;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.swing.WindowConstants;
-
 import javafx.concurrent.Task;
-import javafx.fxml.FXML;
-import javafx.stage.Stage;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.stage.Modality;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
