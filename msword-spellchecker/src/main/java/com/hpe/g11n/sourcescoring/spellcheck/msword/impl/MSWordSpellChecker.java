@@ -11,25 +11,23 @@ import com.jacob.com.Variant;
  * Date: 2016-08-22
  * Time: 10:39
  *
- * can find some JACOB doc in <url>http://www.land-of-kain.de/docs/jacob/</url> <br>
- * MS office doc https://msdn.microsoft.com/en-us/library/office/ff822597.aspx,
- * https://msdn.microsoft.com/en-us/library/office/ff835170.aspx
- * https://msdn.microsoft.com/en-us/library/office/ff821618.aspx
- * https://msdn.microsoft.com/en-us/library/office/ff839188.aspx
+ * can find some JACOB doc in
+ * http://www.land-of-kain.de/docs/jacob <br>
+ *
+ * MS office doc
+ * https://msdn.microsoft.com/en-us/library/office/ff822597.aspx<br>
+ * https://msdn.microsoft.com/en-us/library/office/ff835170.aspx<br>
+ * https://msdn.microsoft.com/en-us/library/office/ff821618.aspx<br>
+ * https://msdn.microsoft.com/en-us/library/office/ff839188.aspx<br>
  */
 public class MSWordSpellChecker implements ISpellChecker {
     @Override
     public String suggestion(String source) {
         ActiveXComponent msWord = null;
         ActiveXComponent document = null;
-        String savePath="C:\\Users\\Administrator\\Desktop\\style\\aaa.doc";
         try{
             StringBuffer sb=new StringBuffer(100);
             msWord = new ActiveXComponent("Word.Application");
-            //we can use word.invoke("CheckSpelling",source); to check whether spell error.
-            //word.invoke("GetSpellingSuggestions",source) to get spellingSuggestions..
-            //document CheckSpelling will display checkspelling dialog...
-            //use content CheckSpelling to get suggestion.
             msWord.setProperty("Visible", Variant.VT_FALSE);
             ActiveXComponent docs=msWord.getPropertyAsComponent("Documents");
             document= docs.invokeGetComponent("Add");
@@ -38,7 +36,6 @@ public class MSWordSpellChecker implements ISpellChecker {
             if(!msWord.invoke("CheckSpelling",source).getBoolean()){
                 Variant result  = msWord.invoke("GetSpellingSuggestions", source);
                 int cnt = Dispatch.get(result.getDispatch(),"count").getInt();
-
                 for(int i=1;i<=cnt;i++){
                     Variant item=Dispatch.call(result.getDispatch(), "Item", i);
                     sb.append(Dispatch.get(item.getDispatch(),"name").getString()).append(",");
