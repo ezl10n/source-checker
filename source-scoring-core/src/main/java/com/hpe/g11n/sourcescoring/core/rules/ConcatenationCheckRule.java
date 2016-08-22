@@ -79,7 +79,7 @@ public class ConcatenationCheckRule implements IRule{
 					hashSet.add(ido.getSourceStrings());
 					hitNCCount = hitNCCount + ido.getSourceStrings().split(" ").length;
 					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceStrings(),
-							Constant.CONCATENATION,"Warning: starting or ending with keyword \""+k+"\". Possible concatenated strings.",null));
+							Constant.CONCATENATION,"Warning: starting or ending with keyword \""+k.trim()+"\". Possible concatenated strings.",null));
 					if(log.isDebugEnabled()){
 						log.debug("ConcatenationCheckRule, value:"+ ido.getSourceStrings() +" start or end with:+"+k);
 					}

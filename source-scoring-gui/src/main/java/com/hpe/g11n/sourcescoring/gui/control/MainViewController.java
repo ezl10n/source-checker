@@ -121,7 +121,7 @@ public class MainViewController extends BaseController  implements Initializable
 	@FXML
 	public void close(ActionEvent event) throws IOException, InterruptedException {
 		if(t != null && t.isAlive()){
-			Alert alert=new Alert(Alert.AlertType.CONFIRMATION,"Files ware processing,Do you want to cancle?");
+			Alert alert=new Alert(Alert.AlertType.CONFIRMATION,"Files are processing,Do you want to cancle?");
 			alert.setHeaderText("Warning:");
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 				progressBar.setVisible(false);
