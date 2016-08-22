@@ -14,27 +14,29 @@ import com.jacob.com.Variant;
  * can find some JACOB doc in <url>http://www.land-of-kain.de/docs/jacob/</url> <br>
  * MS office doc https://msdn.microsoft.com/en-us/library/office/ff822597.aspx,
  * https://msdn.microsoft.com/en-us/library/office/ff835170.aspx
+ * https://msdn.microsoft.com/en-us/library/office/ff821618.aspx
+ * https://msdn.microsoft.com/en-us/library/office/ff839188.aspx
  */
 public class MSWordSpellChecker implements ISpellChecker {
     @Override
     public String suggestion(String source) {
-        ActiveXComponent word = null;
+        ActiveXComponent msWord = null;
         ActiveXComponent document = null;
         String savePath="C:\\Users\\Administrator\\Desktop\\style\\aaa.doc";
         try{
             StringBuffer sb=new StringBuffer(100);
-            word = new ActiveXComponent("Word.Application");
+            msWord = new ActiveXComponent("Word.Application");
             //we can use word.invoke("CheckSpelling",source); to check whether spell error.
             //word.invoke("GetSpellingSuggestions",source) to get spellingSuggestions..
             //document CheckSpelling will display checkspelling dialog...
             //use content CheckSpelling to get suggestion.
-            word.setProperty("Visible", Variant.VT_FALSE);
-            ActiveXComponent docs=word.getPropertyAsComponent("Documents");
+            msWord.setProperty("Visible", Variant.VT_FALSE);
+            ActiveXComponent docs=msWord.getPropertyAsComponent("Documents");
             document= docs.invokeGetComponent("Add");
-            ActiveXComponent content= document.getPropertyAsComponent("content");
+            ActiveXComponent content = document.getPropertyAsComponent("content");
             content.setProperty("text", "This word is for spelling check only!!");
-            if(!word.invoke("CheckSpelling",source).getBoolean()){
-                Variant result  = word.invoke("GetSpellingSuggestions",source);
+            if(!msWord.invoke("CheckSpelling",source).getBoolean()){
+                Variant result  = msWord.invoke("GetSpellingSuggestions", source);
                 int cnt = Dispatch.get(result.getDispatch(),"count").getInt();
 
                 for(int i=1;i<=cnt;i++){
@@ -47,7 +49,7 @@ public class MSWordSpellChecker implements ISpellChecker {
         }catch (Exception e){
             e.printStackTrace();
         }finally {
-            word.invoke("Quit", 0);
+            msWord.invoke("Quit", 0);
         }
         return null;
     }

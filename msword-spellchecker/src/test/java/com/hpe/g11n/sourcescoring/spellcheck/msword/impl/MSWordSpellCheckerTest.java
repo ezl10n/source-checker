@@ -13,6 +13,9 @@ public class MSWordSpellCheckerTest {
     @Test
     public void testSuggestion() {
         MSWordSpellChecker sp=new MSWordSpellChecker();
-        Assert.assertNotNull(sp.suggestion("aaxx G00d and Fox!!"));
+        Assert.assertNull(sp.suggestion("Hello"));
+        Assert.assertNull(sp.suggestion("world"));
+        Assert.assertNotNull(sp.suggestion("hxllo"));
+        Assert.assertNotNull(sp.suggestion("woold"));
     }
 }
