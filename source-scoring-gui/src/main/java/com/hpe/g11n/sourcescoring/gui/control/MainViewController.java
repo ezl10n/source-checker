@@ -124,7 +124,8 @@ public class MainViewController extends BaseController  implements Initializable
 			Alert alert=new Alert(Alert.AlertType.CONFIRMATION,"Files ware processing,Do you want to cancle?");
 			alert.setHeaderText("Warning:");
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
-				System.exit(WindowConstants.DO_NOTHING_ON_CLOSE);
+				progressBar.setVisible(false);
+				t.stop();
 			});
 		}else{
 			System.exit(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -169,21 +170,21 @@ public class MainViewController extends BaseController  implements Initializable
 			}
 		}
 		if(sourceUrl.getText() ==null || "".equals(sourceUrl.getText())){
-			Alert alert=new Alert(Alert.AlertType.CONFIRMATION,"Please choose the source file!");
+			Alert alert=new Alert(Alert.AlertType.ERROR,"Please choose the source file!");
 			alert.setHeaderText("Error:");
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 			});
 			return;
 		}
 		if(outputUrl.getText() ==null || "".equals(outputUrl.getText())){
-			Alert alert=new Alert(Alert.AlertType.CONFIRMATION,"Please choose the folder that write output to it!");
+			Alert alert=new Alert(Alert.AlertType.ERROR,"Please choose the folder that write output to it!");
 			alert.setHeaderText("Error:");
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 			});
 			return;
 		}
 		if(rules.size()==0){
-			Alert alert=new Alert(Alert.AlertType.CONFIRMATION,"Please select a check point or more than one!");
+			Alert alert=new Alert(Alert.AlertType.ERROR,"Please select a check point or more than one!");
 			alert.setHeaderText("Error:");
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 			});

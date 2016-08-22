@@ -103,7 +103,7 @@ public class SourceScoringTask extends Task<Void> {
 	@Override
 	protected void succeeded() {
 		super.succeeded();
-		Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+		Alert alert = new Alert(Alert.AlertType.INFORMATION,
 				"All files are finished!");
 		alert.setHeaderText("Note:");
 		alert.showAndWait().filter(response -> response == ButtonType.OK)

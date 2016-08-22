@@ -4,7 +4,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<Pane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox layoutX="27.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="974.0">
          <children>
@@ -21,13 +21,9 @@
          </children>
       </HBox>
 
-      <HBox layoutX="255.0" layoutY="569.0" prefHeight="14.0" prefWidth="141.0">
-         <children>
-            <Button id="runBtn" mnemonicParsing="false" onAction="#scoring" text="Run" />
-         </children>
-      </HBox>
-      <Button layoutX="640.0" layoutY="569.0" mnemonicParsing="false" onAction="#close" text="Cancel" />
-       <GridPane fx:id="checkRules" layoutX="139.0" layoutY="208.0" prefHeight="323.0" prefWidth="851.0">
+      <HBox layoutX="255.0" layoutY="569.0" prefHeight="14.0" prefWidth="141.0" />
+      <Button layoutX="640.0" layoutY="520.0" mnemonicParsing="false" onAction="#close" text="Cancel" />
+       <GridPane fx:id="checkRules" layoutX="135.0" layoutY="150.0" prefHeight="323.0" prefWidth="851.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -41,17 +37,16 @@
 		  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
       </GridPane>
-      <ProgressBar fx:id="progressBar" layoutX="231.0" layoutY="669.0" prefHeight="17.0" prefWidth="548.0" progress="0.0" visible="false" />
+      <ProgressBar fx:id="progressBar" layoutX="230.0" layoutY="560.0" prefHeight="17.0" prefWidth="548.0" progress="0.0" visible="false" />
       <MenuBar layoutX="3.0" layoutY="2.0" prefHeight="24.0" prefWidth="1000.0">
         <menus>
           <Menu mnemonicParsing="false" text="Settings">
             <items>
-              <MenuItem fx:id="rulesConfig" mnemonicParsing="false" text="Rules" onAction="#rulesConfigPage"/>
+              <MenuItem fx:id="rulesConfig" mnemonicParsing="false" onAction="#rulesConfigPage" text="Rules" />
             </items>
           </Menu>
         </menus>
       </MenuBar>
-      <Label layoutX="14.0" layoutY="342.0" prefHeight="34.0" prefWidth="141.0" text="Check Points:" />
-
+      <Button id="runBtn" layoutX="250.0" layoutY="520.0" mnemonicParsing="false" onAction="#scoring" text="Run" />
    </children>
 </Pane>
