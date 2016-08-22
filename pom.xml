@@ -308,6 +308,7 @@
         <module>source-scoring-cli</module>
         <module>source-scoring-gui</module>
         <module>source-scoring-ezl10n-adapter</module>
+        <module>msword-spellchecker</module>
     </modules>
 
 
