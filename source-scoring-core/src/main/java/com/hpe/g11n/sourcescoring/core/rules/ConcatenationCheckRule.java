@@ -13,9 +13,9 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.hpe.g11n.sourcescoring.core.IRule;
 import com.hpe.g11n.sourcescoring.core.annotation.RuleData;
-import com.hpe.g11n.sourcescoring.pojo.ReportDataCount;
 import com.hpe.g11n.sourcescoring.pojo.InputData;
 import com.hpe.g11n.sourcescoring.pojo.ReportData;
+import com.hpe.g11n.sourcescoring.pojo.ReportDataCount;
 import com.hpe.g11n.sourcescoring.utils.Constant;
 import com.hpe.g11n.sourcescoring.utils.ReportDataUtil;
 import com.typesafe.config.Config;
@@ -91,7 +91,7 @@ public class ConcatenationCheckRule implements IRule{
 					hashSet.add(ido.getSourceStrings());
 					hitNCCount = hitNCCount + ido.getSourceStrings().split(" ").length;
 					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceStrings(),
-							Constant.CONCATENATION,"",null));
+							Constant.CONCATENATION,"Warning: with the first letter in capital \""+ido.getSourceStrings()+"\". Possible concatenated strings.",null));
 					flag = true;
 				}
 			}
@@ -102,7 +102,7 @@ public class ConcatenationCheckRule implements IRule{
 					hashSet.add(ido.getSourceStrings());
 					hitNCCount = hitNCCount + ido.getSourceStrings().split(" ").length;
 					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceStrings(),
-							Constant.CONCATENATION,"",null));
+							Constant.CONCATENATION,"Warning: composed of variables \""+v.trim()+"\". Possible concatenated strings.",null));
 					flag = true;
 				}
 			}

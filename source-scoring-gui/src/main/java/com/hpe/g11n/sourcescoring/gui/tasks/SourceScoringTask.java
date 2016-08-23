@@ -55,7 +55,7 @@ public class SourceScoringTask extends Task<Void> {
 			// lstIdo.addAll(fileParser.parser(sourcePath));
 			lstIdo = fileParser.parser(sourcePath);
 		}
-		checkReport.check(lstIdo);
+		checkReport.check(lstIdo,(now,total) ->{this.updateProgress(now, total);});
 		// report
 		List<ReportData> report = checkReport.report();
 		fw.write("LPU NAME,FILE NAME,STRING ID,SOURCE STRINGS,ERROR TYPE,DETAILS\n");
@@ -78,7 +78,7 @@ public class SourceScoringTask extends Task<Void> {
 			} catch (IOException e) {
 				log.error("write report CSV failure.", e);
 			}
-			this.updateProgress(k, report.size());
+//			this.updateProgress(k, report.size());
 		}
 		if (lstEndReportData.size() > 0) {
 			fw.write("\n");
