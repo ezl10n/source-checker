@@ -42,18 +42,8 @@ public class CommandLineApplication {
 
     }
     public void execute(){
+        task.setUp(options.getSourceUrl(),options.getOutputUrl(),options.getSelectRules());
         Thread t= new Thread(task);
         t.start();
-        while(true){
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if(task.getProgress() >= 1){
-                break;
-            }
-            System.out.println(String.format("\tcurrent progress: %.2f%%\n",task.getProgress()*100));
-        }
     }
 }

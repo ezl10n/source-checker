@@ -70,7 +70,7 @@ public class CommandOptions {
             sb.append("\t" + i + ":" + ruleNames.get(i) + "\n");
         }
 
-        sb.append(String.format("\tfor example: -r 0 1 means using rules %s and %s to check and report.", ruleNames.get(0), ruleNames.get(1)));
+        sb.append(String.format("\tfor example: -r 0,1 means using rules %s and %s to check and report.", ruleNames.get(0), ruleNames.get(1)));
         return sb.toString();
     }
     public boolean validate(){
