@@ -87,6 +87,26 @@
                                         </extraArguments>
                                     </jvmSettings>
                                 </program>
+                                <program>
+                                    <id>sourceScoring-Standalone-GUI_vm</id>
+                                    <mainClass>
+                                        com.hpe.g11n.sourcescoring.gui.Application
+                                    </mainClass>
+                                    <jvmSettings>
+                                        <initialMemorySize>256m</initialMemorySize>
+                                        <maxMemorySize>1024m</maxMemorySize>
+                                        <systemProperties>
+                                            <systemProperty>prism.order=sw</systemProperty>
+                                            <systemProperty>prism.verbose=true</systemProperty>
+                                        </systemProperties>
+                                        <extraArguments>
+                                            <extraArgument>-Djava.library.path=@BASEDIR@\lib</extraArgument>
+                                            <extraArgument>-Dsource.scoring.config.basedir=@BASEDIR@\config</extraArgument>
+                                            <extraArgument>-Dconsole.log-level=${console.logging}</extraArgument>
+                                            <extraArgument>-Dcom.jacob.debug=${jacob.debug}</extraArgument>
+                                        </extraArguments>
+                                    </jvmSettings>
+                                </program>
                             </programs>
                         </configuration>
 <!--                        </execution>
