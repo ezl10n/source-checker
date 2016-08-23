@@ -36,6 +36,8 @@ public class CommandLineApplication {
             commander.usage(help);
             help.append(application.options.rulesUseage());
             System.out.println(help);
+        }else{
+            application.execute();
         }
 
     }
@@ -48,8 +50,10 @@ public class CommandLineApplication {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            if(task.getProgress() >= 1){
+                break;
+            }
             System.out.println(String.format("\tcurrent progress: %.2f%%\n",task.getProgress()*100));
         }
-
     }
 }
