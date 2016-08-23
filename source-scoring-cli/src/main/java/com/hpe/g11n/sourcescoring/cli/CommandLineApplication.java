@@ -7,6 +7,8 @@ import com.hpe.g11n.sourcescoring.cli.command.CommandOptions;
 import com.hpe.g11n.sourcescoring.cli.guice.CliModule;
 import com.hpe.g11n.sourcescoring.config.guice.ConfigModule;
 import com.hpe.g11n.sourcescoring.core.guice.CoreModule;
+import com.hpe.g11n.sourcescoring.gui.guice.GUIModule;
+import com.hpe.g11n.sourcescoring.gui.tasks.SourceScoringTask;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,11 +19,12 @@ import com.hpe.g11n.sourcescoring.core.guice.CoreModule;
 
 public class CommandLineApplication {
     protected Injector injector = Guice.createInjector(new CoreModule(),
-            new ConfigModule(), new CliModule());
+            new ConfigModule(),new GUIModule() ,new CliModule());
     CommandOptions options = new CommandOptions();
-
+    SourceScoringTask task = new SourceScoringTask();
     public CommandLineApplication() {
         injector.injectMembers(options);
+        injector.injectMembers(task);
     }
 
     public static void main(String[] args) {
@@ -33,6 +36,19 @@ public class CommandLineApplication {
             commander.usage(help);
             help.append(application.options.rulesUseage());
             System.out.println(help);
+        }
+
+    }
+    public void execute(){
+        Thread t= new Thread(task);
+        t.start();
+        while(true){
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println(String.format("\tcurrent progress: %.2f%%\n",task.getProgress()*100));
         }
 
     }
