@@ -44,6 +44,7 @@ public class CommandLineApplication {
     public void execute(){
         task.setUp(options.getSourceUrl(),options.getOutputUrl(),options.getSelectRules());
         Thread t= new Thread(task);
+        t.setDaemon(true);
         t.start();
     }
 }
