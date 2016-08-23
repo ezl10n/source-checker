@@ -43,17 +43,27 @@ public class LPUFileParser extends BaseParser {
 			for (int i = 0; i < sourceLists.toList().size(); i++) {
 				for (IPslSourceString sourceString : sourceLists.toList()
 						.get(i).getSourceStrings()) {
-					for (String sourceStringState : lstState) {
-						if (sourceString.hasState(PslState
-								.valueOf(sourceStringState))) {
-							ido = new InputData();
-							ido.setLpuName(new File(filePath).getName());
-							ido.setFileName(new File(sourceLists.toList()
-									.get(i).getSourceFile()).getName());
-							ido.setSourceStrings(sourceString.getText());
-							ido.setStringId(sourceString.getID());
-							lstIdo.add(ido);
+					if(lstState != null && lstState.size()>0){
+						for (String sourceStringState : lstState) {
+							if (sourceString.hasState(PslState
+									.valueOf(sourceStringState))) {
+								ido = new InputData();
+								ido.setLpuName(new File(filePath).getName());
+								ido.setFileName(new File(sourceLists.toList()
+										.get(i).getSourceFile()).getName());
+								ido.setSourceStrings(sourceString.getText());
+								ido.setStringId(sourceString.getID());
+								lstIdo.add(ido);
+							}
 						}
+					}else{
+						ido = new InputData();
+						ido.setLpuName(new File(filePath).getName());
+						ido.setFileName(new File(sourceLists.toList()
+								.get(i).getSourceFile()).getName());
+						ido.setSourceStrings(sourceString.getText());
+						ido.setStringId(sourceString.getID());
+						lstIdo.add(ido);
 					}
 				}
 			}

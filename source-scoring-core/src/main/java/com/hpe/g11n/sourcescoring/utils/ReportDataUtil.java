@@ -12,14 +12,14 @@ import com.hpe.g11n.sourcescoring.pojo.ReportDataCount;
  */
 public class ReportDataUtil {
 	public ReportDataCount getEndReportData(String errorType, int hitStrCount,
-			int validatCount, int totalNCCount, int hitNCCount) {
+			int validCount, int totalNCCount, int hitNCCount) {
 		ReportDataCount endReportData = new ReportDataCount();
 		endReportData.setErrorType(errorType);
 		endReportData.setHitNCCount(hitNCCount);
 		endReportData.setHitStrCount(hitStrCount);
 		endReportData.setTotalNCCount(totalNCCount);
-		endReportData.setValidatCount(validatCount);
-		endReportData.setDupliCount(hitStrCount - validatCount);
+		endReportData.setValidCount(validCount);
+		endReportData.setDupliCount(hitStrCount - validCount);
 		return endReportData;
 	}
 }

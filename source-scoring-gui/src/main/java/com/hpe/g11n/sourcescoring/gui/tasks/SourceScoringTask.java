@@ -88,7 +88,7 @@ public class SourceScoringTask extends Task<Void> {
 				try {
 					fw.write(erd.getErrorType() + "," + erd.getHitStrCount()
 							+ "," + erd.getDupliCount() + ","
-							+ erd.getValidatCount() + ","
+							+ erd.getValidCount() + ","
 							+ erd.getTotalNCCount() + "," + erd.getHitNCCount()
 							+ "\n");
 				} catch (Exception e) {

@@ -108,6 +108,12 @@ public class MainViewController extends BaseController  implements Initializable
 			}
 			sourceUrl.setText(path.substring(0,path.length()-1));
 		}
+//		final DirectoryChooser directoryChooser = new DirectoryChooser();
+//	    final File selectedDirectory =
+//	            directoryChooser.showDialog(root.getScene().getWindow());
+//	    if (selectedDirectory != null) {
+//	    	sourceUrl.setText(selectedDirectory.getAbsolutePath());
+//	    }
 	}
 
 	@FXML
@@ -121,7 +127,7 @@ public class MainViewController extends BaseController  implements Initializable
 	@FXML
 	public void close(ActionEvent event) throws IOException, InterruptedException {
 		if(t != null && t.isAlive()){
-			Alert alert=new Alert(Alert.AlertType.CONFIRMATION,"Files are processing,Do you want to cancle?");
+			Alert alert=new Alert(Alert.AlertType.CONFIRMATION,"Files ware processing,Do you want to cancle?");
 			alert.setHeaderText("Warning:");
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 				progressBar.setVisible(false);

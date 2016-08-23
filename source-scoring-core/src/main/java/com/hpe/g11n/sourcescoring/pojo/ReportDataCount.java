@@ -12,7 +12,7 @@ public class ReportDataCount {
 	private String errorType;
 	private int hitStrCount;
 	private int dupliCount;
-	private int validatCount;
+	private int validCount;
 	private int totalNCCount;
 	private int hitNCCount;
 
@@ -40,12 +40,12 @@ public class ReportDataCount {
 		this.dupliCount = dupliCount;
 	}
 
-	public int getValidatCount() {
-		return validatCount;
+	public int getValidCount() {
+		return validCount;
 	}
 
-	public void setValidatCount(int validatCount) {
-		this.validatCount = validatCount;
+	public void setValidCount(int validCount) {
+		this.validCount = validCount;
 	}
 
 	public int getTotalNCCount() {
