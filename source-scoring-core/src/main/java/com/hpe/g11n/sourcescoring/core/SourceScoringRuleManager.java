@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.concurrent.Task;
+
 public class SourceScoringRuleManager implements ISourceScoring{
     private final Logger log = LoggerFactory.getLogger(getClass());
     List<IRule> checkRules;
@@ -47,15 +49,25 @@ public class SourceScoringRuleManager implements ISourceScoring{
         });
     }
 
-
+    public String check(List<InputData> lstIdo){
+    	return check(lstIdo,null);
+    }
     @Override
-    public String check(List<InputData> lstIdo) {
+    public String check(List<InputData> lstIdo,ITaskProgressCallback callBack) {
         Preconditions.checkNotNull(checkRules);
         Preconditions.checkArgument(checkRules.size() > 0, "checkRules should not be empty");
-        checkRules.forEach( c -> c.check(lstIdo));
+//        checkRules.forEach( c -> c.check(lstIdo));
+        for(int i =0;i<checkRules.size();i++){
+        	checkRules.get(i).check(lstIdo);
+        	
+        	if(callBack != null){
+        		callBack.callBack(i+1,checkRules.size());
+        	}
+        	
+        }
+        
         return "OK";
     }
-
     @Override
     public List<ReportData> report() {
         List<ReportData> result=new ArrayList<>();

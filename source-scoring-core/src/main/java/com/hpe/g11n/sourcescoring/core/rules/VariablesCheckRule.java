@@ -70,26 +70,26 @@ public class VariablesCheckRule implements IRule{
 			totalNCCount = totalNCCount + ido.getSourceStrings().split(" ").length;
 			int wordsCount =ido.getSourceStrings().trim().split(" ").length;
 			int variablesCount =0;
+			String[] sourceStrings = ido.getSourceStrings().split(" ");
 			for(String v:variables){
 				//check xxxx one{xxx} other{xxx} xxxx
 				if(pattern(ido.getSourceStrings(),".*one\\s?\\{.*\\}\\s?other\\s?\\{.*\\}.*$")){
 					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceStrings(),
-							Constant.VARIABLES,"",null));
+							Constant.VARIABLES,"Warning: variable pattern \"one {xxx} other {xxx}\" detected. Please confirm which string(s) are translatable.",null));
 					hitStrCount++;
 					hashSet.add(ido.getSourceStrings());
 					hitNCCount = hitNCCount + ido.getSourceStrings().split(" ").length;
 					break;
 				}
 				//check {0,xxx,xxx}
-				if(pattern(ido.getSourceStrings(),".*\\{0\\,.*\\,.*\\}.*")){
-					variablesCount = variablesCount + 1;
-				}
-				if(ido.getSourceStrings().contains(" "+v+" ")){
-					variablesCount = variablesCount + ido.getSourceStrings().split(" "+v+" ").length-1;
+				for(String ss:sourceStrings){
+					if(pattern(ss,".*\\{0\\,.*\\,.*\\}.*") || ss.equals(v.trim())){
+						variablesCount = variablesCount + 1;
+					}
 				}
 				if(new Float(variablesCount)/new Float(wordsCount) >new Float(0.5)){
 					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceStrings(),
-							Constant.VARIABLES,"",null));
+							Constant.VARIABLES,"Warning: variables count exceeded threshold.",null));
 					hitStrCount++;
 					hashSet.add(ido.getSourceStrings());
 					hitNCCount = hitNCCount + ido.getSourceStrings().split(" ").length;
