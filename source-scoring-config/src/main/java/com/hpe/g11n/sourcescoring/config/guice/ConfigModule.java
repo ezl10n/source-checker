@@ -32,7 +32,7 @@ public class ConfigModule extends AbstractModule {
 
     @Provides
     public static Config loadConfig(){
-        String preFix=String.format("%1$ssrc%1$smain%1$sconfig",File.separator);
+        String preFix=String.format("..%1$s%1$ssrc%1$smain%1$sconfig",File.separator);
         String fileName=String.format("%1$ssource-scoring-standalone-config.conf",File.separator);
         String passInDir=System.getProperty("source.scoring.config.basedir");
         if(passInDir == null){

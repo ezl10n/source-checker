@@ -17,7 +17,7 @@ public class ConfigModuleTest {
         c.getStringList("psl.psl-generate-sourcescoring-report.concatenation.key-words").stream().forEach(e -> System.out.println(e));
         System.out.println("###############################################");
         System.out.println("####################variables##################");
-        System.out.println(c.getString("psl.psl-generate-sourcescoring-report.concatenation.variables"));
+        System.out.println(c.getStringList("psl.psl-generate-sourcescoring-report.concatenation.variables").toString());
         System.out.println("###############################################");
         System.out.println("####################camel-case##################");
         System.out.println(c.getString("psl.psl-generate-sourcescoring-report.camel-case"));
