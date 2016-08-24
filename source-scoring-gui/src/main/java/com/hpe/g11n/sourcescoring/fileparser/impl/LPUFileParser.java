@@ -28,12 +28,12 @@ public class LPUFileParser extends BaseParser {
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	
 	InputData ido;
-	public List<InputData> lstIdo = new ArrayList<InputData>();
 	private static final String STATE = "psl.psl-generate-sourcescoring-report.state";
 	private List<String> lstState;
 
 	
 	private List<InputData> parser(String filePath) {
+		List<InputData> lstIdo = new ArrayList<InputData>();
 		long start = System.currentTimeMillis();
 		lstState=config.getStringList(STATE);
 		IPassoloApp app = PassoloApp.getInstance();
@@ -54,6 +54,7 @@ public class LPUFileParser extends BaseParser {
 								ido.setSourceStrings(sourceString.getText());
 								ido.setStringId(sourceString.getID());
 								lstIdo.add(ido);
+								break;
 							}
 						}
 					}else{

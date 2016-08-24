@@ -84,6 +84,7 @@ public class ConcatenationCheckRule implements IRule{
 						log.debug("ConcatenationCheckRule, value:"+ ido.getSourceStrings() +" start or end with:+"+k);
 					}
 					flag = true;
+					break;
 				}
 				if ((ido.getSourceStrings().trim().hashCode()-32==k.trim().hashCode()) 
 						&& pattern(ido.getSourceStrings(),"^[A-Z].*$")) {
@@ -93,6 +94,7 @@ public class ConcatenationCheckRule implements IRule{
 					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceStrings(),
 							Constant.CONCATENATION,"Warning: with the first letter in capital \""+ido.getSourceStrings()+"\". Possible concatenated strings.",null));
 					flag = true;
+					break;
 				}
 			}
 			for(String v:variables){
@@ -104,6 +106,7 @@ public class ConcatenationCheckRule implements IRule{
 					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceStrings(),
 							Constant.CONCATENATION,"Warning: composed of variables \""+v.trim()+"\". Possible concatenated strings.",null));
 					flag = true;
+					break;
 				}
 			}
 			

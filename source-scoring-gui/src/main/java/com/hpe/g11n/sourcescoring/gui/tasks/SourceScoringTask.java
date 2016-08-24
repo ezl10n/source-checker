@@ -52,7 +52,7 @@ public class SourceScoringTask extends Task<Void> {
 		final FileWriter fw = new FileWriter(report + "SourceScoring"
 				+ sdf.format(new Date()) + ".csv");
 		for (String sourcePath : sourcePaths) {
-			// lstIdo.addAll(fileParser.parser(sourcePath));
+           // lstIdo.addAll(fileParser.parser(sourcePath));
 			lstIdo = fileParser.parser(sourcePath);
 		}
 		checkReport.check(lstIdo,(now,total) ->{this.updateProgress(now, total);});

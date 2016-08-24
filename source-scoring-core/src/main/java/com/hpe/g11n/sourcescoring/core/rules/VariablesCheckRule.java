@@ -71,16 +71,16 @@ public class VariablesCheckRule implements IRule{
 			int wordsCount =ido.getSourceStrings().trim().split(" ").length;
 			int variablesCount =0;
 			String[] sourceStrings = ido.getSourceStrings().split(" ");
+			//check xxxx one{xxx} other{xxx} xxxx
+			if(pattern(ido.getSourceStrings(),".*one\\s?\\{.*\\}\\s?other\\s?\\{.*\\}.*$")){
+				report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceStrings(),
+						Constant.VARIABLES,"Warning: variable pattern \"one {xxx} other {xxx}\" detected. Please confirm which string(s) are translatable.",null));
+				hitStrCount++;
+				hashSet.add(ido.getSourceStrings());
+				hitNCCount = hitNCCount + ido.getSourceStrings().split(" ").length;
+				continue;
+			}
 			for(String v:variables){
-				//check xxxx one{xxx} other{xxx} xxxx
-				if(pattern(ido.getSourceStrings(),".*one\\s?\\{.*\\}\\s?other\\s?\\{.*\\}.*$")){
-					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceStrings(),
-							Constant.VARIABLES,"Warning: variable pattern \"one {xxx} other {xxx}\" detected. Please confirm which string(s) are translatable.",null));
-					hitStrCount++;
-					hashSet.add(ido.getSourceStrings());
-					hitNCCount = hitNCCount + ido.getSourceStrings().split(" ").length;
-					break;
-				}
 				//check {0,xxx,xxx}
 				for(String ss:sourceStrings){
 					if(pattern(ss,".*\\{0\\,.*\\,.*\\}.*") || ss.equals(v.trim())){
@@ -93,6 +93,7 @@ public class VariablesCheckRule implements IRule{
 					hitStrCount++;
 					hashSet.add(ido.getSourceStrings());
 					hitNCCount = hitNCCount + ido.getSourceStrings().split(" ").length;
+					break;
 				}
 			}
 			
