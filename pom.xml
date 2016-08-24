@@ -35,6 +35,7 @@
         <jacob.debug>false</jacob.debug>
         <jassolo.version>1.2.0</jassolo.version>
         <jacbo.version>1.18-M2</jacbo.version>
+        <jcommander.version>1.47</jcommander.version>
     </properties>
     <profiles>
     <profile>
@@ -171,6 +172,11 @@
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
             <version>${json.simple.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.beust</groupId>
+            <artifactId>jcommander</artifactId>
+            <version>${jcommander.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

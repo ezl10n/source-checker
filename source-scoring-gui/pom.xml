@@ -28,7 +28,7 @@
         <groupId>com.hpe.g11n.sourcescoring</groupId>
         <artifactId>source-scoring-core</artifactId>
         <version>${source.scoring.version}</version>
-    </dependency>
+        </dependency>
         <!-- jassolo core -->
         <dependency>
             <groupId>com.hp.g11n</groupId>

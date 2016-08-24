@@ -12,10 +12,32 @@
 
     <name>source-scoring-cli</name>
 
-
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+<dependencies>
+    <dependency>
+        <groupId>com.hpe.g11n.sourcescoring</groupId>
+        <artifactId>source-scoring-config</artifactId>
+        <version>${source.scoring.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>com.hpe.g11n.sourcescoring</groupId>
+        <artifactId>source-scoring-core</artifactId>
+        <version>${source.scoring.version}</version>
+    </dependency>
+    <!-- FIXME cli should not dependence on GUI module.. afeter SourceScoringTask.java moved to core module, remove
+         this dependence.
+    -->
+    <dependency>
+        <groupId>com.hpe.g11n.sourcescoring</groupId>
+        <artifactId>source-scoring-gui</artifactId>
+        <version>${source.scoring.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>com.beust</groupId>
+        <artifactId>jcommander</artifactId>
+    </dependency>
+</dependencies>
 </project>
