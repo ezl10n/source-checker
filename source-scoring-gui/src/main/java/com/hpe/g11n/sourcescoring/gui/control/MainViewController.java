@@ -62,15 +62,6 @@ public class MainViewController extends BaseController  implements Initializable
 	@Named("ruleNames")
 	List<String> checkBoxs;
 
-	SourceScoringTask task = new SourceScoringTask();
-	
-	List<Integer> rules = new ArrayList<Integer>();
-
-	public MainViewController() {
-		super();
-		injector.injectMembers(task);
-	}
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		if (chooser == null) {
@@ -169,6 +160,7 @@ public class MainViewController extends BaseController  implements Initializable
 	
 	@FXML
 	public void scoring(ActionEvent event) {
+		List<Integer> rules = new ArrayList<Integer>();
 		for (int i = 0; i < checkRules.getChildren().size(); i++) {
 			CheckBox cb = (CheckBox) checkRules.getChildren().get(i);
 			if (cb.isSelected()) {
@@ -196,6 +188,8 @@ public class MainViewController extends BaseController  implements Initializable
 			});
 			return;
 		}
+		SourceScoringTask task = new SourceScoringTask();
+		injector.injectMembers(task);
 		progressBar.setVisible(true);
 		progressBar.progressProperty().bind(task.progressProperty());
 		task.setUp(sourceUrl.getText(), outputUrl.getText() + "/", rules);

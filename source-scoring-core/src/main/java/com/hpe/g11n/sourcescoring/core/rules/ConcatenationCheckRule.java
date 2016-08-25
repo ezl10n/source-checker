@@ -61,7 +61,7 @@ public class ConcatenationCheckRule implements IRule{
 		Preconditions.checkNotNull(variables);
 		Preconditions.checkNotNull(lstIdo);
 		boolean flag = false;
-		report = new ArrayList<>();
+		report = new ArrayList<ReportData>();
 		HashSet<String> hashSet = new HashSet<String>();
 		int hitStrCount=0;
 		int totalNCCount=0;

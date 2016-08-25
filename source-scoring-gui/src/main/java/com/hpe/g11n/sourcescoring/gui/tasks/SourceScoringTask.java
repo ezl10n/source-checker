@@ -5,7 +5,10 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
@@ -20,6 +23,7 @@ import com.hpe.g11n.sourcescoring.fileparser.IFileParser;
 import com.hpe.g11n.sourcescoring.pojo.InputData;
 import com.hpe.g11n.sourcescoring.pojo.ReportData;
 import com.hpe.g11n.sourcescoring.pojo.ReportDataCount;
+import com.hpe.g11n.sourcescoring.xml.XMLHandler;
 
 public class SourceScoringTask extends Task<Void> {
 	private final Logger log = LoggerFactory.getLogger(getClass());
@@ -32,7 +36,6 @@ public class SourceScoringTask extends Task<Void> {
 	ISourceScoring checkReport;
 	@Inject
 	IFileParser fileParser;
-	public List<InputData> lstIdo = new ArrayList<InputData>();
 	int totalProgress = 0;
 	int totalCount = 0;
 
@@ -47,39 +50,50 @@ public class SourceScoringTask extends Task<Void> {
 	@Override
 	protected Void call() throws Exception {
 		// output
+		List<InputData> lstIdo = new ArrayList<InputData>();
+		Date date = new Date();
 		String[] sourcePaths = source.split(";");
 		SimpleDateFormat sdf = new SimpleDateFormat("YYYYMMddHHmmss");
 		final FileWriter fw = new FileWriter(report + "SourceScoring"
-				+ sdf.format(new Date()) + ".csv");
+				+ sdf.format(date) + ".csv");
 		for (String sourcePath : sourcePaths) {
-           // lstIdo.addAll(fileParser.parser(sourcePath));
-			lstIdo = fileParser.parser(sourcePath);
+            lstIdo.addAll(fileParser.parser(sourcePath));
 		}
 		checkReport.check(lstIdo,(now,total) ->{this.updateProgress(now, total);});
 		// report
-		List<ReportData> report = checkReport.report();
+		List<ReportData> lstReport = checkReport.report();
+		//create xml 
+		XMLHandler handler = new XMLHandler();
+		handler.createXML("1.0", report + "SourceScoring"
+				+ sdf.format(date) + ".xml", lstReport);
+		
+		//create csv
 		fw.write("LPU NAME,FILE NAME,STRING ID,SOURCE STRINGS,ERROR TYPE,DETAILS\n");
 		List<ReportDataCount> lstEndReportData = new ArrayList<ReportDataCount>();
-		int k = 0;
-		for (ReportData r : report) {
-			k++;
-			try {
-				if (r.getStringId() != null) {
-					fw.write(r.getLpuName() + "," + r.getFileName() + ","
-							+ r.getStringId() + "," + r.getSourceStrings()
-							+ "," + r.getErrorType() + "," + r.getDetails()
+		Set<String> set = new HashSet<String>();
+		for (ReportData r : lstReport) {
+			if (r.getLpuName() != null) {
+				set.add(r.getLpuName());
+			}
+			if (r.getEndReportData() != null) {
+				lstEndReportData.add(r.getEndReportData());
+
+			}
+
+		}
+		Iterator iterator = set.iterator();
+		while(iterator.hasNext()){
+			String name = (String)iterator.next();
+			for(ReportData rd : lstReport){
+				if (rd.getLpuName() != null && name.equals(rd.getLpuName())) {
+					fw.write(rd.getLpuName() + "," + rd.getFileName() + ","
+							+ rd.getStringId() + "," + rd.getSourceStrings()
+							+ "," + rd.getErrorType() + "," + rd.getDetails()
 							+ "\n");
 				}
-				if (r.getEndReportData() != null) {
-					lstEndReportData.add(r.getEndReportData());
-
-				}
-
-			} catch (IOException e) {
-				log.error("write report CSV failure.", e);
 			}
-//			this.updateProgress(k, report.size());
 		}
+		
 		if (lstEndReportData.size() > 0) {
 			fw.write("\n");
 			fw.write("\n");

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/ReportXMLSchema" xmlns:tns="http://www.example.org/ReportXMLSchema" elementFormDefault="qualified">
+<element name="SourceScoring">
+ <complexType>
+  <sequence>
+  	<element name="ResultData">
+  	<complexType>
+	  <sequence>
+	  <element name="File" maxOccurs="unbounded">
+		<complexType>
+		<sequence>
+		<element name="SourceStrings" maxOccurs="unbounded">
+		  <complexType>
+		  <sequence>
+		   <element name="fileName" type="string"/>
+		   <element name="stringId" type="string"/>
+		   <element name="sourceString" type="string"/>
+		   <element name="errorType" type="string"/>
+		   <element name="details" type="string"/>
+		  </sequence>
+		  </complexType>
+		</element>
+		</sequence>
+		<attribute name="name" type="string" use="required"/>
+		<attribute name="fileVersion" type="string" use="required"/>
+		</complexType>
+	  </element>
+	  </sequence>
+	  <attribute name="projectName" type="string" use="required"/>
+	</complexType>
+    </element>
+  	<element name="ResultCountData" maxOccurs="unbounded">
+  	<complexType>
+     <sequence>
+      <element name="errorType" type="string"/>
+      <element name="hitStringCount" type="positiveInteger"/>
+      <element name="duplicatedCount" type="positiveInteger"/>
+      <element name="validatedCount" type="positiveInteger"/>
+      <element name="totalWordCount" type="positiveInteger"/>
+      <element name="hitWordCount" type="positiveInteger"/>
+     </sequence>
+    </complexType>
+    </element>
+    <element name="Summary">
+    <complexType>
+     <sequence>
+      <element name="scanStartTime" type="dateTime"/>
+      <element name="scanEndTime" type="dateTime"/>
+      <element name="durataon" type="time"/>
+     </sequence>
+    </complexType>
+    </element>
+  </sequence>
+  <attribute name="productVersion" type="string" use="required"/>
+ </complexType>
+</element>
+</schema>
