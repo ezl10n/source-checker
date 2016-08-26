@@ -21,8 +21,8 @@ import java.util.List;
  */
 public class JazzySample implements SpellCheckListener {
 
-        private static String dictFile = "src/main/dict/english.0";
-        private static String phonetFile = "src/main/dict/phonet.en";
+        private static String dictFile = "src/main/dict/jazzy/english.0";
+
 
         private SpellChecker spellCheck = null;
 
@@ -30,7 +30,8 @@ public class JazzySample implements SpellCheckListener {
         public JazzySample() {
             try {
                 String path=System.getProperty("user.dir");
-                SpellDictionary dictionary = new SpellDictionaryHashMap(Paths.get(path,dictFile).toFile(), Paths.get(path,phonetFile).toFile());
+                //TODO may be should use SpellDictionaryDisk instead...
+                SpellDictionary dictionary = new SpellDictionaryHashMap(Paths.get(path,dictFile).toFile());
 
                 spellCheck = new SpellChecker(dictionary);
                 spellCheck.addSpellCheckListener(this);
