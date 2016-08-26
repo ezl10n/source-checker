@@ -51,7 +51,7 @@ public class LPUFileParser extends BaseParser {
 								ido.setLpuName(new File(filePath).getName());
 								ido.setFileName(new File(sourceLists.toList()
 										.get(i).getSourceFile()).getName());
-								ido.setSourceStrings(sourceString.getText());
+								ido.setSourceString(sourceString.getText());
 								ido.setStringId(sourceString.getID());
 								lstIdo.add(ido);
 								break;
@@ -62,7 +62,7 @@ public class LPUFileParser extends BaseParser {
 						ido.setLpuName(new File(filePath).getName());
 						ido.setFileName(new File(sourceLists.toList()
 								.get(i).getSourceFile()).getName());
-						ido.setSourceStrings(sourceString.getText());
+						ido.setSourceString(sourceString.getText());
 						ido.setStringId(sourceString.getID());
 						lstIdo.add(ido);
 					}

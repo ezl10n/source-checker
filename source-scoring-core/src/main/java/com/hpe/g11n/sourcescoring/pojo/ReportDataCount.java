@@ -1,5 +1,7 @@
 package com.hpe.g11n.sourcescoring.pojo;
 
+import java.math.BigDecimal;
+
 /**
  * 
  * @Descripation
@@ -10,11 +12,12 @@ package com.hpe.g11n.sourcescoring.pojo;
  */
 public class ReportDataCount {
 	private String errorType;
-	private int hitStrCount;
-	private int dupliCount;
-	private int validCount;
-	private int totalNCCount;
-	private int hitNCCount;
+	private int hitStringCount;
+	private int duplicatedCount;
+	private int validatedCount;
+	private int totalWordCount;
+	private int hitWordCount;
+	private BigDecimal errorTypeScore;
 
 	public String getErrorType() {
 		return errorType;
@@ -24,43 +27,52 @@ public class ReportDataCount {
 		this.errorType = errorType;
 	}
 
-	public int getHitStrCount() {
-		return hitStrCount;
+	public int getHitStringCount() {
+		return hitStringCount;
 	}
 
-	public void setHitStrCount(int hitStrCount) {
-		this.hitStrCount = hitStrCount;
+	public void setHitStringCount(int hitStringCount) {
+		this.hitStringCount = hitStringCount;
 	}
 
-	public int getDupliCount() {
-		return dupliCount;
+	public int getDuplicatedCount() {
+		return duplicatedCount;
 	}
 
-	public void setDupliCount(int dupliCount) {
-		this.dupliCount = dupliCount;
+	public void setDuplicatedCount(int duplicatedCount) {
+		this.duplicatedCount = duplicatedCount;
 	}
 
-	public int getValidCount() {
-		return validCount;
+	public int getValidatedCount() {
+		return validatedCount;
 	}
 
-	public void setValidCount(int validCount) {
-		this.validCount = validCount;
+	public void setValidatedCount(int validatedCount) {
+		this.validatedCount = validatedCount;
 	}
 
-	public int getTotalNCCount() {
-		return totalNCCount;
+	public int getTotalWordCount() {
+		return totalWordCount;
 	}
 
-	public void setTotalNCCount(int totalNCCount) {
-		this.totalNCCount = totalNCCount;
+	public void setTotalWordCount(int totalWordCount) {
+		this.totalWordCount = totalWordCount;
 	}
 
-	public int getHitNCCount() {
-		return hitNCCount;
+	public int getHitWordCount() {
+		return hitWordCount;
 	}
 
-	public void setHitNCCount(int hitNCCount) {
-		this.hitNCCount = hitNCCount;
+	public void setHitWordCount(int hitWordCount) {
+		this.hitWordCount = hitWordCount;
 	}
+
+	public BigDecimal getErrorTypeScore() {
+		return errorTypeScore;
+	}
+
+	public void setErrorTypeScore(BigDecimal errorTypeScore) {
+		this.errorTypeScore = errorTypeScore;
+	}
+
 }

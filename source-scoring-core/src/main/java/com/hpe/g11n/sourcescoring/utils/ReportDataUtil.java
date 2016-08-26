@@ -1,5 +1,7 @@
 package com.hpe.g11n.sourcescoring.utils;
 
+import java.math.BigDecimal;
+
 import com.hpe.g11n.sourcescoring.pojo.ReportDataCount;
 
 /**
@@ -12,14 +14,15 @@ import com.hpe.g11n.sourcescoring.pojo.ReportDataCount;
  */
 public class ReportDataUtil {
 	public ReportDataCount getEndReportData(String errorType, int hitStrCount,
-			int validCount, int totalNCCount, int hitNCCount) {
+			int validCount, int totalNCCount, int hitNCCount,BigDecimal errorTypeScore) {
 		ReportDataCount endReportData = new ReportDataCount();
 		endReportData.setErrorType(errorType);
-		endReportData.setHitNCCount(hitNCCount);
-		endReportData.setHitStrCount(hitStrCount);
-		endReportData.setTotalNCCount(totalNCCount);
-		endReportData.setValidCount(validCount);
-		endReportData.setDupliCount(hitStrCount - validCount);
+		endReportData.setHitWordCount(hitNCCount);
+		endReportData.setHitStringCount(hitStrCount);
+		endReportData.setTotalWordCount(totalNCCount);
+		endReportData.setValidatedCount(validCount);
+		endReportData.setDuplicatedCount(hitStrCount - validCount);
+		endReportData.setErrorTypeScore(errorTypeScore);
 		return endReportData;
 	}
 }

@@ -1,6 +1,7 @@
 package com.hpe.g11n.sourcescoring.core.rules;
 
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -65,19 +66,19 @@ public class VariablesCheckRule implements IRule{
 		int hitNCCount =0;
 		for(InputData ido:lstIdo){
 			if(log.isDebugEnabled()){
-				log.debug("Start VariablesCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceStrings());
+				log.debug("Start VariablesCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());
 			}
-			totalNCCount = totalNCCount + ido.getSourceStrings().split(" ").length;
-			int wordsCount =ido.getSourceStrings().trim().split(" ").length;
+			totalNCCount = totalNCCount + ido.getSourceString().split(" ").length;
+			int wordsCount =ido.getSourceString().trim().split(" ").length;
 			int variablesCount =0;
-			String[] sourceStrings = ido.getSourceStrings().split(" ");
+			String[] sourceStrings = ido.getSourceString().split(" ");
 			//check xxxx one{xxx} other{xxx} xxxx
-			if(pattern(ido.getSourceStrings(),".*one\\s?\\{.*\\}\\s?other\\s?\\{.*\\}.*$")){
-				report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceStrings(),
-						Constant.VARIABLES,"Warning: variable pattern \"one {xxx} other {xxx}\" detected. Please confirm which string(s) are translatable.",null));
+			if(pattern(ido.getSourceString(),".*one\\s?\\{.*\\}\\s?other\\s?\\{.*\\}.*$")){
+				report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+						Constant.VARIABLES,"Warning: variable pattern \"one {xxx} other {xxx}\" detected. Please confirm which string(s) are translatable.",ido.getFileVersion(),null));
 				hitStrCount++;
-				hashSet.add(ido.getSourceStrings());
-				hitNCCount = hitNCCount + ido.getSourceStrings().split(" ").length;
+				hashSet.add(ido.getSourceString());
+				hitNCCount = hitNCCount + ido.getSourceString().split(" ").length;
 				continue;
 			}
 			for(String v:variables){
@@ -88,22 +89,22 @@ public class VariablesCheckRule implements IRule{
 					}
 				}
 				if(new Float(variablesCount)/new Float(wordsCount) >new Float(0.5)){
-					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceStrings(),
-							Constant.VARIABLES,"Warning: variables count exceeded threshold.",null));
+					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+							Constant.VARIABLES,"Warning: variables count exceeded threshold.",ido.getFileVersion(),null));
 					hitStrCount++;
-					hashSet.add(ido.getSourceStrings());
-					hitNCCount = hitNCCount + ido.getSourceStrings().split(" ").length;
+					hashSet.add(ido.getSourceString());
+					hitNCCount = hitNCCount + ido.getSourceString().split(" ").length;
 					break;
 				}
 			}
 			
 			if(log.isDebugEnabled()){
-				log.debug("END VariablesCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceStrings());
+				log.debug("END VariablesCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());
 			}
 		}
 		ReportDataUtil reportDataUtil = new ReportDataUtil();
-		ReportDataCount reportDataCount = reportDataUtil.getEndReportData(Constant.VARIABLES, hitStrCount, hashSet.size(), totalNCCount, hitNCCount);
-		report.add(new ReportData(null,null,null,null,null,null,reportDataCount));
+		ReportDataCount reportDataCount = reportDataUtil.getEndReportData(Constant.VARIABLES, hitStrCount, hashSet.size(), totalNCCount, hitNCCount,new BigDecimal(0));
+		report.add(new ReportData(null,null,null,null,null,null,null,reportDataCount));
 		return flag;
 	}
 	

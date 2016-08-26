@@ -10,22 +10,24 @@ package com.hpe.g11n.sourcescoring.pojo;
  */
 public class ReportData {
 	private String lpuName;
-	private String fileName;
+	private String subFileName;
 	private String stringId;
-	private String sourceStrings;
+	private String sourceString;
 	private String errorType;
 	private String details;
+	private String fileVersion;
 	private ReportDataCount endReportData;
 
-	public ReportData(String lpuName, String fileName, String stringId,
-			String sourceStrings, String errorType, String details,ReportDataCount endReportData) {
+	public ReportData(String lpuName, String subFileName, String stringId,String sourceString, 
+			String errorType, String details,String fileVersion,ReportDataCount endReportData) {
 		super();
 		this.lpuName = lpuName;
-		this.fileName = fileName;
+		this.subFileName = subFileName;
 		this.stringId = stringId;
-		this.sourceStrings = sourceStrings;
+		this.sourceString = sourceString;
 		this.errorType = errorType;
 		this.details = details;
+		this.fileVersion=fileVersion;
 		this.endReportData = endReportData;
 	}
 	
@@ -37,12 +39,12 @@ public class ReportData {
 		this.lpuName = lpuName;
 	}
 
-	public String getFileName() {
-		return fileName;
+	public String getSubFileName() {
+		return subFileName;
 	}
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
+	public void setSubFileName(String subFileName) {
+		this.subFileName = subFileName;
 	}
 
 	public String getStringId() {
@@ -53,12 +55,12 @@ public class ReportData {
 		this.stringId = stringId;
 	}
 
-	public String getSourceStrings() {
-		return sourceStrings;
+	public String getSourceString() {
+		return sourceString;
 	}
 
-	public void setSourceStrings(String sourceStrings) {
-		this.sourceStrings = sourceStrings;
+	public void setSourceString(String sourceString) {
+		this.sourceString = sourceString;
 	}
 
 	public String getErrorType() {
@@ -83,6 +85,14 @@ public class ReportData {
 
 	public void setEndReportData(ReportDataCount endReportData) {
 		this.endReportData = endReportData;
+	}
+
+	public String getFileVersion() {
+		return fileVersion;
+	}
+
+	public void setFileVersion(String fileVersion) {
+		this.fileVersion = fileVersion;
 	}
 
 }

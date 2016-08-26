@@ -17,4 +17,6 @@ public class Constant {
    public static final String BRACKET ="Bracket";
    public static final String UNTRANSLATABLE ="Untranslatable";
    public static final String HTML ="Html";
+   
+   public static final String PRODUCT_VERSION = "1.0";
 }

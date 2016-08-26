@@ -1,6 +1,7 @@
 package com.hpe.g11n.sourcescoring.core.rules;
 
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -68,55 +69,55 @@ public class ConcatenationCheckRule implements IRule{
 		int hitNCCount =0;
 		for(InputData ido:lstIdo){
 			if(log.isDebugEnabled()){
-				log.debug("Start ConcatenationCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceStrings());
+				log.debug("Start ConcatenationCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());
 			}
-			totalNCCount = totalNCCount + ido.getSourceStrings().split(" ").length;
+			totalNCCount = totalNCCount + ido.getSourceString().split(" ").length;
 			for(String k : keywords) {
-				if (ido.getSourceStrings().startsWith(k.trim().concat(" ")) 
-						|| ido.getSourceStrings().endsWith(" ".concat(k.trim()))
+				if (ido.getSourceString().startsWith(k.trim().concat(" ")) 
+						|| ido.getSourceString().endsWith(" ".concat(k.trim()))
 						){
 					hitStrCount++;
-					hashSet.add(ido.getSourceStrings());
-					hitNCCount = hitNCCount + ido.getSourceStrings().split(" ").length;
-					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceStrings(),
-							Constant.CONCATENATION,"Warning: starting or ending with keyword \""+k.trim()+"\". Possible concatenated strings.",null));
+					hashSet.add(ido.getSourceString());
+					hitNCCount = hitNCCount + ido.getSourceString().split(" ").length;
+					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+							Constant.CONCATENATION,"Warning: starting or ending with keyword \""+k.trim()+"\". Possible concatenated strings.",ido.getFileVersion(),null));
 					if(log.isDebugEnabled()){
-						log.debug("ConcatenationCheckRule, value:"+ ido.getSourceStrings() +" start or end with:+"+k);
+						log.debug("ConcatenationCheckRule, value:"+ ido.getSourceString() +" start or end with:+"+k);
 					}
 					flag = true;
 					break;
 				}
-				if ((ido.getSourceStrings().trim().hashCode()-32==k.trim().hashCode()) 
-						&& pattern(ido.getSourceStrings(),"^[A-Z].*$")) {
+				if ((ido.getSourceString().trim().hashCode()-32==k.trim().hashCode()) 
+						&& pattern(ido.getSourceString(),"^[A-Z].*$")) {
 					hitStrCount++;
-					hashSet.add(ido.getSourceStrings());
-					hitNCCount = hitNCCount + ido.getSourceStrings().split(" ").length;
-					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceStrings(),
-							Constant.CONCATENATION,"Warning: with the first letter in capital \""+ido.getSourceStrings()+"\". Possible concatenated strings.",null));
+					hashSet.add(ido.getSourceString());
+					hitNCCount = hitNCCount + ido.getSourceString().split(" ").length;
+					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+							Constant.CONCATENATION,"Warning: with the first letter in capital \""+ido.getSourceString()+"\". Possible concatenated strings.",ido.getFileVersion(),null));
 					flag = true;
 					break;
 				}
 			}
 			for(String v:variables){
-				if (ido.getSourceStrings().contains(v.trim().toLowerCase())
-						|| ido.getSourceStrings().contains(v.trim().toUpperCase())) {
+				if (ido.getSourceString().contains(v.trim().toLowerCase())
+						|| ido.getSourceString().contains(v.trim().toUpperCase())) {
 					hitStrCount++;
-					hashSet.add(ido.getSourceStrings());
-					hitNCCount = hitNCCount + ido.getSourceStrings().split(" ").length;
-					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceStrings(),
-							Constant.CONCATENATION,"Warning: composed of variables \""+v.trim()+"\". Possible concatenated strings.",null));
+					hashSet.add(ido.getSourceString());
+					hitNCCount = hitNCCount + ido.getSourceString().split(" ").length;
+					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+							Constant.CONCATENATION,"Warning: composed of variables \""+v.trim()+"\". Possible concatenated strings.",ido.getFileVersion(),null));
 					flag = true;
 					break;
 				}
 			}
 			
 			if(log.isDebugEnabled()){
-				log.debug("END ConcatenationCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceStrings());
+				log.debug("END ConcatenationCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());
 			}
 		}
 		ReportDataUtil reportDataUtil = new ReportDataUtil();
-		ReportDataCount reportDataCount = reportDataUtil.getEndReportData(Constant.CONCATENATION, hitStrCount, hashSet.size(), totalNCCount, hitNCCount);
-		report.add(new ReportData(null,null,null,null,null,null,reportDataCount));
+		ReportDataCount reportDataCount = reportDataUtil.getEndReportData(Constant.CONCATENATION, hitStrCount, hashSet.size(), totalNCCount, hitNCCount,new BigDecimal(0));
+		report.add(new ReportData(null,null,null,null,null,null,null,reportDataCount));
 		return flag;
 	}
 

@@ -2,6 +2,7 @@ package com.hpe.g11n.sourcescoring.gui.tasks;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,6 +24,10 @@ import com.hpe.g11n.sourcescoring.fileparser.IFileParser;
 import com.hpe.g11n.sourcescoring.pojo.InputData;
 import com.hpe.g11n.sourcescoring.pojo.ReportData;
 import com.hpe.g11n.sourcescoring.pojo.ReportDataCount;
+import com.hpe.g11n.sourcescoring.pojo.SourceScoring;
+import com.hpe.g11n.sourcescoring.pojo.Summary;
+import com.hpe.g11n.sourcescoring.utils.Constant;
+import com.hpe.g11n.sourcescoring.utils.DateUtil;
 import com.hpe.g11n.sourcescoring.xml.XMLHandler;
 
 public class SourceScoringTask extends Task<Void> {
@@ -50,44 +55,64 @@ public class SourceScoringTask extends Task<Void> {
 	@Override
 	protected Void call() throws Exception {
 		// output
+		SourceScoring sourceScoring = new SourceScoring();
+		sourceScoring.setProductVersion(Constant.PRODUCT_VERSION);
+		
 		List<InputData> lstIdo = new ArrayList<InputData>();
-		Date date = new Date();
+		DateUtil dateUtil = new DateUtil();
+		Date startScanTime = new Date();
 		String[] sourcePaths = source.split(";");
-		SimpleDateFormat sdf = new SimpleDateFormat("YYYYMMddHHmmss");
-		final FileWriter fw = new FileWriter(report + "SourceScoring"
-				+ sdf.format(date) + ".csv");
 		for (String sourcePath : sourcePaths) {
             lstIdo.addAll(fileParser.parser(sourcePath));
 		}
 		checkReport.check(lstIdo,(now,total) ->{this.updateProgress(now, total);});
+		Date startEndTime = new Date();
 		// report
 		List<ReportData> lstReport = checkReport.report();
-		//create xml 
-		XMLHandler handler = new XMLHandler();
-		handler.createXML("1.0", report + "SourceScoring"
-				+ sdf.format(date) + ".xml", lstReport);
+		sourceScoring.setLstReportData(lstReport);
 		
-		//create csv
-		fw.write("LPU NAME,FILE NAME,STRING ID,SOURCE STRINGS,ERROR TYPE,DETAILS\n");
+		//create xml 
+		String dateFileName = dateUtil.format("YYYYMMddHHmmss",new Date());
 		List<ReportDataCount> lstEndReportData = new ArrayList<ReportDataCount>();
 		Set<String> set = new HashSet<String>();
+		BigDecimal totalScore= new BigDecimal(0);
 		for (ReportData r : lstReport) {
 			if (r.getLpuName() != null) {
 				set.add(r.getLpuName());
 			}
 			if (r.getEndReportData() != null) {
 				lstEndReportData.add(r.getEndReportData());
-
+				totalScore = totalScore.add(r.getEndReportData().getErrorTypeScore());
 			}
 
 		}
+		
+		Summary summary = new Summary();
+		summary.setReleaseName("");//TODO get project name
+		summary.setReleaseVersion("");//TODO get project version
+		summary.setScanStartTime(startScanTime);
+		summary.setScanEndTime(startEndTime);
+		summary.setTotalScore(totalScore);
+		summary.setDuration(dateUtil.getDurationDate(startScanTime, startEndTime));
+		sourceScoring.setSummary(summary);
+		
+		//create xml 
+		XMLHandler handler = new XMLHandler();
+		handler.createXML(report + "SourceScoring"
+				+ dateFileName + ".xml", sourceScoring);
+		
+		//create csv
+		final FileWriter fw = new FileWriter(report + "SourceScoring"
+				+ dateFileName + ".csv");
+		fw.write("File NAME,SUB FILE NAME,STRING ID,SOURCE STRINGS,ERROR TYPE,DETAILS\n");
+		
 		Iterator iterator = set.iterator();
 		while(iterator.hasNext()){
 			String name = (String)iterator.next();
 			for(ReportData rd : lstReport){
 				if (rd.getLpuName() != null && name.equals(rd.getLpuName())) {
-					fw.write(rd.getLpuName() + "," + rd.getFileName() + ","
-							+ rd.getStringId() + "," + rd.getSourceStrings()
+					fw.write(rd.getLpuName() + "," + rd.getSubFileName() + ","
+							+ rd.getStringId() + "," + rd.getSourceString()
 							+ "," + rd.getErrorType() + "," + rd.getDetails()
 							+ "\n");
 				}
@@ -97,19 +122,26 @@ public class SourceScoringTask extends Task<Void> {
 		if (lstEndReportData.size() > 0) {
 			fw.write("\n");
 			fw.write("\n");
-			fw.write("Error type,Hit string count,Duplicated count,Validated count,Total New & Change Word Count,Hit New & Change Word Count\n");
+			fw.write("Error type,Hit string count,Duplicated count,Validated count,Total New & Change Word Count,Hit New & Change Word Count,Error Type Score\n");
 			lstEndReportData.forEach(erd -> {
 				try {
-					fw.write(erd.getErrorType() + "," + erd.getHitStrCount()
-							+ "," + erd.getDupliCount() + ","
-							+ erd.getValidCount() + ","
-							+ erd.getTotalNCCount() + "," + erd.getHitNCCount()
-							+ "\n");
+					fw.write(erd.getErrorType() + "," + erd.getHitStringCount()
+							+ "," + erd.getDuplicatedCount() + ","
+							+ erd.getValidatedCount() + ","
+							+ erd.getTotalWordCount() + "," + erd.getHitWordCount()
+							+ "," + erd.getErrorTypeScore() + "\n");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			});
 		}
+		
+		fw.write("\n");
+		fw.write("\n");
+		fw.write("Total Score,Scan Start Time,Scan End Time,Duration,Release Name,Release Version\n");
+		fw.write(summary.getTotalScore() + "," + dateUtil.format("YYYY-MM-dd HH:mm:ss", summary.getScanStartTime())
+				+ "," + dateUtil.format("YYYY-MM-dd HH:mm:ss", summary.getScanEndTime()) + "," + summary.getDuration()
+				+ "," + summary.getReleaseName() + "," + summary.getReleaseVersion() + "\n");
 		fw.close();
 		return null;
 	}
