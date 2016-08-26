@@ -7,6 +7,8 @@ import com.google.inject.name.Names;
 import com.hpe.g11n.sourcescoring.core.ISourceScoring;
 import com.hpe.g11n.sourcescoring.core.SourceScoringRuleManager;
 import com.hpe.g11n.sourcescoring.core.annotation.RuleData;
+import com.hpe.g11n.sourcescoring.core.spellingcheck.ISpellingCheck;
+import com.hpe.g11n.sourcescoring.core.spellingcheck.jazzy.HashMapDictionarySpellCheck;
 import org.reflections.Reflections;
 import org.reflections.scanners.FieldAnnotationsScanner;
 import org.reflections.scanners.Scanner;
@@ -50,7 +52,9 @@ public class CoreModule extends AbstractModule {
         bind(ISourceScoring.class).to(SourceScoringRuleManager.class);
         bind(new TypeLiteral<List<Class>>(){}).annotatedWith(Names.named("ruleClasses")).toInstance(getRules());
         bind(new TypeLiteral<List<String>>(){}).annotatedWith(Names.named("ruleNames")).toInstance(checkboxs());
+        bind(ISpellingCheck.class).to(HashMapDictionarySpellCheck.class);
     }
+
     @Provides
     @Singleton
     public List<Class> getRules(){
