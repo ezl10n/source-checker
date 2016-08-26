@@ -16,6 +16,7 @@ public class HashMapDictionarySpellCheckTest {
         HashMapDictionarySpellCheck checker = new HashMapDictionarySpellCheck();
         Assert.assertEquals(true, checker.isCorrect("hello"));
         Assert.assertEquals(false, checker.isCorrect("hxllx"));
+        Assert.assertEquals(true, checker.isCorrect("AWT"));
     }
 
     @Test

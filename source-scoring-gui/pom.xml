@@ -136,6 +136,12 @@
                                                 <include>*.conf</include>
                                             </includes>
                                         </resource>
+                                        <resource>
+                                            <directory>../src/main/dict</directory>
+                                            <includes>
+                                                <exclude>testDict.*</exclude>
+                                            </includes>
+                                        </resource>
                                     </resources>
                                 </configuration>
                             </execution>
