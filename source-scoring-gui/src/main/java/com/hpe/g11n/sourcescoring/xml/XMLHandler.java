@@ -25,6 +25,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.hpe.g11n.sourcescoring.pojo.ReportData;
+import com.hpe.g11n.sourcescoring.pojo.SourceScoring;
+import com.hpe.g11n.sourcescoring.pojo.Summary;
+import com.hpe.g11n.sourcescoring.utils.DateUtil;
 
 /**
  * 
@@ -40,15 +43,17 @@ public class XMLHandler {
 
 	}
 
-	public void createXML(String version,String filePath,List<ReportData> lstReportData) {
+	public void createXML(String filePath,SourceScoring sourceScoring) {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		try {
+			List<ReportData> lstReportData = sourceScoring.getLstReportData();
+			Summary summary = sourceScoring.getSummary();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document document = builder.newDocument();
 			document.setXmlVersion("1.0");
 
 			Element root = document.createElement("SourcesCoring");
-			root.setAttribute("version", version);
+			root.setAttribute("version", sourceScoring.getProductVersion());
 			Element resultData = document.createElement("ResultData");
 			Set<String> set = new HashSet<String>();
 			for(ReportData reportData:lstReportData){
@@ -60,35 +65,38 @@ public class XMLHandler {
 			while(iterator.hasNext()){
 				String name = (String)iterator.next();
 				Element fileType = document.createElement("FileType");
-				fileType.setAttribute("name", name);
+				String fileVersion="";
 				for(int j=0;j<lstReportData.size();j++){
 					String lpuName =lstReportData.get(j).getLpuName();
 					if(lpuName!= null && lpuName.equals(name)){
+						fileVersion = lstReportData.get(j).getFileVersion();
 						Element sourceStrings = document.createElement("SourceStrings");
 						
-						Element fileName = document.createElement("fileName");
-						fileName.setTextContent(lstReportData.get(j).getFileName());
-						sourceStrings.appendChild(fileName);
+						Element subFileName = document.createElement("SubFileName");
+						subFileName.setTextContent(lstReportData.get(j).getSubFileName());
+						sourceStrings.appendChild(subFileName);
 						
-						Element stringId = document.createElement("stringId");
+						Element stringId = document.createElement("StringId");
 						stringId.setTextContent(lstReportData.get(j).getStringId());
 						sourceStrings.appendChild(stringId);
 						
-						Element sourceString = document.createElement("sourceString");
-						sourceString.setTextContent(lstReportData.get(j).getSourceStrings());
+						Element sourceString = document.createElement("SourceString");
+						sourceString.setTextContent(lstReportData.get(j).getSourceString());
 						sourceStrings.appendChild(sourceString);
 						
-						Element errorType = document.createElement("errorType");
+						Element errorType = document.createElement("ErrorType");
 						errorType.setTextContent(lstReportData.get(j).getErrorType());
 						sourceStrings.appendChild(errorType);
 						
-						Element details = document.createElement("details");
+						Element details = document.createElement("Details");
 						details.setTextContent(lstReportData.get(j).getDetails());
 						sourceStrings.appendChild(details);
 						
 						fileType.appendChild(sourceStrings);
 					}
 				}
+				fileType.setAttribute("FileVersion", fileVersion);
+				fileType.setAttribute("FileName", name);
 				resultData.appendChild(fileType);
 			}
 			
@@ -97,33 +105,66 @@ public class XMLHandler {
 				if(lstReportData.get(k).getEndReportData() !=null){
 					Element resultCountData = document.createElement("ResultCountData");
 					
-					Element errorType = document.createElement("errorType");
+					Element errorType = document.createElement("ErrorType");
 					errorType.setTextContent(lstReportData.get(k).getEndReportData().getErrorType());
 					resultCountData.appendChild(errorType);
 					
-					Element hitStrCount = document.createElement("hitStringCount");
-					hitStrCount.setTextContent(String.valueOf(lstReportData.get(k).getEndReportData().getHitStrCount()));
+					Element hitStrCount = document.createElement("HitStringCount");
+					hitStrCount.setTextContent(String.valueOf(lstReportData.get(k).getEndReportData().getHitStringCount()));
 					resultCountData.appendChild(hitStrCount);
 					
-					Element dupliCount = document.createElement("duplicatedCount");
-					dupliCount.setTextContent(String.valueOf(lstReportData.get(k).getEndReportData().getDupliCount()));
+					Element dupliCount = document.createElement("DuplicatedCount");
+					dupliCount.setTextContent(String.valueOf(lstReportData.get(k).getEndReportData().getDuplicatedCount()));
 					resultCountData.appendChild(dupliCount);
 					
-					Element validatCount = document.createElement("validatedCount");
-					validatCount.setTextContent(String.valueOf(lstReportData.get(k).getEndReportData().getValidCount()));
+					Element validatCount = document.createElement("ValidatedCount");
+					validatCount.setTextContent(String.valueOf(lstReportData.get(k).getEndReportData().getValidatedCount()));
 					resultCountData.appendChild(validatCount);
 					
-					Element totalNCCount = document.createElement("totalNewOrChangeWordCount");
-					totalNCCount.setTextContent(String.valueOf(lstReportData.get(k).getEndReportData().getTotalNCCount()));
+					Element totalNCCount = document.createElement("TotalWordCount");
+					totalNCCount.setTextContent(String.valueOf(lstReportData.get(k).getEndReportData().getTotalWordCount()));
 					resultCountData.appendChild(totalNCCount);
 					
-					Element hitNCCount = document.createElement("hitNewOrChangeWordCount");
-					hitNCCount.setTextContent(String.valueOf(lstReportData.get(k).getEndReportData().getHitNCCount()));
+					Element hitNCCount = document.createElement("HitWordCount");
+					hitNCCount.setTextContent(String.valueOf(lstReportData.get(k).getEndReportData().getHitWordCount()));
 					resultCountData.appendChild(hitNCCount);
+					
+					Element errorTypeScore = document.createElement("ErrorTypeScore");
+					errorTypeScore.setTextContent(String.valueOf(lstReportData.get(k).getEndReportData().getErrorTypeScore()));
+					resultCountData.appendChild(errorTypeScore);
 					
 					root.appendChild(resultCountData);
 				}
 			}
+			
+			Element summaryElement = document.createElement("Summary");
+			Element totalScore = document.createElement("TotalScore");
+			totalScore.setTextContent(String.valueOf(summary.getTotalScore()));
+			summaryElement.appendChild(totalScore);
+			
+			DateUtil dateUtil = new DateUtil();
+			
+			Element scanStartTime = document.createElement("ScanStartTime");
+			scanStartTime.setTextContent(dateUtil.format("YYYY-MM-dd HH:mm:ss", summary.getScanStartTime()));
+			summaryElement.appendChild(scanStartTime);
+			
+			Element scanEndTime = document.createElement("ScanEndTime");
+			scanEndTime.setTextContent(dateUtil.format("YYYY-MM-dd HH:mm:ss", summary.getScanEndTime()));
+			summaryElement.appendChild(scanEndTime);
+			
+			Element duration = document.createElement("Duration");
+			duration.setTextContent(summary.getDuration());
+			summaryElement.appendChild(duration);
+			
+			Element releaseName = document.createElement("ReleaseName");
+			releaseName.setTextContent(summary.getReleaseName());
+			summaryElement.appendChild(releaseName);
+			
+			Element releaseVersion = document.createElement("ReleaseVersion");
+			releaseVersion.setTextContent(summary.getReleaseVersion());
+			summaryElement.appendChild(releaseVersion);
+			root.appendChild(summaryElement);
+			
 			document.appendChild(root);
 			TransformerFactory transFactory = TransformerFactory.newInstance();
 			Transformer transFormer = transFactory.newTransformer();
@@ -149,6 +190,7 @@ public class XMLHandler {
 		} catch (TransformerException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
+			log.error("create xml error!");
 			e.printStackTrace();
 		}
 	}
@@ -156,10 +198,4 @@ public class XMLHandler {
 //	public void parserXML(String strXML) {
 //	}
 
-//	public static void main(String[] args) {
-//		XMLHandler handler = new XMLHandler();
-//		String xml = handler.createXML();
-//		System.out.println(xml);
-		// handler.parserXML(xml);
-//	}
 }

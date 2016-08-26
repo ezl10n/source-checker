@@ -4,17 +4,18 @@ public class InputData {
 	private String lpuName;
 	private String fileName;
 	private String stringId;
-	private String sourceStrings;
+	private String sourceString;
+	private String fileVersion;
 	public InputData(){
 		super();
 	}
 	public InputData(String lpuName, String fileName, String stringId,
-			String sourceStrings) {
+			String sourceString) {
 		super();
 		this.lpuName = lpuName;
 		this.fileName = fileName;
 		this.stringId = stringId;
-		this.sourceStrings = sourceStrings;
+		this.sourceString = sourceString;
 	}
 
 	public String getLpuName() {
@@ -41,12 +42,18 @@ public class InputData {
 		this.stringId = stringId;
 	}
 
-	public String getSourceStrings() {
-		return sourceStrings;
+	public String getSourceString() {
+		return sourceString;
 	}
 
-	public void setSourceStrings(String sourceStrings) {
-		this.sourceStrings = sourceStrings;
+	public void setSourceString(String sourceString) {
+		this.sourceString = sourceString;
+	}
+	public String getFileVersion() {
+		return fileVersion;
+	}
+	public void setFileVersion(String fileVersion) {
+		this.fileVersion = fileVersion;
 	}
 
 }
