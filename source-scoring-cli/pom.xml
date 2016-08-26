@@ -8,7 +8,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>source-scoring-cli</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
     <name>source-scoring-cli</name>
 

@@ -318,9 +318,10 @@
     <modules>
         <module>source-scoring-core</module>
 		<module>source-scoring-config</module>
-        <module>source-scoring-cli</module>
         <module>source-scoring-gui</module>
+        <module>source-scoring-cli</module>
         <module>source-scoring-ezl10n-adapter</module>
+        <module>source-scoring-standalone</module>
     </modules>
 
 
