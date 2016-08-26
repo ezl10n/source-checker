@@ -136,11 +136,27 @@
                                                 <include>*.conf</include>
                                             </includes>
                                         </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>copy-dict-resources</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <overwrite>true</overwrite>
+                                    <outputDirectory>${dist.directory}/dict</outputDirectory>
+                                    <resources>
                                         <resource>
-                                            <directory>../src/main/dict</directory>
+                                            <directory>../src/main/dict/</directory>
                                             <includes>
-                                                <exclude>testDict.*</exclude>
+                                                <include>**/**</include>
                                             </includes>
+                                            <excludes>
+                                                <exclude>**/testDic.1</exclude>
+                                            </excludes>
                                         </resource>
                                     </resources>
                                 </configuration>
