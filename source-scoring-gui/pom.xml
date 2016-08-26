@@ -66,7 +66,7 @@
                              </goals>-->
                         <configuration>
                             <configurationSourceDirectory>src/main/config</configurationSourceDirectory>
-                            <extraJvmArguments>-Djava.library.path=@BASEDIR@\lib -Dsource.scoring.config.basedir=@BASEDIR@\config -Dcom.jacob.debug=${jacob.debug} -Dconsole.log-level=${console.logging}</extraJvmArguments>
+                            <extraJvmArguments>-Djava.library.path=@BASEDIR@\lib -Dsource.scoring.config.basedir=@BASEDIR@\config -Dsource.scoring.spellingcheck.dict.basedir=@BASEDIR@\dict -Dcom.jacob.debug=${jacob.debug} -Dconsole.log-level=${console.logging}</extraJvmArguments>
                             <programs>
                                 <program>
                                     <id>sourceScoring-Standalone-GUI</id>
@@ -82,6 +82,7 @@
                                         <extraArguments>
                                             <extraArgument>-Djava.library.path=@BASEDIR@\lib</extraArgument>
                                             <extraArgument>-Dsource.scoring.config.basedir=@BASEDIR@\config</extraArgument>
+                                            <extraArgument>-Dsource.scoring.spellingcheck.dict.basedir=@BASEDIR@\dict</extraArgument>
                                             <extraArgument>-Dconsole.log-level=${console.logging}</extraArgument>
                                             <extraArgument>-Dcom.jacob.debug=${jacob.debug}</extraArgument>
                                         </extraArguments>
@@ -102,6 +103,7 @@
                                         <extraArguments>
                                             <extraArgument>-Djava.library.path=@BASEDIR@\lib</extraArgument>
                                             <extraArgument>-Dsource.scoring.config.basedir=@BASEDIR@\config</extraArgument>
+                                            <extraArgument>-Dsource.scoring.spellingcheck.dict.basedir=@BASEDIR@\dict</extraArgument>
                                             <extraArgument>-Dconsole.log-level=${console.logging}</extraArgument>
                                             <extraArgument>-Dcom.jacob.debug=${jacob.debug}</extraArgument>
                                         </extraArguments>
@@ -133,6 +135,28 @@
                                             <includes>
                                                 <include>*.conf</include>
                                             </includes>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>copy-dict-resources</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <overwrite>true</overwrite>
+                                    <outputDirectory>${dist.directory}/dict</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>../src/main/dict/</directory>
+                                            <includes>
+                                                <include>**/**</include>
+                                            </includes>
+                                            <excludes>
+                                                <exclude>**/testDic.1</exclude>
+                                            </excludes>
                                         </resource>
                                     </resources>
                                 </configuration>
