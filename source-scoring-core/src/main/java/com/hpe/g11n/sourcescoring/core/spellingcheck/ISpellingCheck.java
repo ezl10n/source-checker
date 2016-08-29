@@ -24,6 +24,23 @@ public interface ISpellingCheck {
      * @return the list of words suggested
      */
     List<String> getSuggestions(String word);
+    
+    //TDDO
+    default String getSuggestionsLessThanThree(String word){
+    	List<String> list= getSuggestions(word);
+    	String result="";
+    	for(int i=0;i<list.size();i++){
+    		result = result + word +";";
+    		i++;
+    		if(i==2){
+    			break;
+    		}
+    	}
+    	if(result.length()>0){
+    		result.substring(0,result.length()-1);
+    	}
+    	return result;
+    }
 
     default String getDictBasePath(){
         String baseDir=System.getProperty("source.scoring.spellingcheck.dict.basedir");

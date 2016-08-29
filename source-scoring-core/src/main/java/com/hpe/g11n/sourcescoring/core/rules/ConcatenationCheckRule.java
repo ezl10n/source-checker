@@ -19,6 +19,7 @@ import com.hpe.g11n.sourcescoring.pojo.ReportData;
 import com.hpe.g11n.sourcescoring.pojo.ReportDataCount;
 import com.hpe.g11n.sourcescoring.utils.Constant;
 import com.hpe.g11n.sourcescoring.utils.ReportDataUtil;
+import com.hpe.g11n.sourcescoring.utils.StringUtil;
 import com.typesafe.config.Config;
 
 /**
@@ -71,14 +72,14 @@ public class ConcatenationCheckRule implements IRule{
 			if(log.isDebugEnabled()){
 				log.debug("Start ConcatenationCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());
 			}
-			totalNCCount = totalNCCount + ido.getSourceString().split(" ").length;
+			totalNCCount = totalNCCount + StringUtil.getCountWords(ido.getSourceString());
 			for(String k : keywords) {
 				if (ido.getSourceString().startsWith(k.trim().concat(" ")) 
 						|| ido.getSourceString().endsWith(" ".concat(k.trim()))
 						){
 					hitStrCount++;
 					hashSet.add(ido.getSourceString());
-					hitNCCount = hitNCCount + ido.getSourceString().split(" ").length;
+					hitNCCount = hitNCCount + StringUtil.getCountWords(ido.getSourceString());
 					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
 							Constant.CONCATENATION,"Warning: starting or ending with keyword \""+k.trim()+"\". Possible concatenated strings.",ido.getFileVersion(),null));
 					if(log.isDebugEnabled()){
@@ -91,7 +92,7 @@ public class ConcatenationCheckRule implements IRule{
 						&& pattern(ido.getSourceString(),"^[A-Z].*$")) {
 					hitStrCount++;
 					hashSet.add(ido.getSourceString());
-					hitNCCount = hitNCCount + ido.getSourceString().split(" ").length;
+					hitNCCount = hitNCCount + StringUtil.getCountWords(ido.getSourceString());
 					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
 							Constant.CONCATENATION,"Warning: with the first letter in capital \""+ido.getSourceString()+"\". Possible concatenated strings.",ido.getFileVersion(),null));
 					flag = true;
@@ -103,7 +104,7 @@ public class ConcatenationCheckRule implements IRule{
 						|| ido.getSourceString().contains(v.trim().toUpperCase())) {
 					hitStrCount++;
 					hashSet.add(ido.getSourceString());
-					hitNCCount = hitNCCount + ido.getSourceString().split(" ").length;
+					hitNCCount = hitNCCount + StringUtil.getCountWords(ido.getSourceString());
 					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
 							Constant.CONCATENATION,"Warning: composed of variables \""+v.trim()+"\". Possible concatenated strings.",ido.getFileVersion(),null));
 					flag = true;

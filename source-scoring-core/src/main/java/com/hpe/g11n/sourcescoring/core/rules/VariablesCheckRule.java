@@ -19,6 +19,7 @@ import com.hpe.g11n.sourcescoring.pojo.ReportData;
 import com.hpe.g11n.sourcescoring.pojo.ReportDataCount;
 import com.hpe.g11n.sourcescoring.utils.Constant;
 import com.hpe.g11n.sourcescoring.utils.ReportDataUtil;
+import com.hpe.g11n.sourcescoring.utils.StringUtil;
 import com.typesafe.config.Config;
 
 /**
@@ -68,8 +69,8 @@ public class VariablesCheckRule implements IRule{
 			if(log.isDebugEnabled()){
 				log.debug("Start VariablesCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());
 			}
-			totalNCCount = totalNCCount + ido.getSourceString().split(" ").length;
-			int wordsCount =ido.getSourceString().trim().split(" ").length;
+			totalNCCount = totalNCCount + StringUtil.getCountWords(ido.getSourceString());
+			int wordsCount =StringUtil.getCountWords(ido.getSourceString());
 			int variablesCount =0;
 			String[] sourceStrings = ido.getSourceString().split(" ");
 			//check xxxx one{xxx} other{xxx} xxxx
@@ -78,13 +79,13 @@ public class VariablesCheckRule implements IRule{
 						Constant.VARIABLES,"Warning: variable pattern \"one {xxx} other {xxx}\" detected. Please confirm which string(s) are translatable.",ido.getFileVersion(),null));
 				hitStrCount++;
 				hashSet.add(ido.getSourceString());
-				hitNCCount = hitNCCount + ido.getSourceString().split(" ").length;
+				hitNCCount = hitNCCount + StringUtil.getCountWords(ido.getSourceString());
 				continue;
 			}
 			for(String v:variables){
 				//check {0,xxx,xxx}
 				for(String ss:sourceStrings){
-					if(pattern(ss,".*\\{0\\,.*\\,.*\\}.*") || ss.equals(v.trim())){
+					if(pattern(ss,".*\\{0\\,.*\\,.*\\}.*$") || ss.equals(v.trim())){
 						variablesCount = variablesCount + 1;
 					}
 				}
@@ -93,7 +94,7 @@ public class VariablesCheckRule implements IRule{
 							Constant.VARIABLES,"Warning: variables count exceeded threshold.",ido.getFileVersion(),null));
 					hitStrCount++;
 					hashSet.add(ido.getSourceString());
-					hitNCCount = hitNCCount + ido.getSourceString().split(" ").length;
+					hitNCCount = hitNCCount + StringUtil.getCountWords(ido.getSourceString());
 					break;
 				}
 			}
