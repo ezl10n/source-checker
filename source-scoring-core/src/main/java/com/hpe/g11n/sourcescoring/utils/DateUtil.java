@@ -18,15 +18,16 @@ public class DateUtil {
 		return sdf.format(date);
 	}
 
-	public String getDurationDate(Date startDate, Date enddate) throws ParseException {
-		Long durationDate = enddate.getTime() - startDate.getTime();
+	public String getDurationDate(Date startDate, Date endDate) throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat("YYYYMMddHHmmss");
+		Long durationDate = Long.valueOf((sdf.format(endDate))) - Long.valueOf((sdf.format(startDate)));
 
-		long hours = durationDate / (1000 * 60 * 60);
+		long hours = durationDate / (60 * 60);
 		long minutes = (durationDate - hours
-				* (1000 * 60 * 60))
-				/ (1000 * 60);
-		long second = (durationDate - hours
-				* (1000 * 60 * 60) -minutes *(1000 * 60))/1000;
+				* (60 * 60))
+				/ (60);
+		long second = durationDate - hours
+				* (60 * 60) -minutes *(60);
 		return hours+" hours "+minutes+" minutes "+second+" s";
 	}
 }
