@@ -37,6 +37,7 @@
         <jacbo.version>1.18-M2</jacbo.version>
         <jcommander.version>1.47</jcommander.version>
         <jazzy.version>0.5.2</jazzy.version>
+        <poi.version>3.14</poi.version>
     </properties>
     <profiles>
     <profile>
@@ -278,6 +279,11 @@
             <artifactId>jazzy-core</artifactId>
             <version>${jazzy.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
     </dependencies>
     </dependencyManagement>
 
@@ -318,9 +324,10 @@
     <modules>
         <module>source-scoring-core</module>
 		<module>source-scoring-config</module>
-        <module>source-scoring-cli</module>
         <module>source-scoring-gui</module>
+        <module>source-scoring-cli</module>
         <module>source-scoring-ezl10n-adapter</module>
+        <module>source-scoring-standalone</module>
     </modules>
 
 
