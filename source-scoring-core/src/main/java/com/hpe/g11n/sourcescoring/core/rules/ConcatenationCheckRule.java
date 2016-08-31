@@ -88,8 +88,7 @@ public class ConcatenationCheckRule implements IRule{
 					flag = true;
 					break;
 				}
-				if ((ido.getSourceString().trim().hashCode()-32==k.trim().hashCode()) 
-						&& pattern(ido.getSourceString(),"^[A-Z].*$")) {
+				if (pattern(ido.getSourceString(),"^[A-Z][a-z]*$")) {
 					hitStrCount++;
 					hashSet.add(ido.getSourceString());
 					hitNCCount = hitNCCount + StringUtil.getCountWords(ido.getSourceString());

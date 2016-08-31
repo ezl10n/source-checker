@@ -16,4 +16,10 @@ public class StringUtil {
 		words = string.trim().split("\\s+");
 		return words.length;
 	}
+	
+	public static String getStringWithChar(String string) {
+		string = string.replaceAll("[^A-Za-z]", " ");
+		string = string.replaceAll("\\s+", " ");
+		return string.trim();
+	}
 }

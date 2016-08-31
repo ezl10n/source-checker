@@ -88,7 +88,7 @@ public class SourceScoringTask extends Task<Void> {
 		}
 		
 		Summary summary = new Summary();
-		summary.setReleaseName("");//TODO get project name
+		summary.setProjectName("");//TODO get project name
 		summary.setReleaseVersion("");//TODO get project version
 		summary.setScanStartTime(startScanTime);
 		summary.setScanEndTime(startEndTime);
@@ -104,7 +104,7 @@ public class SourceScoringTask extends Task<Void> {
 		//create csv
 		final FileWriter fw = new FileWriter(report + "SourceScoring"
 				+ dateFileName + ".csv");
-		fw.write("File NAME,SUB FILE NAME,STRING ID,SOURCE STRINGS,ERROR TYPE,DETAILS\n");
+		fw.write("FILE NAME,SUB FILE NAME,STRING ID,SOURCE STRINGS,ERROR TYPE,DETAILS\n");
 		
 		Iterator iterator = set.iterator();
 		while(iterator.hasNext()){
@@ -141,7 +141,7 @@ public class SourceScoringTask extends Task<Void> {
 		fw.write("Total Score,Scan Start Time,Scan End Time,Duration,Release Name,Release Version\n");
 		fw.write(summary.getTotalScore() + "," + dateUtil.format("YYYY-MM-dd HH:mm:ss", summary.getScanStartTime())
 				+ "," + dateUtil.format("YYYY-MM-dd HH:mm:ss", summary.getScanEndTime()) + "," + summary.getDuration()
-				+ "," + summary.getReleaseName() + "," + summary.getReleaseVersion() + "\n");
+				+ "," + summary.getProjectName() + "," + summary.getReleaseVersion() + "\n");
 		fw.close();
 		return null;
 	}

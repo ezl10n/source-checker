@@ -156,9 +156,9 @@ public class XMLHandler {
 			duration.setTextContent(summary.getDuration());
 			summaryElement.appendChild(duration);
 			
-			Element releaseName = document.createElement("ReleaseName");
-			releaseName.setTextContent(summary.getReleaseName());
-			summaryElement.appendChild(releaseName);
+			Element projectName = document.createElement("ProjectName");
+			projectName.setTextContent(summary.getProjectName());
+			summaryElement.appendChild(projectName);
 			
 			Element releaseVersion = document.createElement("ReleaseVersion");
 			releaseVersion.setTextContent(summary.getReleaseVersion());

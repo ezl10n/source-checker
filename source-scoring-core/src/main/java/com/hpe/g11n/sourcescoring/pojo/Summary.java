@@ -16,7 +16,7 @@ public class Summary {
 	private Date scanStartTime;
 	private Date scanEndTime;
 	private String duration;// scanStartTime-scanEndTime
-	private String releaseName;// project name
+	private String projectName;// project name
 	private String releaseVersion;// project version
 
 	public BigDecimal getTotalScore() {
@@ -51,12 +51,12 @@ public class Summary {
 		this.duration = duration;
 	}
 
-	public String getReleaseName() {
-		return releaseName;
+	public String getProjectName() {
+		return projectName;
 	}
 
-	public void setReleaseName(String releaseName) {
-		this.releaseName = releaseName;
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
 	}
 
 	public String getReleaseVersion() {
