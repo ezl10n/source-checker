@@ -64,8 +64,8 @@ public class CamelCaseCheckRule implements IRule{
 			}
 			totalNCCount = totalNCCount + StringUtil.getCountWords(ido.getSourceString());
 			if (!StringUtil.getStringWithChar(ido.getSourceString().trim()).contains(" ")
-					&& (Pattern.matches("^(([A-Z][a-zA-Z]*)|[^A-Za-z]){2,}$", ido.getSourceString().trim()) 
-							|| Pattern.matches("^[a-z]*([A-Z]+[a-zA-Z]*){2,}$", ido.getSourceString().trim()))) {
+					&& (Pattern.matches("^([A-Z]+[a-z]+[A-Za-z]*){2,}$", ido.getSourceString().trim()) 
+							|| Pattern.matches("^([a-z]+[A-Z]+[A-Za-z]*){2,}$", ido.getSourceString().trim()))) {
 				hitStrCount++;
 				hashSet.add(ido.getSourceString());
 				hitNCCount = hitNCCount + StringUtil.getCountWords(ido.getSourceString());

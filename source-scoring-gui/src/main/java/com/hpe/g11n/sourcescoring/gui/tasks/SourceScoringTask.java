@@ -1,9 +1,6 @@
 package com.hpe.g11n.sourcescoring.gui.tasks;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -21,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.hpe.g11n.sourcescoring.core.ISourceScoring;
 import com.hpe.g11n.sourcescoring.fileparser.IFileParser;
+import com.hpe.g11n.sourcescoring.pojo.Excel;
 import com.hpe.g11n.sourcescoring.pojo.InputData;
 import com.hpe.g11n.sourcescoring.pojo.ReportData;
 import com.hpe.g11n.sourcescoring.pojo.ReportDataCount;
@@ -28,6 +26,7 @@ import com.hpe.g11n.sourcescoring.pojo.SourceScoring;
 import com.hpe.g11n.sourcescoring.pojo.Summary;
 import com.hpe.g11n.sourcescoring.utils.Constant;
 import com.hpe.g11n.sourcescoring.utils.DateUtil;
+import com.hpe.g11n.sourcescoring.utils.ExcelPoiUtils;
 import com.hpe.g11n.sourcescoring.xml.XMLHandler;
 
 public class SourceScoringTask extends Task<Void> {
@@ -98,51 +97,103 @@ public class SourceScoringTask extends Task<Void> {
 		
 		//create xml 
 		XMLHandler handler = new XMLHandler();
-		handler.createXML(report + "SourceScoring"
+		handler.createXML(report + "SourceChecker"
 				+ dateFileName + ".xml", sourceScoring);
 		
-		//create csv
-		final FileWriter fw = new FileWriter(report + "SourceScoring"
-				+ dateFileName + ".csv");
-		fw.write("FILE NAME,SUB FILE NAME,STRING ID,SOURCE STRINGS,ERROR TYPE,DETAILS\n");
+		//create excel 
+		String excelPath= report + "SourceChecker" + dateFileName + ".xls";
+		List<Excel> lstExcel = new ArrayList<Excel>();
+		Excel detail = new Excel();
 		
+		detail.setName("Details");
+		List<String> lstDetailsHeader = new ArrayList<String>();
+		lstDetailsHeader.add("FILE NAME");
+		lstDetailsHeader.add("SUB FILE NAME");
+		lstDetailsHeader.add("STRING ID");
+		lstDetailsHeader.add("SOURCE STRING");
+		lstDetailsHeader.add("ERROR TYPE");
+		lstDetailsHeader.add("DETAILS");
+		detail.setHeader(lstDetailsHeader);
+		
+		List<List<String>> lstDetailsValue = new ArrayList<List<String>>();
 		Iterator iterator = set.iterator();
 		while(iterator.hasNext()){
 			String name = (String)iterator.next();
 			for(ReportData rd : lstReport){
 				if (rd.getLpuName() != null && name.equals(rd.getLpuName())) {
-					fw.write(rd.getLpuName() + "," + rd.getSubFileName() + ","
-							+ rd.getStringId() + "," + rd.getSourceString()
-							+ "," + rd.getErrorType() + "," + rd.getDetails()
-							+ "\n");
+					List<String> lstDetail = new ArrayList<String>();
+					lstDetail.add(rd.getLpuName());
+					lstDetail.add(rd.getSubFileName());
+					lstDetail.add(rd.getStringId());
+					lstDetail.add(rd.getSourceString());
+					lstDetail.add(rd.getErrorType());
+					lstDetail.add(rd.getDetails());
+					lstDetailsValue.add(lstDetail);
 				}
 			}
 		}
+		detail.setValue(lstDetailsValue);
+		lstExcel.add(detail);
 		
 		if (lstEndReportData.size() > 0) {
-			fw.write("\n");
-			fw.write("\n");
-			fw.write("Error type,Hit string count,Duplicated count,Validated count,Total New & Change Word Count,Hit New & Change Word Count,Error Type Score\n");
+			Excel count = new Excel();
+			count.setName("Count");
+			
+			List<String> lstCountHeader = new ArrayList<String>();
+			lstCountHeader.add("ERROR TYPE");
+			lstCountHeader.add("HIT STRING COUNT");
+			lstCountHeader.add("DUPLICATED COUNT");
+			lstCountHeader.add("VALIDATED COUNT");
+			lstCountHeader.add("TOTAL NEW & CHANGE WORD COUNT");
+			lstCountHeader.add("HIT NEW & CHANGE WORD COUNT");
+			lstCountHeader.add("ERROR TYPE SCORE");
+			count.setHeader(lstCountHeader);
+			
+			List<List<String>> lstCountValue = new ArrayList<List<String>>();
 			lstEndReportData.forEach(erd -> {
 				try {
-					fw.write(erd.getErrorType() + "," + erd.getHitStringCount()
-							+ "," + erd.getDuplicatedCount() + ","
-							+ erd.getValidatedCount() + ","
-							+ erd.getTotalWordCount() + "," + erd.getHitWordCount()
-							+ "," + erd.getErrorTypeScore() + "\n");
+					List<String> lstCount = new ArrayList<String>();
+					lstCount.add(erd.getErrorType());
+					lstCount.add(String.valueOf(erd.getHitStringCount()));
+					lstCount.add(String.valueOf(erd.getDuplicatedCount()));
+					lstCount.add(String.valueOf(erd.getValidatedCount()));
+					lstCount.add(String.valueOf(erd.getTotalWordCount()));
+					lstCount.add(String.valueOf(erd.getHitWordCount()));
+					lstCount.add(String.valueOf(erd.getErrorTypeScore()));
+					lstCountValue.add(lstCount);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			});
+			count.setValue(lstCountValue);
+			lstExcel.add(count);
 		}
 		
-		fw.write("\n");
-		fw.write("\n");
-		fw.write("Total Score,Scan Start Time,Scan End Time,Duration,Release Name,Release Version\n");
-		fw.write(summary.getTotalScore() + "," + dateUtil.format("YYYY-MM-dd HH:mm:ss", summary.getScanStartTime())
-				+ "," + dateUtil.format("YYYY-MM-dd HH:mm:ss", summary.getScanEndTime()) + "," + summary.getDuration()
-				+ "," + summary.getProjectName() + "," + summary.getReleaseVersion() + "\n");
-		fw.close();
+		Excel summaryExcel = new Excel();
+		summaryExcel.setName("Summary");
+		
+		List<String> lstSummaryExcelHeader = new ArrayList<String>();
+		lstSummaryExcelHeader.add("TOTAL SCORE");
+		lstSummaryExcelHeader.add("SCAN START TIME");
+		lstSummaryExcelHeader.add("SCAN END TIME");
+		lstSummaryExcelHeader.add("DURATION");
+		lstSummaryExcelHeader.add("PROJECT NAME");
+		lstSummaryExcelHeader.add("RELEASE VERSION");
+		summaryExcel.setHeader(lstSummaryExcelHeader);
+		
+		List<List<String>> lstSummaryExcelValue = new ArrayList<List<String>>();
+		List<String> lstSummary = new ArrayList<String>();
+		lstSummary.add(String.valueOf(summary.getTotalScore()));
+		lstSummary.add(dateUtil.format("YYYY-MM-dd HH:mm:ss", summary.getScanStartTime()));
+		lstSummary.add(dateUtil.format("YYYY-MM-dd HH:mm:ss", summary.getScanEndTime()));
+		lstSummary.add(summary.getDuration());
+		lstSummary.add(summary.getProjectName());
+		lstSummary.add(summary.getReleaseVersion());
+		lstSummaryExcelValue.add(lstSummary);
+		
+		summaryExcel.setValue(lstSummaryExcelValue);
+		lstExcel.add(summaryExcel);
+		ExcelPoiUtils.exportExcel(lstExcel,excelPath.toString());
 		return null;
 	}
 

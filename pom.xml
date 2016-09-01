@@ -38,6 +38,7 @@
         <jcommander.version>1.47</jcommander.version>
         <jazzy.version>0.5.2</jazzy.version>
         <poi.version>3.14</poi.version>
+        <jexcelapi.version>2.6.12</jexcelapi.version>
     </properties>
     <profiles>
     <profile>
@@ -284,7 +285,12 @@
             <artifactId>poi-ooxml</artifactId>
             <version>${poi.version}</version>
         </dependency>
-    </dependencies>
+		<dependency>
+            <groupId>net.sourceforge.jexcelapi</groupId>
+            <artifactId>jxl</artifactId>
+            <version>${jexcelapi.version}</version>
+        </dependency>   
+       </dependencies>
     </dependencyManagement>
 
     <dependencies>
