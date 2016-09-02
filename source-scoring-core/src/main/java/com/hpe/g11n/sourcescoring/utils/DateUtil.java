@@ -28,6 +28,6 @@ public class DateUtil {
 				/ (60);
 		long second = durationDate - hours
 				* (60 * 60) -minutes *(60);
-		return hours+" hours "+minutes+" minutes "+second+" s";
+		return hours+" hours "+minutes+" minutes "+second+" seconds";
 	}
 }

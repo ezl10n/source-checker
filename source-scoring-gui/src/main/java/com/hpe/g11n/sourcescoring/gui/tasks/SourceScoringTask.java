@@ -103,37 +103,31 @@ public class SourceScoringTask extends Task<Void> {
 		//create excel 
 		String excelPath= report + "SourceChecker" + dateFileName + ".xls";
 		List<Excel> lstExcel = new ArrayList<Excel>();
-		Excel detail = new Excel();
+
+		Excel summaryExcel = new Excel();
+		summaryExcel.setName("Summary");
 		
-		detail.setName("Details");
-		List<String> lstDetailsHeader = new ArrayList<String>();
-		lstDetailsHeader.add("FILE NAME");
-		lstDetailsHeader.add("SUB FILE NAME");
-		lstDetailsHeader.add("STRING ID");
-		lstDetailsHeader.add("SOURCE STRING");
-		lstDetailsHeader.add("ERROR TYPE");
-		lstDetailsHeader.add("DETAILS");
-		detail.setHeader(lstDetailsHeader);
+		List<String> lstSummaryExcelHeader = new ArrayList<String>();
+		lstSummaryExcelHeader.add("TOTAL SCORE");
+		lstSummaryExcelHeader.add("SCAN START TIME");
+		lstSummaryExcelHeader.add("SCAN END TIME");
+		lstSummaryExcelHeader.add("DURATION");
+		lstSummaryExcelHeader.add("PROJECT NAME");
+		lstSummaryExcelHeader.add("RELEASE VERSION");
+		summaryExcel.setHeader(lstSummaryExcelHeader);
 		
-		List<List<String>> lstDetailsValue = new ArrayList<List<String>>();
-		Iterator iterator = set.iterator();
-		while(iterator.hasNext()){
-			String name = (String)iterator.next();
-			for(ReportData rd : lstReport){
-				if (rd.getLpuName() != null && name.equals(rd.getLpuName())) {
-					List<String> lstDetail = new ArrayList<String>();
-					lstDetail.add(rd.getLpuName());
-					lstDetail.add(rd.getSubFileName());
-					lstDetail.add(rd.getStringId());
-					lstDetail.add(rd.getSourceString());
-					lstDetail.add(rd.getErrorType());
-					lstDetail.add(rd.getDetails());
-					lstDetailsValue.add(lstDetail);
-				}
-			}
-		}
-		detail.setValue(lstDetailsValue);
-		lstExcel.add(detail);
+		List<List<String>> lstSummaryExcelValue = new ArrayList<List<String>>();
+		List<String> lstSummary = new ArrayList<String>();
+		lstSummary.add(String.valueOf(summary.getTotalScore()));
+		lstSummary.add(dateUtil.format("YYYY-MM-dd HH:mm:ss", summary.getScanStartTime()));
+		lstSummary.add(dateUtil.format("YYYY-MM-dd HH:mm:ss", summary.getScanEndTime()));
+		lstSummary.add(summary.getDuration());
+		lstSummary.add(summary.getProjectName());
+		lstSummary.add(summary.getReleaseVersion());
+		lstSummaryExcelValue.add(lstSummary);
+		
+		summaryExcel.setValue(lstSummaryExcelValue);
+		lstExcel.add(summaryExcel);
 		
 		if (lstEndReportData.size() > 0) {
 			Excel count = new Excel();
@@ -169,30 +163,38 @@ public class SourceScoringTask extends Task<Void> {
 			lstExcel.add(count);
 		}
 		
-		Excel summaryExcel = new Excel();
-		summaryExcel.setName("Summary");
+		Excel detail = new Excel();
 		
-		List<String> lstSummaryExcelHeader = new ArrayList<String>();
-		lstSummaryExcelHeader.add("TOTAL SCORE");
-		lstSummaryExcelHeader.add("SCAN START TIME");
-		lstSummaryExcelHeader.add("SCAN END TIME");
-		lstSummaryExcelHeader.add("DURATION");
-		lstSummaryExcelHeader.add("PROJECT NAME");
-		lstSummaryExcelHeader.add("RELEASE VERSION");
-		summaryExcel.setHeader(lstSummaryExcelHeader);
+		detail.setName("Details");
+		List<String> lstDetailsHeader = new ArrayList<String>();
+		lstDetailsHeader.add("FILE NAME");
+		lstDetailsHeader.add("SUB FILE NAME");
+		lstDetailsHeader.add("STRING ID");
+		lstDetailsHeader.add("SOURCE STRING");
+		lstDetailsHeader.add("ERROR TYPE");
+		lstDetailsHeader.add("DETAILS");
+		detail.setHeader(lstDetailsHeader);
 		
-		List<List<String>> lstSummaryExcelValue = new ArrayList<List<String>>();
-		List<String> lstSummary = new ArrayList<String>();
-		lstSummary.add(String.valueOf(summary.getTotalScore()));
-		lstSummary.add(dateUtil.format("YYYY-MM-dd HH:mm:ss", summary.getScanStartTime()));
-		lstSummary.add(dateUtil.format("YYYY-MM-dd HH:mm:ss", summary.getScanEndTime()));
-		lstSummary.add(summary.getDuration());
-		lstSummary.add(summary.getProjectName());
-		lstSummary.add(summary.getReleaseVersion());
-		lstSummaryExcelValue.add(lstSummary);
+		List<List<String>> lstDetailsValue = new ArrayList<List<String>>();
+		Iterator iterator = set.iterator();
+		while(iterator.hasNext()){
+			String name = (String)iterator.next();
+			for(ReportData rd : lstReport){
+				if (rd.getLpuName() != null && name.equals(rd.getLpuName())) {
+					List<String> lstDetail = new ArrayList<String>();
+					lstDetail.add(rd.getLpuName());
+					lstDetail.add(rd.getSubFileName());
+					lstDetail.add(rd.getStringId());
+					lstDetail.add(rd.getSourceString());
+					lstDetail.add(rd.getErrorType());
+					lstDetail.add(rd.getDetails());
+					lstDetailsValue.add(lstDetail);
+				}
+			}
+		}
+		detail.setValue(lstDetailsValue);
+		lstExcel.add(detail);
 		
-		summaryExcel.setValue(lstSummaryExcelValue);
-		lstExcel.add(summaryExcel);
 		ExcelPoiUtils.exportExcel(lstExcel,excelPath.toString());
 		return null;
 	}
