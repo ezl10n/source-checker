@@ -285,11 +285,6 @@
             <artifactId>poi-ooxml</artifactId>
             <version>${poi.version}</version>
         </dependency>
-		<dependency>
-            <groupId>net.sourceforge.jexcelapi</groupId>
-            <artifactId>jxl</artifactId>
-            <version>${jexcelapi.version}</version>
-        </dependency>   
        </dependencies>
     </dependencyManagement>
 
@@ -326,6 +321,11 @@
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
         </dependency>
+        <dependency>
+            <groupId>net.sourceforge.jexcelapi</groupId>
+            <artifactId>jxl</artifactId>
+            <version>${jexcelapi.version}</version>
+        </dependency>   
     </dependencies>
     <modules>
         <module>source-scoring-core</module>
