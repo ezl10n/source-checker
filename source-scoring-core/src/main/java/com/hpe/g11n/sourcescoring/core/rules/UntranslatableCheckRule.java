@@ -6,7 +6,7 @@ import com.hpe.g11n.sourcescoring.core.IRule;
 import com.hpe.g11n.sourcescoring.core.annotation.RuleData;
 import com.hpe.g11n.sourcescoring.pojo.InputData;
 import com.hpe.g11n.sourcescoring.pojo.ReportData;
-import com.hpe.g11n.sourcescoring.utils.Constant;
+import com.hpe.g11n.sourcescoring.utils.constant.Constant;
 import com.typesafe.config.Config;
 
 @RuleData(id="UntranslatableCheckRule",name=Constant.UNTRANSLATABLE,order=12,ruleClass = UntranslatableCheckRule.class)

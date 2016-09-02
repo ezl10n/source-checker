@@ -17,8 +17,9 @@ import com.hpe.g11n.sourcescoring.core.annotation.RuleData;
 import com.hpe.g11n.sourcescoring.pojo.InputData;
 import com.hpe.g11n.sourcescoring.pojo.ReportData;
 import com.hpe.g11n.sourcescoring.pojo.ReportDataCount;
-import com.hpe.g11n.sourcescoring.utils.Constant;
+import com.hpe.g11n.sourcescoring.utils.constant.Constant;
 import com.hpe.g11n.sourcescoring.utils.ReportDataUtil;
+import com.hpe.g11n.sourcescoring.utils.constant.RulePatternConstant;
 import com.hpe.g11n.sourcescoring.utils.StringUtil;
 import com.typesafe.config.Config;
 
@@ -64,8 +65,7 @@ public class CamelCaseCheckRule implements IRule{
 			}
 			totalNCCount = totalNCCount + StringUtil.getCountWords(ido.getSourceString());
 			if (!StringUtil.getStringWithChar(ido.getSourceString().trim()).contains(" ")
-					&& (Pattern.matches("^([A-Z]+[a-z]+[A-Za-z]*){2,}$", ido.getSourceString().trim()) 
-							|| Pattern.matches("^([a-z]+[A-Z]+[A-Za-z]*){2,}$", ido.getSourceString().trim()))) {
+					&& (Pattern.matches(RulePatternConstant.CAMEL_CASE_CHECK_RULE, ido.getSourceString().trim()))) {
 				hitStrCount++;
 				hashSet.add(ido.getSourceString());
 				hitNCCount = hitNCCount + StringUtil.getCountWords(ido.getSourceString());

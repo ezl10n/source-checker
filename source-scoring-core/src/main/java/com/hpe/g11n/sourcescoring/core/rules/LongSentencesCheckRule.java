@@ -16,8 +16,9 @@ import com.hpe.g11n.sourcescoring.core.annotation.RuleData;
 import com.hpe.g11n.sourcescoring.pojo.InputData;
 import com.hpe.g11n.sourcescoring.pojo.ReportData;
 import com.hpe.g11n.sourcescoring.pojo.ReportDataCount;
-import com.hpe.g11n.sourcescoring.utils.Constant;
+import com.hpe.g11n.sourcescoring.utils.constant.Constant;
 import com.hpe.g11n.sourcescoring.utils.ReportDataUtil;
+import com.hpe.g11n.sourcescoring.utils.constant.RulePatternConstant;
 import com.hpe.g11n.sourcescoring.utils.StringUtil;
 import com.typesafe.config.Config;
 
@@ -62,7 +63,7 @@ public class LongSentencesCheckRule implements IRule{
 				log.debug("Start LongSentencesCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());
 			}
 			totalNCCount = totalNCCount + StringUtil.getCountWords(ido.getSourceString());
-			if (pattern(ido.getSourceString(),"^[A-Za-z]+[\\sA-Za-z]*[\\?|\\!|\\;|\\,|\\.|\\:]+[\\sA-Za-z]+.$")
+			if (!pattern(ido.getSourceString(),RulePatternConstant.LONG_SENTENCES_CHECK_RULE)
 					&& StringUtil.getCountWords(ido.getSourceString()) >20) {
 				hitStrCount++;
 				hashSet.add(ido.getSourceString());

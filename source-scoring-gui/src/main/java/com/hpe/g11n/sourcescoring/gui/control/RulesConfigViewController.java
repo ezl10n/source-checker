@@ -16,7 +16,7 @@ import javafx.stage.WindowEvent;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.hpe.g11n.sourcescoring.config.guice.ConfigModule;
-import com.hpe.g11n.sourcescoring.utils.Constant;
+import com.hpe.g11n.sourcescoring.utils.constant.Constant;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigValueFactory;
 

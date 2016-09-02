@@ -17,8 +17,9 @@ import com.hpe.g11n.sourcescoring.core.annotation.RuleData;
 import com.hpe.g11n.sourcescoring.pojo.InputData;
 import com.hpe.g11n.sourcescoring.pojo.ReportData;
 import com.hpe.g11n.sourcescoring.pojo.ReportDataCount;
-import com.hpe.g11n.sourcescoring.utils.Constant;
+import com.hpe.g11n.sourcescoring.utils.constant.Constant;
 import com.hpe.g11n.sourcescoring.utils.ReportDataUtil;
+import com.hpe.g11n.sourcescoring.utils.constant.RulePatternConstant;
 import com.hpe.g11n.sourcescoring.utils.StringUtil;
 import com.typesafe.config.Config;
 
@@ -74,7 +75,7 @@ public class VariablesCheckRule implements IRule{
 			int variablesCount =0;
 			String[] sourceStrings = ido.getSourceString().split(" ");
 			//check xxxx one{xxx} other{xxx} xxxx
-			if(pattern(ido.getSourceString(),".*one\\s?\\{.*\\}\\s?other\\s?\\{.*\\}.*$")){
+			if(pattern(ido.getSourceString(),RulePatternConstant.VARIABLES_CHECK_RULE_1)){
 				report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
 						Constant.VARIABLES,"Warning: variable pattern \"one {xxx} other {xxx}\" detected. Please confirm which string(s) are translatable.",ido.getFileVersion(),null));
 				hitStrCount++;
@@ -85,7 +86,7 @@ public class VariablesCheckRule implements IRule{
 			for(String v:variables){
 				//check {0,xxx,xxx}
 				for(String ss:sourceStrings){
-					if(pattern(ss,".*\\{0\\,.*\\,.*\\}.*$") || ss.equals(v.trim())){
+					if(pattern(ss,RulePatternConstant.VARIABLES_CHECK_RULE_2) || ss.equals(v.trim())){
 						variablesCount = variablesCount + 1;
 					}
 				}

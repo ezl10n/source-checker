@@ -17,8 +17,9 @@ import com.hpe.g11n.sourcescoring.core.annotation.RuleData;
 import com.hpe.g11n.sourcescoring.pojo.InputData;
 import com.hpe.g11n.sourcescoring.pojo.ReportData;
 import com.hpe.g11n.sourcescoring.pojo.ReportDataCount;
-import com.hpe.g11n.sourcescoring.utils.Constant;
+import com.hpe.g11n.sourcescoring.utils.constant.Constant;
 import com.hpe.g11n.sourcescoring.utils.ReportDataUtil;
+import com.hpe.g11n.sourcescoring.utils.constant.RulePatternConstant;
 import com.hpe.g11n.sourcescoring.utils.StringUtil;
 import com.typesafe.config.Config;
 
@@ -88,7 +89,7 @@ public class ConcatenationCheckRule implements IRule{
 					flag = true;
 					break;
 				}
-				if (pattern(ido.getSourceString(),"^[A-Z][a-z]*$")
+				if (pattern(ido.getSourceString(),RulePatternConstant.CONCATENATION_CHECK_RULE)
 						&& ido.getSourceString().toLowerCase().equals(k)) {
 					hitStrCount++;
 					hashSet.add(ido.getSourceString());

@@ -24,7 +24,7 @@ import com.hpe.g11n.sourcescoring.pojo.ReportData;
 import com.hpe.g11n.sourcescoring.pojo.ReportDataCount;
 import com.hpe.g11n.sourcescoring.pojo.SourceScoring;
 import com.hpe.g11n.sourcescoring.pojo.Summary;
-import com.hpe.g11n.sourcescoring.utils.Constant;
+import com.hpe.g11n.sourcescoring.utils.constant.Constant;
 import com.hpe.g11n.sourcescoring.utils.DateUtil;
 import com.hpe.g11n.sourcescoring.utils.ExcelPoiUtils;
 import com.hpe.g11n.sourcescoring.xml.XMLHandler;
