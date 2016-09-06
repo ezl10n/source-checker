@@ -134,13 +134,16 @@ public class SourceScoringTask extends Task<Void> {
 			count.setName("Count");
 			
 			List<String> lstCountHeader = new ArrayList<String>();
-			lstCountHeader.add("ERROR TYPE");
-			lstCountHeader.add("HIT STRING COUNT");
-			lstCountHeader.add("DUPLICATED COUNT");
-			lstCountHeader.add("VALIDATED COUNT");
-			lstCountHeader.add("TOTAL NEW & CHANGE WORD COUNT");
-			lstCountHeader.add("HIT NEW & CHANGE WORD COUNT");
-			lstCountHeader.add("ERROR TYPE SCORE");
+			lstCountHeader.add("Error Type");
+			lstCountHeader.add("Hit String Count");
+			lstCountHeader.add("Hit New & Change Word Count");
+			lstCountHeader.add("Duplicated String Count");
+			lstCountHeader.add("Duplicated Word Count");
+			lstCountHeader.add("Validated String Count");
+			lstCountHeader.add("Validated Word Count");
+			lstCountHeader.add("Total String Count");
+			lstCountHeader.add("Total Word Count");
+			lstCountHeader.add("Error Type Score");
 			count.setHeader(lstCountHeader);
 			
 			List<List<String>> lstCountValue = new ArrayList<List<String>>();
@@ -149,10 +152,13 @@ public class SourceScoringTask extends Task<Void> {
 					List<String> lstCount = new ArrayList<String>();
 					lstCount.add(erd.getErrorType());
 					lstCount.add(String.valueOf(erd.getHitStringCount()));
-					lstCount.add(String.valueOf(erd.getDuplicatedCount()));
-					lstCount.add(String.valueOf(erd.getValidatedCount()));
+					lstCount.add(String.valueOf(erd.getHitNewChangeWordCount()));
+					lstCount.add(String.valueOf(erd.getDuplicatedStringCount()));
+					lstCount.add(String.valueOf(erd.getDuplicatedWordCount()));
+					lstCount.add(String.valueOf(erd.getValidatedStringCount()));
+					lstCount.add(String.valueOf(erd.getValidatedWordCount()));
+					lstCount.add(String.valueOf(erd.getTotalStringCount()));
 					lstCount.add(String.valueOf(erd.getTotalWordCount()));
-					lstCount.add(String.valueOf(erd.getHitWordCount()));
 					lstCount.add(String.valueOf(erd.getErrorTypeScore()));
 					lstCountValue.add(lstCount);
 				} catch (Exception e) {

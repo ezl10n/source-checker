@@ -109,25 +109,37 @@ public class XMLHandler {
 					errorType.setTextContent(lstReportData.get(k).getEndReportData().getErrorType());
 					resultCountData.appendChild(errorType);
 					
-					Element hitStrCount = document.createElement("HitStringCount");
-					hitStrCount.setTextContent(String.valueOf(lstReportData.get(k).getEndReportData().getHitStringCount()));
-					resultCountData.appendChild(hitStrCount);
+					Element hitStringCount = document.createElement("HitStringCount");
+					hitStringCount.setTextContent(String.valueOf(lstReportData.get(k).getEndReportData().getHitStringCount()));
+					resultCountData.appendChild(hitStringCount);
 					
-					Element dupliCount = document.createElement("DuplicatedCount");
-					dupliCount.setTextContent(String.valueOf(lstReportData.get(k).getEndReportData().getDuplicatedCount()));
-					resultCountData.appendChild(dupliCount);
+					Element hitNewChangeWordCount = document.createElement("HitNewChangeWordCount");
+					hitNewChangeWordCount.setTextContent(String.valueOf(lstReportData.get(k).getEndReportData().getHitNewChangeWordCount()));
+					resultCountData.appendChild(hitNewChangeWordCount);
 					
-					Element validatCount = document.createElement("ValidatedCount");
-					validatCount.setTextContent(String.valueOf(lstReportData.get(k).getEndReportData().getValidatedCount()));
-					resultCountData.appendChild(validatCount);
+					Element duplicatedStringCount = document.createElement("DuplicatedStringCount");
+					duplicatedStringCount.setTextContent(String.valueOf(lstReportData.get(k).getEndReportData().getDuplicatedStringCount()));
+					resultCountData.appendChild(duplicatedStringCount);
 					
-					Element totalNCCount = document.createElement("TotalWordCount");
-					totalNCCount.setTextContent(String.valueOf(lstReportData.get(k).getEndReportData().getTotalWordCount()));
-					resultCountData.appendChild(totalNCCount);
+					Element duplicatedWordCount = document.createElement("DuplicatedWordCount");
+					duplicatedWordCount.setTextContent(String.valueOf(lstReportData.get(k).getEndReportData().getDuplicatedWordCount()));
+					resultCountData.appendChild(duplicatedWordCount);
 					
-					Element hitNCCount = document.createElement("HitWordCount");
-					hitNCCount.setTextContent(String.valueOf(lstReportData.get(k).getEndReportData().getHitWordCount()));
-					resultCountData.appendChild(hitNCCount);
+					Element validatedStringCount = document.createElement("ValidatedStringCount");
+					validatedStringCount.setTextContent(String.valueOf(lstReportData.get(k).getEndReportData().getValidatedStringCount()));
+					resultCountData.appendChild(validatedStringCount);
+					
+					Element validatedWordCount = document.createElement("ValidatedWordCount");
+					validatedWordCount.setTextContent(String.valueOf(lstReportData.get(k).getEndReportData().getValidatedWordCount()));
+					resultCountData.appendChild(validatedWordCount);
+					
+					Element totalStringCount = document.createElement("TotalStringCount");
+					totalStringCount.setTextContent(String.valueOf(lstReportData.get(k).getEndReportData().getTotalStringCount()));
+					resultCountData.appendChild(totalStringCount);
+					
+					Element totalWordCount = document.createElement("TotalWordCount");
+					totalWordCount.setTextContent(String.valueOf(lstReportData.get(k).getEndReportData().getTotalWordCount()));
+					resultCountData.appendChild(totalWordCount);
 					
 					Element errorTypeScore = document.createElement("ErrorTypeScore");
 					errorTypeScore.setTextContent(String.valueOf(lstReportData.get(k).getEndReportData().getErrorTypeScore()));

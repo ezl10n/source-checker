@@ -13,15 +13,20 @@ import com.hpe.g11n.sourcescoring.pojo.ReportDataCount;
  *
  */
 public class ReportDataUtil {
-	public ReportDataCount getEndReportData(String errorType, int hitStrCount,
-			int validCount, int totalNCCount, int hitNCCount,BigDecimal errorTypeScore) {
+	public ReportDataCount getEndReportData(String errorType, int hitStringCount,
+			int hitNewChangeWordCount, int duplicatedStringCount, int duplicatedWordCount,
+			int validatedStringCount,int validatedWordCount,int totalStringCount,
+			int totalWordCount,BigDecimal errorTypeScore) {
 		ReportDataCount endReportData = new ReportDataCount();
 		endReportData.setErrorType(errorType);
-		endReportData.setHitWordCount(hitNCCount);
-		endReportData.setHitStringCount(hitStrCount);
-		endReportData.setTotalWordCount(totalNCCount);
-		endReportData.setValidatedCount(validCount);
-		endReportData.setDuplicatedCount(hitStrCount - validCount);
+		endReportData.setHitStringCount(hitStringCount);
+		endReportData.setHitNewChangeWordCount(hitNewChangeWordCount);
+		endReportData.setDuplicatedStringCount(duplicatedStringCount);
+		endReportData.setDuplicatedWordCount(duplicatedWordCount);
+		endReportData.setValidatedStringCount(validatedStringCount);
+		endReportData.setValidatedWordCount(validatedWordCount);
+		endReportData.setTotalStringCount(totalStringCount);
+		endReportData.setTotalWordCount(totalWordCount);
 		endReportData.setErrorTypeScore(errorTypeScore);
 		return endReportData;
 	}

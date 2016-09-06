@@ -67,20 +67,30 @@ public class ConcatenationCheckRule implements IRule{
 		report = new ArrayList<ReportData>();
 		HashSet<String> hashSet = new HashSet<String>();
 		int hitStrCount=0;
-		int totalNCCount=0;
-		int hitNCCount =0;
+		int totalWordCount=0;
+		int hitNewChangeWordCount =0;
+		int duplicatedStringCount =0;
+		int duplicatedWordCount =0;
+		int validatedWordCount =0;
 		for(InputData ido:lstIdo){
 			if(log.isDebugEnabled()){
 				log.debug("Start ConcatenationCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());
 			}
-			totalNCCount = totalNCCount + StringUtil.getCountWords(ido.getSourceString());
+			totalWordCount = totalWordCount + StringUtil.getCountWords(ido.getSourceString());
 			for(String k : keywords) {
 				if (ido.getSourceString().startsWith(k.trim().concat(" ")) 
 						|| ido.getSourceString().endsWith(" ".concat(k.trim()))
 						){
 					hitStrCount++;
+					int hs = hashSet.size();
 					hashSet.add(ido.getSourceString());
-					hitNCCount = hitNCCount + StringUtil.getCountWords(ido.getSourceString());
+					if(hs == hashSet.size()){
+						duplicatedStringCount++;
+						duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+					}else{
+						validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+					}
+					hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
 					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
 							Constant.CONCATENATION,"Warning: starting or ending with keyword \""+k.trim()+"\". Possible concatenated strings.",ido.getFileVersion(),null));
 					if(log.isDebugEnabled()){
@@ -92,8 +102,15 @@ public class ConcatenationCheckRule implements IRule{
 				if (pattern(ido.getSourceString(),RulePatternConstant.CONCATENATION_CHECK_RULE)
 						&& ido.getSourceString().toLowerCase().equals(k)) {
 					hitStrCount++;
+					int hs = hashSet.size();
 					hashSet.add(ido.getSourceString());
-					hitNCCount = hitNCCount + StringUtil.getCountWords(ido.getSourceString());
+					if(hs == hashSet.size()){
+						duplicatedStringCount++;
+						duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+					}else{
+						validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+					}
+					hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
 					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
 							Constant.CONCATENATION,"Warning: with the first letter in capital \""+ido.getSourceString()+"\". Possible concatenated strings.",ido.getFileVersion(),null));
 					flag = true;
@@ -104,8 +121,15 @@ public class ConcatenationCheckRule implements IRule{
 				if (ido.getSourceString().contains(v.trim().toLowerCase())
 						|| ido.getSourceString().contains(v.trim().toUpperCase())) {
 					hitStrCount++;
+					int hs = hashSet.size();
 					hashSet.add(ido.getSourceString());
-					hitNCCount = hitNCCount + StringUtil.getCountWords(ido.getSourceString());
+					if(hs == hashSet.size()){
+						duplicatedStringCount++;
+						duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+					}else{
+						validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+					}
+					hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
 					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
 							Constant.CONCATENATION,"Warning: composed of variables \""+v.trim()+"\". Possible concatenated strings.",ido.getFileVersion(),null));
 					flag = true;
@@ -118,7 +142,8 @@ public class ConcatenationCheckRule implements IRule{
 			}
 		}
 		ReportDataUtil reportDataUtil = new ReportDataUtil();
-		ReportDataCount reportDataCount = reportDataUtil.getEndReportData(Constant.CONCATENATION, hitStrCount, hashSet.size(), totalNCCount, hitNCCount,new BigDecimal(0));
+		ReportDataCount reportDataCount = reportDataUtil.getEndReportData(Constant.CONCATENATION, hitStrCount,hitNewChangeWordCount,
+				duplicatedStringCount,duplicatedWordCount, hashSet.size(),validatedWordCount,lstIdo.size(), totalWordCount,new BigDecimal(0));
 		report.add(new ReportData(null,null,null,null,null,null,null,reportDataCount));
 		return flag;
 	}

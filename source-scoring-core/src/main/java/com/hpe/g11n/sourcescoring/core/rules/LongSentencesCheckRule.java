@@ -56,18 +56,28 @@ public class LongSentencesCheckRule implements IRule{
 		report = new ArrayList<ReportData>();
 		HashSet<String> hashSet = new HashSet<String>();
 		int hitStrCount=0;
-		int totalNCCount=0;
-		int hitNCCount =0;
+		int totalWordCount=0;
+		int hitNewChangeWordCount =0;
+		int duplicatedStringCount =0;
+		int duplicatedWordCount =0;
+		int validatedWordCount =0;
 		for(InputData ido:lstIdo){
 			if(log.isDebugEnabled()){
 				log.debug("Start LongSentencesCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());
 			}
-			totalNCCount = totalNCCount + StringUtil.getCountWords(ido.getSourceString());
+			totalWordCount = totalWordCount + StringUtil.getCountWords(ido.getSourceString());
 			if (!pattern(ido.getSourceString(),RulePatternConstant.LONG_SENTENCES_CHECK_RULE)
 					&& StringUtil.getCountWords(ido.getSourceString()) >20) {
 				hitStrCount++;
+				int hs = hashSet.size();
 				hashSet.add(ido.getSourceString());
-				hitNCCount = hitNCCount + StringUtil.getCountWords(ido.getSourceString());
+				if(hs == hashSet.size()){
+					duplicatedStringCount++;
+					duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+				}else{
+					validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+				}
+				hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
 				report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
 						Constant.LONGSENTENCES,"Warning:words number of \"" + ido.getSourceString() + "\" exceed a threshold.",ido.getFileVersion(),null));
 				flag = true;
@@ -78,7 +88,8 @@ public class LongSentencesCheckRule implements IRule{
 			}
 		}
 		ReportDataUtil reportDataUtil = new ReportDataUtil();
-		ReportDataCount reportDataCount = reportDataUtil.getEndReportData(Constant.LONGSENTENCES, hitStrCount, hashSet.size(), totalNCCount, hitNCCount,new BigDecimal(0));
+		ReportDataCount reportDataCount = reportDataUtil.getEndReportData(Constant.LONGSENTENCES, hitStrCount,hitNewChangeWordCount,
+				duplicatedStringCount,duplicatedWordCount, hashSet.size(),validatedWordCount,lstIdo.size(), totalWordCount,new BigDecimal(0));
 		report.add(new ReportData(null,null,null,null,null,null,null,reportDataCount));
 		return flag;
 	}

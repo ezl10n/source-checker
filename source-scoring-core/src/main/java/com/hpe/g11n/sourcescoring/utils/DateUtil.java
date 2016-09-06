@@ -19,15 +19,14 @@ public class DateUtil {
 	}
 
 	public String getDurationDate(Date startDate, Date endDate) throws ParseException {
-		SimpleDateFormat sdf = new SimpleDateFormat("YYYYMMddHHmmss");
-		Long durationDate = Long.valueOf((sdf.format(endDate))) - Long.valueOf((sdf.format(startDate)));
+		Long durationDate = endDate.getTime() - startDate.getTime();
 
-		long hours = durationDate / (60 * 60);
+		long hours = durationDate / (60 * 60*1000);
 		long minutes = (durationDate - hours
-				* (60 * 60))
-				/ (60);
-		long second = durationDate - hours
-				* (60 * 60) -minutes *(60);
+				* (60 * 60*1000))
+				/ (60*1000);
+		long second = (durationDate - hours
+				* (60 * 60*1000) -minutes *(60*1000))/1000;
 		return hours+" hours "+minutes+" minutes "+second+" seconds";
 	}
 }
