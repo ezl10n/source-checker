@@ -4,13 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.hpe.g11n.sourcescoring</groupId>
-    <artifactId>source-scoring-parent</artifactId>
+    <groupId>com.hpe.g11n.sourcechecker</groupId>
+    <artifactId>source-checker-parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <properties>
-        <source.scoring.version>1.0.0-SNAPSHOT</source.scoring.version>
+        <source.checker.version>1.0.0-SNAPSHOT</source.checker.version>
         <console.logging>INFO</console.logging>
         <dist.directory>${project.build.directory}/dist</dist.directory>
         <dist.lib.directory>${dist.directory}/lib</dist.lib.directory>
@@ -328,12 +328,12 @@
         </dependency>   
     </dependencies>
     <modules>
-        <module>source-scoring-core</module>
-		<module>source-scoring-config</module>
-        <module>source-scoring-gui</module>
-        <module>source-scoring-cli</module>
-        <module>source-scoring-ezl10n-adapter</module>
-        <module>source-scoring-standalone</module>
+        <module>source-checker-core</module>
+		<module>source-checker-config</module>
+        <module>source-checker-gui</module>
+        <module>source-checker-cli</module>
+        <module>source-checker-ezl10n-adapter</module>
+        <module>source-checker-standalone</module>
     </modules>
 
 

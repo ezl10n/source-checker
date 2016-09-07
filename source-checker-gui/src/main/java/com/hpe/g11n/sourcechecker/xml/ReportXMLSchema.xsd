@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/ReportXMLSchema" xmlns:tns="http://www.example.org/ReportXMLSchema" elementFormDefault="qualified">
+<element name="SourceChecker">
+ <complexType>
+  <sequence>
+  	<element name="ResultData">
+  	<complexType>
+	  <sequence>
+	  <element name="FileType" maxOccurs="unbounded">
+		<complexType>
+		<sequence>
+		<element name="SourceStrings" maxOccurs="unbounded">
+		  <complexType>
+		  <sequence>
+		   <element name="SubFileName" type="string"/>
+		   <element name="StringId" type="string"/>
+		   <element name="SourceString" type="string"/>
+		   <element name="ErrorType" type="string"/>
+		   <element name="Details" type="string"/>
+		  </sequence>
+		  </complexType>
+		</element>
+		</sequence>
+		<attribute name="Name" type="string" use="required"/>
+		<attribute name="FileVersion" type="string" use="required"/>
+		</complexType>
+	  </element>
+	  </sequence>
+	</complexType>
+    </element>
+  	<element name="ResultCountData" maxOccurs="unbounded">
+  	<complexType>
+     <sequence>
+      <element name="ErrorType" type="string"/>
+      <element name="HitStringCount" type="integer"/>
+      <element name="HitNewChangeWordCount" type="integer"/>
+      <element name="DuplicatedStringCount" type="integer"/>
+      <element name="DuplicatedWordCount" type="integer"/>
+      <element name="ValidatedStringCount" type="integer"/>
+      <element name="ValidatedWordCount" type="integer"/>
+      <element name="TotalStringCount" type="integer"/>
+      <element name="TotalWordCount" type="integer"/>
+      <element name="ErrorTypeScore" type="decimal"/>
+     </sequence>
+    </complexType>
+    </element>
+    <element name="Summary">
+    <complexType>
+     <sequence>
+      <element name="TotalScore" type="decimal"/>
+      <element name="ScanStartTime" type="dateTime"/>
+      <element name="ScanEndTime" type="dateTime"/>
+      <element name="Duration" type="string"/>
+      <element name="ReleaseName" type="string"/>
+      <element name="ReleaseVersion" type="string"/>
+     </sequence>
+    </complexType>
+    </element>
+  </sequence>
+  <attribute name="ProductVersion" type="string" use="required"/>
+ </complexType>
+</element>
+</schema>

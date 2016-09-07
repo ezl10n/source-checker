@@ -1,0 +1,52 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>source-checker-parent</artifactId>
+        <groupId>com.hpe.g11n.sourcechecker</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>source-checker-gui</artifactId>
+    <packaging>jar</packaging>
+
+    <name>source-checker-gui</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jacob.debug>false</jacob.debug>
+        <console.logging>INFO</console.logging>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.hpe.g11n.sourcechecker</groupId>
+            <artifactId>source-checker-config</artifactId>
+            <version>${source.checker.version}</version>
+        </dependency>
+        <dependency>
+        <groupId>com.hpe.g11n.sourcechecker</groupId>
+        <artifactId>source-checker-core</artifactId>
+        <version>${source.checker.version}</version>
+        </dependency>
+        <!-- jassolo core -->
+        <dependency>
+            <groupId>com.hp.g11n</groupId>
+            <artifactId>jassolo-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jacob</groupId>
+            <artifactId>jacob</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.hp.g11n</groupId>
+            <artifactId>jassolo-core</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+
+
+</project>
