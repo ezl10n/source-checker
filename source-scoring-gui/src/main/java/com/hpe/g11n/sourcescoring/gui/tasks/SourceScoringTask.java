@@ -108,22 +108,22 @@ public class SourceScoringTask extends Task<Void> {
 		summaryExcel.setName("Summary");
 		
 		List<String> lstSummaryExcelHeader = new ArrayList<String>();
+		lstSummaryExcelHeader.add("PROJECT");
+		lstSummaryExcelHeader.add("VERSION");
 		lstSummaryExcelHeader.add("TOTAL SCORE");
 		lstSummaryExcelHeader.add("SCAN START TIME");
 		lstSummaryExcelHeader.add("SCAN END TIME");
 		lstSummaryExcelHeader.add("DURATION");
-		lstSummaryExcelHeader.add("PROJECT NAME");
-		lstSummaryExcelHeader.add("RELEASE VERSION");
 		summaryExcel.setHeader(lstSummaryExcelHeader);
 		
 		List<List<String>> lstSummaryExcelValue = new ArrayList<List<String>>();
 		List<String> lstSummary = new ArrayList<String>();
+		lstSummary.add(summary.getProjectName());
+		lstSummary.add(summary.getReleaseVersion());
 		lstSummary.add(String.valueOf(summary.getTotalScore()));
 		lstSummary.add(dateUtil.format("YYYY-MM-dd HH:mm:ss", summary.getScanStartTime()));
 		lstSummary.add(dateUtil.format("YYYY-MM-dd HH:mm:ss", summary.getScanEndTime()));
 		lstSummary.add(summary.getDuration());
-		lstSummary.add(summary.getProjectName());
-		lstSummary.add(summary.getReleaseVersion());
 		lstSummaryExcelValue.add(lstSummary);
 		
 		summaryExcel.setValue(lstSummaryExcelValue);
