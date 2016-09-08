@@ -38,6 +38,8 @@ public class LPUFileParser extends BaseParser {
 		lstState=config.getStringList(STATE);
 		IPassoloApp app = PassoloApp.getInstance();
 		IPslProject project = app.open(filePath);
+		long startTime =System.currentTimeMillis();
+		log.debug("PassoloApp to read file start at:"+startTime);
 		try {
 			IPslSourceLists sourceLists = project.getSourceLists();
 			for (int i = 0; i < sourceLists.toList().size(); i++) {
@@ -77,6 +79,9 @@ public class LPUFileParser extends BaseParser {
 			log.info("LPUFileParser.process execute time:" + (end - start)
 					+ "ms");
 		}
+		long endTime =System.currentTimeMillis();
+		log.debug("PassoloApp to read to read file end at:"+endTime);
+		log.debug("Duration time:"+(endTime-startTime));
 		return lstIdo;
 	}
 

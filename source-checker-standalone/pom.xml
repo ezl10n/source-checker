@@ -15,7 +15,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jacob.debug>false</jacob.debug>
-        <console.logging>INFO</console.logging>
+        <console.logging>DEBUG</console.logging>
+        <slf4j-log4j12.version>1.7.12</slf4j-log4j12.version>
     </properties>
 
     <dependencies>
@@ -29,6 +30,12 @@
             <artifactId>source-checker-gui</artifactId>
             <version>${source.checker.version}</version>
         </dependency>
+        <dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-log4j12</artifactId>
+		    <version>${slf4j-log4j12.version}</version>
+		</dependency>
+		
     </dependencies>
 
     <profiles>

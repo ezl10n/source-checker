@@ -6,7 +6,7 @@ import org.junit.Test;
 public class MainTest {
     @Test
     public void testMainGUI(){
-        String[] args={};
+        String[] args={}; 
         Application.main(args);
     }
 }
