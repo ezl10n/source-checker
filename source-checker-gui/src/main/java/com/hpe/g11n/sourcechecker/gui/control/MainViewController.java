@@ -57,6 +57,11 @@ public class MainViewController extends BaseController  implements Initializable
 	private Thread t;
 	
 	public String info;
+	
+	private SourceCheckerTask task;
+	
+	private String chooseSourcePath;
+	private String outputPath;
 
 	@Inject
 	@Named("ruleNames")
@@ -91,6 +96,9 @@ public class MainViewController extends BaseController  implements Initializable
                 new FileChooser.ExtensionFilter("JSON", "*.json"),
                 new FileChooser.ExtensionFilter("properties", "*.properties")
             );
+		if(chooseSourcePath !=null){
+			fileChooser.setInitialDirectory(new File(chooseSourcePath));
+		}
 		List<File> lstFile = fileChooser.showOpenMultipleDialog(root.getScene().getWindow());
 		if (lstFile != null) {
 			String path = "";
@@ -98,6 +106,7 @@ public class MainViewController extends BaseController  implements Initializable
 				path = path+file.getAbsolutePath()+";";
 			}
 			sourceUrl.setText(path.substring(0,path.length()-1));
+			chooseSourcePath = getDirectoryPath(path.substring(0,path.length()-1));
 		}
 //		final DirectoryChooser directoryChooser = new DirectoryChooser();
 //	    final File selectedDirectory =
@@ -107,11 +116,20 @@ public class MainViewController extends BaseController  implements Initializable
 //	    }
 	}
 
+	private String getDirectoryPath(String filePath){
+		 String[] s =filePath.split(";");
+         return s[0].substring(0, s[0].lastIndexOf("\\"));
+	}
+	
 	@FXML
 	public void chooseOutput(ActionEvent event) {
+		if(outputPath != null){
+			chooser.setInitialDirectory(new File(outputPath));
+		}
 		File file = chooser.showDialog(root.getScene().getWindow());
 		if (file != null) {
 			outputUrl.setText(file.getAbsolutePath());
+			outputPath = file.getAbsolutePath();
 		}
 	}
 
@@ -122,6 +140,7 @@ public class MainViewController extends BaseController  implements Initializable
 			alert.setHeaderText("Warning:");
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 				progressBar.setVisible(false);
+//				task.stopChecker();
 				t.stop();
 			});
 		}else{
@@ -188,7 +207,7 @@ public class MainViewController extends BaseController  implements Initializable
 			});
 			return;
 		}
-		SourceCheckerTask task = new SourceCheckerTask();
+		task = new SourceCheckerTask();
 		injector.injectMembers(task);
 		progressBar.setVisible(true);
 		progressBar.progressProperty().bind(task.progressProperty());

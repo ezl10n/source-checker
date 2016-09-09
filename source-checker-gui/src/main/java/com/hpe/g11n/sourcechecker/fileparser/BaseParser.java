@@ -21,6 +21,8 @@ public abstract class BaseParser {
 
 	public abstract List<InputData> getInputData(String source);
 	
+	public abstract void stopChecker();
+	
 	public void setConfig(Config config){
 		this.config=config;
 	};

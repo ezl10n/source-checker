@@ -14,4 +14,6 @@ import com.hpe.g11n.sourcechecker.pojo.InputData;
  */
 public interface IFileParser {
 	public List<InputData> parser(String filePath);
+	
+	public void stopChecker();
 }

@@ -225,4 +225,8 @@ public class SourceCheckerTask extends Task<Void> {
 
 				});
 	}
+	
+	public void stopChecker(){
+		fileParser.stopChecker();
+	}
 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,14 +31,15 @@ public class LPUFileParser extends BaseParser {
 	InputData ido;
 	private static final String STATE = "psl.psl-generate-sourcechecker-report.state";
 	private List<String> lstState;
-
+	private IPassoloApp app;
+	private IPslProject project;
 	
 	private List<InputData> parser(String filePath) {
 		List<InputData> lstIdo = new ArrayList<InputData>();
 		long start = System.currentTimeMillis();
 		lstState=config.getStringList(STATE);
-		IPassoloApp app = PassoloApp.getInstance();
-		IPslProject project = app.open(filePath);
+		app = PassoloApp.getInstance();
+		project = app.open(filePath);
 		long startTime =System.currentTimeMillis();
 		log.debug("PassoloApp to read file start at:"+startTime);
 		try {
@@ -93,6 +95,18 @@ public class LPUFileParser extends BaseParser {
 	@Override
 	public List<InputData> getInputData(String source) {
 		return parser(source);
+	}
+
+	@Override
+	public void stopChecker() {
+		if(project !=null){
+			project.close();
+			project.safeRelease();
+		}
+		if(app !=null){
+			IPassoloApp.quit();
+			app.safeRelease();
+		}
 	}
 
 }

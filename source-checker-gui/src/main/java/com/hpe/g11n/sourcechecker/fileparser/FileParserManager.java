@@ -37,4 +37,11 @@ public class FileParserManager implements IFileParser {
 		return null;
 	}
 
+	@Override
+	public void stopChecker() {
+		for (BaseParser parser : parsers) {
+			parser.stopChecker();
+		}
+	}
+
 }

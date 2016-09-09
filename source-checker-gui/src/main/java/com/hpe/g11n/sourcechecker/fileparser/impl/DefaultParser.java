@@ -25,4 +25,9 @@ public class DefaultParser extends BaseParser {
 		throw new RuntimeException("Failue");
 	}
 
+	@Override
+	public void stopChecker() {
+		
+	}
+
 }
