@@ -5,8 +5,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +66,7 @@ public class CamelCaseCheckRule implements IRule{
 			}
 			totalWordCount = totalWordCount + StringUtil.getCountWords(ido.getSourceString());
 			if (!StringUtil.getStringWithChar(ido.getSourceString().trim()).contains(" ")
-					&& (Pattern.matches(RulePatternConstant.CAMEL_CASE_CHECK_RULE, ido.getSourceString().trim()))) {
+					&& (StringUtil.pattern(ido.getSourceString().trim(),RulePatternConstant.CAMEL_CASE_CHECK_RULE))) {
 				hitStrCount++;
 				int hs = hashSet.size();
 				hashSet.add(ido.getSourceString());
@@ -96,10 +94,4 @@ public class CamelCaseCheckRule implements IRule{
 		report.add(new ReportData(null,null,null,null,null,null,null,reportDataCount));
 		return flag;
 	}
-	private boolean pattern(String source,String rule){
-		Pattern pattern = Pattern.compile(rule);
-        Matcher matcher = pattern.matcher(source);
-        return matcher.matches();
-	}
-
 }

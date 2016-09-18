@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +58,7 @@ public class CapitalCheckRule implements IRule{
 				log.debug("Start CapitalCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());
 			}
 			totalWordCount = totalWordCount + StringUtil.getCountWords(ido.getSourceString());
-			if (pattern(ido.getSourceString(),RulePatternConstant.CAPITAL_CHECK_RULE)) {
+			if (StringUtil.pattern(ido.getSourceString(),RulePatternConstant.CAPITAL_CHECK_RULE)) {
 				hitStrCount++;
 				int hs = hashSet.size();
 				hashSet.add(ido.getSourceString());
@@ -70,6 +68,7 @@ public class CapitalCheckRule implements IRule{
 				}else{
 					validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
 				}
+				hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
 				report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
 						Constant.CAPITAL,"Warning:capital string \"" + ido.getSourceString() + "\" detected.",ido.getFileVersion(),null));
 				flag = true;
@@ -89,11 +88,4 @@ public class CapitalCheckRule implements IRule{
 	@Override
 	public void setConfig(Config config) {
 	}
-	
-	private boolean pattern(String source,String rule){
-		Pattern pattern = Pattern.compile(rule);
-        Matcher matcher = pattern.matcher(source);
-        return matcher.matches();
-	}
-
 }

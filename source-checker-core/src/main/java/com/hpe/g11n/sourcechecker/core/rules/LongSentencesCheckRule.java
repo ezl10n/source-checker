@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,8 +64,10 @@ public class LongSentencesCheckRule implements IRule{
 				log.debug("Start LongSentencesCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());
 			}
 			totalWordCount = totalWordCount + StringUtil.getCountWords(ido.getSourceString());
-			if (!pattern(ido.getSourceString(),RulePatternConstant.LONG_SENTENCES_CHECK_RULE)
-					&& StringUtil.getCountWords(ido.getSourceString()) >20) {
+			if (!StringUtil.pattern(ido.getSourceString(), RulePatternConstant.LONG_SENTENCES_CHECK_RULE)
+					&& StringUtil.getCountWords(ido.getSourceString())>20
+					&& (!ido.getSourceString().contains(" ") && ido.getSourceString().length()<50)
+					&& !StringUtil.haveTag(ido.getSourceString())) {
 				hitStrCount++;
 				int hs = hashSet.size();
 				hashSet.add(ido.getSourceString());
@@ -92,10 +92,5 @@ public class LongSentencesCheckRule implements IRule{
 				duplicatedStringCount,duplicatedWordCount, hashSet.size(),validatedWordCount,lstIdo.size(), totalWordCount,new BigDecimal(0));
 		report.add(new ReportData(null,null,null,null,null,null,null,reportDataCount));
 		return flag;
-	}
-	private boolean pattern(String source,String rule){
-		Pattern pattern = Pattern.compile(rule);
-        Matcher matcher = pattern.matcher(source);
-        return matcher.matches();
 	}
 }

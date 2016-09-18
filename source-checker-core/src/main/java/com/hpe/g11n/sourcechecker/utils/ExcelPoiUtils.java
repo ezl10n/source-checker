@@ -3,7 +3,6 @@ package com.hpe.g11n.sourcechecker.utils;
 import java.io.FileOutputStream;
 import java.util.List;
 
-import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.CellRangeAddress;
@@ -55,6 +54,12 @@ public class ExcelPoiUtils {
 	    } else if (fileType.equals("xlsx")) {
 	      wb = new XSSFWorkbook();
 	    }
+	    
+	    Font black = getFontBlack(wb);
+	    Font red = getFontRed(wb);
+	    CellStyle redCellStyle = getCellStyleRed(wb,black,red);
+	    CellStyle blackCellStyle = getDetailValueStyle(wb);
+	    
 	    Sheet summarySheet = wb.createSheet(summary.getName());
 	    CellRangeAddress cellRangeAddress = new CellRangeAddress(0, 0, 0, 9);
 	    summarySheet.addMergedRegion(cellRangeAddress);
@@ -147,41 +152,18 @@ public class ExcelPoiUtils {
     		for(int n =0;n<lstObj.size();n++){
         		Cell valueCell = valueRow.createCell(n);
         		if(n==lstObj.size()-1 && lstObj.get(n).contains("\"")){
-        		    CellStyle valueStyle =wb.createCellStyle();
-        			valueStyle.setAlignment(CellStyle.ALIGN_LEFT); 
-        			valueStyle.setVerticalAlignment(CellStyle.ALIGN_LEFT);
-        			// 设置单元格字体
-        			Font valueFont = wb.createFont(); // 字体
-        			valueFont.setFontHeightInPoints((short)10);
-        			valueFont.setColor(HSSFColor.BLACK.index);
-        			valueFont.setFontName("Arial");
-        			valueStyle.setFont(valueFont);
-        			valueStyle.setWrapText(true);
-        			
-        			// 设置单元格字体
-        			Font valueFont1 = wb.createFont(); // 字体
-        			valueFont1.setFontHeightInPoints((short)10);
-        			valueFont1.setColor(HSSFColor.RED.index);
-        			valueFont1.setFontName("Arial");
-        			valueStyle.setFont(valueFont1);
-        			valueStyle.setWrapText(true);
-        			
-        			// 设置单元格边框及颜色
-        			valueStyle.setBorderBottom((short)1);
-        			valueStyle.setBorderLeft((short)1);
-        			valueStyle.setBorderRight((short)1);
-        			valueStyle.setBorderTop((short)1);
-        			valueStyle.setWrapText(true);
         			//设置红色高亮
         			HSSFRichTextString ts= new HSSFRichTextString(lstObj.get(n));
         			String[] str =lstObj.get(n).split("\"");
-         		    ts.applyFont(0,str[0].length()+1,valueFont);
-         		    ts.applyFont(str[0].length()+1,str[0].length()+1+str[1].length(),valueFont1);
+        			int index = lstObj.get(n).lastIndexOf("\"");
+         		    ts.applyFont(0,str[0].length()+1,black);
+         		    ts.applyFont(str[0].length()+1,index,red);
+         		    
          		    valueCell.setCellValue(ts);
-       			    valueCell.setCellStyle(valueStyle);
+       			    valueCell.setCellStyle(redCellStyle);
         		}else{
         			valueCell.setCellValue(lstObj.get(n));
-        			valueCell.setCellStyle(getDetailValueStyle(wb));
+        			valueCell.setCellStyle(blackCellStyle);
         		}
         	}	
         	
@@ -287,4 +269,46 @@ public class ExcelPoiUtils {
 		valueStyle.setWrapText(true);
 		return valueStyle;
 	}
+	
+	private static Font getFontBlack(Workbook wb){
+		Font valueFont = wb.createFont(); // 字体
+		valueFont.setFontHeightInPoints((short)10);
+		valueFont.setColor(HSSFColor.BLACK.index);
+		valueFont.setFontName("Arial");
+		return valueFont;
+	}
+	private static Font getFontRed(Workbook wb){
+		// 设置单元格字体
+		Font valueFont1 = wb.createFont(); // 字体
+		valueFont1.setFontHeightInPoints((short)10);
+		valueFont1.setColor(HSSFColor.RED.index);
+		return valueFont1;
+	}
+	private static CellStyle getCellStyleRed(Workbook wb,Font valueFont,Font valueFont1){
+		CellStyle valueStyle =wb.createCellStyle();
+		valueStyle.setAlignment(CellStyle.ALIGN_LEFT); 
+		valueStyle.setVerticalAlignment(CellStyle.ALIGN_LEFT);
+		// 设置单元格字体
+		valueFont.setFontHeightInPoints((short)10);
+		valueFont.setColor(HSSFColor.BLACK.index);
+		valueFont.setFontName("Arial");
+		valueStyle.setFont(valueFont);
+		valueStyle.setWrapText(true);
+		
+		// 设置单元格字体
+		valueFont1.setFontHeightInPoints((short)10);
+		valueFont1.setColor(HSSFColor.RED.index);
+		valueFont1.setFontName("Arial");
+		valueStyle.setFont(valueFont1);
+		valueStyle.setWrapText(true);
+		
+		// 设置单元格边框及颜色
+		valueStyle.setBorderBottom((short)1);
+		valueStyle.setBorderLeft((short)1);
+		valueStyle.setBorderRight((short)1);
+		valueStyle.setBorderTop((short)1);
+		valueStyle.setWrapText(true);
+		return valueStyle;
+	}
+	
 }

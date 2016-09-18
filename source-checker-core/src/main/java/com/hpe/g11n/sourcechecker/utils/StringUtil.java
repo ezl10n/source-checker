@@ -1,5 +1,8 @@
 package com.hpe.g11n.sourcechecker.utils;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * 
  * @Descripation
@@ -21,5 +24,28 @@ public class StringUtil {
 		string = string.replaceAll("[^A-Za-z]", " ");
 		string = string.replaceAll("\\s+", " ");
 		return string.trim();
+	}
+	
+	public static String[] getWordsFromString(String string){
+		string = string.replaceAll("[^A-Za-z]", " ");
+		string = string.replaceAll("\\s+", " ");
+		String[] words;
+		words = string.trim().split("\\s+");
+		return words;
+	}
+	
+	public static boolean pattern(String source,String rule){
+		Pattern pattern = Pattern.compile(rule);
+        Matcher matcher = pattern.matcher(source);
+        return matcher.matches();
+	}
+	
+	public static boolean haveTag(String string){
+		string= string.trim();
+		if((string.startsWith("<") && string.endsWith(">") && string.contains("</"))
+				||(string.startsWith("<") && string.endsWith("/>")) ){
+			return true;
+		}
+		return false;
 	}
 }

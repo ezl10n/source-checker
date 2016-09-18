@@ -30,14 +30,16 @@ public interface ISpellingCheck {
     	List<String> list= getSuggestions(word);
     	String result="";
     	for(int i=0;i<list.size();i++){
-    		result = result + word +";";
+    		result = result + word +",";
     		i++;
     		if(i==2){
     			break;
     		}
     	}
     	if(result.length()>0){
-    		result.substring(0,result.length()-1);
+    		result = result.substring(0,result.length()-1);
+    	}else{
+    		result="NA";
     	}
     	return result;
     }
