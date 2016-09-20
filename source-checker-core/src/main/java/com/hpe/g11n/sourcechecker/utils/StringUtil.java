@@ -21,16 +21,24 @@ public class StringUtil {
 	}
 	
 	public static String getStringWithChar(String string) {
-		string = string.replaceAll("[^A-Za-z]", " ");
+		if(pattern(string,"[A-Za-z\\-]+'?[A-Za-z\\-]+$")){
+			return string.trim();
+		}else{
+			string = string.replaceAll("[^A-Za-z\\-]", " ");
+			string = string.replaceAll("\\s+", " ");
+			return string.trim();
+		}
+		
+	}
+	public static String getStringWithNoPunctuation(String string) {
+		string = string.replaceAll("[^A-Za-z'\\-\\[\\]\\<\\>\\@\\&\\*\\%\\#\\$\\^]", " ");
 		string = string.replaceAll("\\s+", " ");
 		return string.trim();
 	}
 	
 	public static String[] getWordsFromString(String string){
-		string = string.replaceAll("[^A-Za-z]", " ");
-		string = string.replaceAll("\\s+", " ");
 		String[] words;
-		words = string.trim().split("\\s+");
+		words = string.trim().split(" ");
 		return words;
 	}
 	

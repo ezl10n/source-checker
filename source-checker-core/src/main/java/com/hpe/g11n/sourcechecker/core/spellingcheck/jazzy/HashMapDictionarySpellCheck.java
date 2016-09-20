@@ -55,7 +55,7 @@ public class HashMapDictionarySpellCheck implements ISpellingCheck {
     }
 
     @Override
-    public List<String> getSuggestions(String word) {
+    public List getSuggestions(String word) {
         Preconditions.checkNotNull(spellCheck);
         Preconditions.checkNotNull(word);
         return spellCheck.getSuggestions(word, threshold);

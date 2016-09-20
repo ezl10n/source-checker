@@ -135,13 +135,18 @@ public class LPUFileParser extends BaseParser {
 					}
 				}
 			} else {
-				ido = new InputData();
-				ido.setLpuName(getName(filePath));
-				ido.setFileName(getName(sourceFile));
-				ido.setSourceString(sourceString.getText());
-				ido.setStringId(sourceString.getID());
-				lstIdo.add(ido);
-				ido = null;
+				if(!sourceString.hasState(PslState.valueOf("pslStateReadOnly"))
+						&& !sourceString.hasState(PslState.valueOf("pslStateHidden"))
+						&& !sourceString.hasState(PslState.valueOf("pslStateDeleted"))
+						&& !sourceString.hasState(PslState.valueOf("pslStateCorrection"))){
+					ido = new InputData();
+					ido.setLpuName(getName(filePath));
+					ido.setFileName(getName(sourceFile));
+					ido.setSourceString(sourceString.getText());
+					ido.setStringId(sourceString.getID());
+					lstIdo.add(ido);
+					ido = null;
+				}
 			}
 		}
 		return lstIdo;

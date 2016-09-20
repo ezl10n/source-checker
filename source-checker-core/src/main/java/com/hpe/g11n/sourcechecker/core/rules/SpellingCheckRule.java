@@ -73,6 +73,7 @@ public class SpellingCheckRule implements IRule{
 			if(log.isDebugEnabled()){
 				log.debug("Start SpellingCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());
 			}
+			totalWordCount = totalWordCount + StringUtil.getCountWords(ido.getSourceString());
 			boolean on =false;
 			if(StringUtil.pattern(ido.getSourceString(),RulePatternConstant.CAPITAL_CHECK_RULE)
 					||(!StringUtil.getStringWithChar(ido.getSourceString().trim()).contains(" ")
@@ -84,13 +85,14 @@ public class SpellingCheckRule implements IRule{
 				on = true;
 			}
 			if(!on){
-				totalWordCount = totalWordCount + StringUtil.getCountWords(ido.getSourceString());
-				String[] words = StringUtil.getWordsFromString(ido.getSourceString());
+				String[] words = StringUtil.getWordsFromString(StringUtil.getStringWithNoPunctuation(ido.getSourceString()));
 				String wrongWords="";
 				String suggestion="";
 				for(String word:words){
-					if(!spellingCheck.isCorrect(word)){
-						wrongWords = wrongWords + word + " ";
+					word = StringUtil.getStringWithChar(word);
+					word = word.trim();
+					if(!"".equals(word) && !spellingCheck.isCorrect(word)){
+						wrongWords = wrongWords + word + ";";
 						suggestion = suggestion + spellingCheck.getSuggestionsLessThanThree(word) + ";";
 					}
 				}
@@ -106,7 +108,7 @@ public class SpellingCheckRule implements IRule{
 					}
 					hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
 					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-							Constant.SPELLING,"Warning:unknown strings \"" + wrongWords + "\".\n Suggestion:"+suggestion ,ido.getFileVersion(),null));
+							Constant.SPELLING,"Warning:unknown strings \"" + wrongWords.trim() + "\".\n Suggestion:"+suggestion ,ido.getFileVersion(),null));
 					flag = true;
 				}
 				if(log.isDebugEnabled()){
