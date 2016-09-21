@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -96,6 +97,26 @@ public class MainViewController extends BaseController  implements Initializable
                 new FileChooser.ExtensionFilter("JSON", "*.json"),
                 new FileChooser.ExtensionFilter("properties", "*.properties")
             );
+		if(sourceUrl.getText() != null && !sourceUrl.getText().equals("")){
+			if(!sourceUrl.getText().contains(";")){
+				File file = new File(sourceUrl.getText());
+				if(file.isDirectory()){
+					chooseSourcePath = sourceUrl.getText();
+				}else{
+					int index = sourceUrl.getText().lastIndexOf("\\");
+					chooseSourcePath = sourceUrl.getText().substring(0,index);
+				}
+			}else{
+				String[] path = sourceUrl.getText().split(";");
+				File file = new File(path[0]);
+				if(file.isDirectory()){
+					chooseSourcePath = path[0];
+				}else{
+					int index = path[0].lastIndexOf("\\");
+					chooseSourcePath = path[0].substring(0,index);
+				}
+			}
+		}
 		if(chooseSourcePath !=null){
 			fileChooser.setInitialDirectory(new File(chooseSourcePath));
 		}
@@ -123,8 +144,12 @@ public class MainViewController extends BaseController  implements Initializable
 	
 	@FXML
 	public void chooseOutput(ActionEvent event) {
-		if(outputPath != null){
-			chooser.setInitialDirectory(new File(outputPath));
+		if(outputUrl.getText() != null && !outputUrl.getText().equals("")){
+			outputPath = outputUrl.getText();
+			File tempFile = new File(outputPath);
+			if(outputPath != null && tempFile.exists()){
+				chooser.setInitialDirectory(new File(outputPath));
+			}
 		}
 		File file = chooser.showDialog(root.getScene().getWindow());
 		if (file != null) {
@@ -190,20 +215,86 @@ public class MainViewController extends BaseController  implements Initializable
 			Alert alert=new Alert(Alert.AlertType.ERROR,"Please choose the source file!");
 			alert.setHeaderText("Error:");
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
+				return;
 			});
 			return;
+		}else{
+			String path = sourceUrl.getText();
+			if(path.contains(";")){
+				String[] paths =path.split(";");
+				for(String subPath:paths){
+					File file = new File(subPath);
+					if(file.isFile() && !file.exists()){
+						int index =subPath.lastIndexOf("\\");
+						Alert alert=new Alert(Alert.AlertType.ERROR,"The file ‘"+subPath.substring(index+1,subPath.length())+"’ is not existed, please try again.");
+						alert.setHeaderText("Error:");
+						alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
+							return;
+						});
+						return;
+					}
+					if(file.isDirectory()){
+						Alert alert=new Alert(Alert.AlertType.ERROR,"It is not file!");
+						alert.setHeaderText("Error:");
+						alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
+							return;
+						});
+						return;
+					}
+				}
+			}else{
+				File file = new File(path);
+				if(!file.exists()){
+					int index =path.lastIndexOf("\\");
+					Alert alert=new Alert(Alert.AlertType.ERROR,"The file ‘"+path.substring(index+1,path.length())+"’ is not existed, please try again.");
+					alert.setHeaderText("Error:");
+					alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
+						return;
+					});
+					return;
+				}
+				if(file.isDirectory()){
+					Alert alert=new Alert(Alert.AlertType.ERROR,"It is not file!");
+					alert.setHeaderText("Error:");
+					alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
+						return;
+					});
+					return;
+				}
+			}
 		}
 		if(outputUrl.getText() ==null || "".equals(outputUrl.getText())){
 			Alert alert=new Alert(Alert.AlertType.ERROR,"Please choose the folder that write output to it!");
 			alert.setHeaderText("Error:");
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
+				return;
 			});
 			return;
+		}else{
+			File file = new File(outputUrl.getText());
+			if(!file.exists()){
+				Alert alert=new Alert(Alert.AlertType.CONFIRMATION,"The folder is not existed ! Create it ?");
+				alert.setHeaderText("Confirmation:");
+				Optional<ButtonType> result = alert.showAndWait();
+				if (result.isPresent() && result.get() == ButtonType.OK) {
+					try {
+						file.mkdir();
+					} catch (Exception e) {
+						e.printStackTrace();
+						return;
+					}
+				}
+				if (result.isPresent() && result.get() == ButtonType.CANCEL) {
+					return;
+				}
+			}
+			
 		}
 		if(rules.size()==0){
 			Alert alert=new Alert(Alert.AlertType.ERROR,"Please select a check point or more than one!");
 			alert.setHeaderText("Error:");
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
+				return;
 			});
 			return;
 		}
@@ -215,25 +306,5 @@ public class MainViewController extends BaseController  implements Initializable
 		t = new Thread(task);
 		t.setDaemon(true);
 		t.start();
-	}
-
-	public void deletedFile(String filePath) {
-		File file = new File(filePath);
-		if (file.exists()) {
-			String[] tempList = file.list();
-			File temp = null;
-			for (int i = 0; i < tempList.length; i++) {
-				if(tempList[i].endsWith(".csv")){
-					if (filePath.endsWith(File.separator)) {
-						temp = new File(filePath + tempList[i]);
-					} else {
-						temp = new File(filePath + File.separator + tempList[i]);
-					}
-					if (temp.isFile()) {
-						temp.delete();
-					}
-				}
-			}
-		}
 	}
 }

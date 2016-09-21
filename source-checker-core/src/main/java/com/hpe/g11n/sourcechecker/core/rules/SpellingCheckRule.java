@@ -81,7 +81,8 @@ public class SpellingCheckRule implements IRule{
 					||(StringUtil.pattern(ido.getSourceString(),RulePatternConstant.STRINGMIXED_1)
 							||StringUtil.pattern(ido.getSourceString(),RulePatternConstant.STRINGMIXED_2))
 				    ||(StringUtil.pattern(ido.getSourceString(), RulePatternConstant.NUMBER))
-				    ||(checkDateFormat(ido))){
+				    ||(checkDateFormat(ido.getSourceString()))
+				    ||(StringUtil.untranstlatable(ido.getSourceString()))){
 				on = true;
 			}
 			if(!on){
@@ -123,9 +124,9 @@ public class SpellingCheckRule implements IRule{
 		return flag;
 	}
 	
-	public boolean checkDateFormat(InputData ido){
+	public boolean checkDateFormat(String string){
 		for(String k : keywords) {
-			if (ido.getSourceString().contains(k.trim())){
+			if (string.contains(k.trim())){
 				return true;
 			}
 		}

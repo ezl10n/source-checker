@@ -24,7 +24,7 @@ public class StringUtil {
 		if(pattern(string,"[A-Za-z\\-]+'?[A-Za-z\\-]+$")){
 			return string.trim();
 		}else{
-			string = string.replaceAll("[^A-Za-z\\-]", " ");
+			string = string.replaceAll("[^A-Za-z\\-\\[\\]\\<\\>\\@\\&\\*\\%\\#\\$\\^]", " ");
 			string = string.replaceAll("\\s+", " ");
 			return string.trim();
 		}
@@ -56,4 +56,13 @@ public class StringUtil {
 		}
 		return false;
 	}
+	
+	public static boolean untranstlatable(String string){
+		if(!string.contains(" ") && string.length() >=50){
+			return true;
+		}
+		return false;
+	}
+	
+	
 }
