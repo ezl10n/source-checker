@@ -9,7 +9,7 @@ import com.hpe.g11n.sourcechecker.pojo.ReportData;
 import com.hpe.g11n.sourcechecker.utils.constant.Constant;
 import com.typesafe.config.Config;
 
-@RuleData(id="UntranslatableCheckRule",name=Constant.UNTRANSLATABLE,order=12,ruleClass = UntranslatableCheckRule.class)
+//@RuleData(id="UntranslatableCheckRule",name=Constant.UNTRANSLATABLE,order=12,ruleClass = UntranslatableCheckRule.class)
 public class UntranslatableCheckRule implements IRule{
 
 	@Override

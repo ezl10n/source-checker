@@ -9,7 +9,7 @@ import com.hpe.g11n.sourcechecker.pojo.ReportData;
 import com.hpe.g11n.sourcechecker.utils.constant.Constant;
 import com.typesafe.config.Config;
 
-@RuleData(id="BracketCheckRule",name=Constant.BRACKET,order=11,ruleClass = BracketCheckRule.class)
+//@RuleData(id="BracketCheckRule",name=Constant.BRACKET,order=11,ruleClass = BracketCheckRule.class)
 public class BracketCheckRule implements IRule{
 
 	@Override

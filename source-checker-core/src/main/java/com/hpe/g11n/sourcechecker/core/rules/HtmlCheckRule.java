@@ -9,7 +9,7 @@ import com.hpe.g11n.sourcechecker.pojo.ReportData;
 import com.hpe.g11n.sourcechecker.utils.constant.Constant;
 import com.typesafe.config.Config;
 
-@RuleData(id="HtmlCheckRule",name=Constant.HTML,order=13,ruleClass = HtmlCheckRule.class)
+//@RuleData(id="HtmlCheckRule",name=Constant.HTML,order=13,ruleClass = HtmlCheckRule.class)
 public class HtmlCheckRule implements IRule{
 
 	@Override

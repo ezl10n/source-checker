@@ -9,7 +9,7 @@ import com.hpe.g11n.sourcechecker.pojo.ReportData;
 import com.hpe.g11n.sourcechecker.utils.constant.Constant;
 import com.typesafe.config.Config;
 
-@RuleData(id="VerbNounAdjectiveCheckRule",name=Constant.VERBNOUNADJECTIVE,order=7,ruleClass = VerbNounAdjectiveCheckRule.class)
+//@RuleData(id="VerbNounAdjectiveCheckRule",name=Constant.VERBNOUNADJECTIVE,order=7,ruleClass = VerbNounAdjectiveCheckRule.class)
 public class VerbNounAdjectiveCheckRule implements IRule{
 
 	@Override

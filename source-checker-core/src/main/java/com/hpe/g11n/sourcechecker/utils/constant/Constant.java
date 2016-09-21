@@ -23,7 +23,7 @@ public class Constant {
    public static final String DATETIMEFORMAT="Date&Time Format";
    public static final String VARIABLES ="Variables";
    public static final String CAPITAL ="Capital";
-   public static final String STRINGMIXED ="Strings Mixed With Punctuation";
+   public static final String STRINGMIXED ="Punctuation";
    public static final String VERBNOUNADJECTIVE ="Verb Noun Adjective";
    public static final String INCONSISTENCIES ="Inconsistencies";
    public static final String SPELLING ="Spelling";

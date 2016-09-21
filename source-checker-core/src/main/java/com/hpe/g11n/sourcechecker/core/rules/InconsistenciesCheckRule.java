@@ -9,7 +9,7 @@ import com.hpe.g11n.sourcechecker.pojo.ReportData;
 import com.hpe.g11n.sourcechecker.utils.constant.Constant;
 import com.typesafe.config.Config;
 
-@RuleData(id="InconsistenciesCheckRule",name=Constant.INCONSISTENCIES,order=8,ruleClass = InconsistenciesCheckRule.class)
+//@RuleData(id="InconsistenciesCheckRule",name=Constant.INCONSISTENCIES,order=8,ruleClass = InconsistenciesCheckRule.class)
 public class InconsistenciesCheckRule implements IRule{
 
 	@Override
