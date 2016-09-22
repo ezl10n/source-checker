@@ -121,18 +121,14 @@ public class LPUFileParser extends BaseParser {
 			String sourceFile, List<IPslSourceString> lstSourceString) {
 		for (IPslSourceString sourceString : lstSourceString) {
 			if (lstState != null && lstState.size() > 0) {
-				for (String sourceStringState : lstState) {
-					if (sourceString.hasState(PslState
-							.valueOf(sourceStringState))) {
-						ido = new InputData();
-						ido.setLpuName(getName(filePath));
-						ido.setFileName(getName(sourceFile));
-						ido.setSourceString(sourceString.getText());
-						ido.setStringId(sourceString.getID());
-						lstIdo.add(ido);
-						ido = null;
-						break;
-					}
+				if (isNewOrChanged(sourceString)) {
+					ido = new InputData();
+					ido.setLpuName(getName(filePath));
+					ido.setFileName(getName(sourceFile));
+					ido.setSourceString(sourceString.getText());
+					ido.setStringId(sourceString.getID());
+					lstIdo.add(ido);
+					ido = null;
 				}
 			} else {
 				if(!sourceString.hasState(PslState.valueOf("pslStateReadOnly"))
@@ -150,5 +146,39 @@ public class LPUFileParser extends BaseParser {
 			}
 		}
 		return lstIdo;
+	}
+	
+	private boolean isNewOrChanged(IPslSourceString sourceString){
+		boolean flag = false;
+		if((sourceString.hasState(PslState.valueOf("pslStateNew"))
+				|| sourceString.hasState(PslState.valueOf("pslStateChanged"))
+				|| (sourceString.hasState(PslState.valueOf("pslStateNew")) 
+				&& (sourceString.hasState(PslState.valueOf("pslStateChanged")))))
+				&& (!sourceString.hasState(PslState.valueOf("pslStateReadOnly"))
+				&& !sourceString.hasState(PslState.valueOf("pslStateHidden"))
+				&& !sourceString.hasState(PslState.valueOf("pslStateCorrection"))
+				&& !sourceString.hasState(PslState.valueOf("pslStateCoordChanged"))
+				&& !sourceString.hasState(PslState.valueOf("pslStateReview"))
+				&& !sourceString.hasState(PslState.valueOf("pslStateTranslated"))
+				&& !sourceString.hasState(PslState.valueOf("pslStateBookmark"))
+				&& !sourceString.hasState(PslState.valueOf("pslStateDeleted"))
+				&& !sourceString.hasState(PslState.valueOf("pslStateNoReplicate"))
+				&& !sourceString.hasState(PslState.valueOf("pslStateVariableID"))
+				&& !sourceString.hasState(PslState.valueOf("pslStateAutoTranslated"))
+				&& !sourceString.hasState(PslState.valueOf("pslStateSuppressError"))
+				&& !sourceString.hasState(PslState.valueOf("pslStateLocked"))
+				&& !sourceString.hasState(PslState.valueOf("pslStateTagged"))
+				&& !sourceString.hasState(PslState.valueOf("pslStateAllowUntag"))
+				&& !sourceString.hasState(PslState.valueOf("pslStateInvisible"))
+				&& !sourceString.hasState(PslState.valueOf("pslStateMultiline"))
+				&& !sourceString.hasState(PslState.valueOf("pslStateToggleRL"))
+				&& !sourceString.hasState(PslState.valueOf("pslStateMirror"))
+				&& !sourceString.hasState(PslState.valueOf("pslStateMirrorThis"))
+				&& !sourceString.hasState(PslState.valueOf("pslStateUnifyReplicates"))
+				&& !sourceString.hasState(PslState.valueOf("pslStateOtherSplitPart"))
+				&& !sourceString.hasState(PslState.valueOf("pslSourceListStateVirtual")))){
+			flag = true;
+		}
+		return flag;
 	}
 }
