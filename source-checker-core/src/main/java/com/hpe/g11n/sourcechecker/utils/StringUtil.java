@@ -64,5 +64,7 @@ public class StringUtil {
 		return false;
 	}
 	
-	
+	public static boolean isRightWord(String string){
+		return pattern(string, "^[A-Za-z]+['\\-]?[A-Za-z]+$");
+	}
 }

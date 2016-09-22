@@ -80,9 +80,11 @@ public class SpellingCheckRule implements IRule{
 							&& (StringUtil.pattern(ido.getSourceString().trim(),RulePatternConstant.CAMEL_CASE_CHECK_RULE)))
 					||(StringUtil.pattern(ido.getSourceString(),RulePatternConstant.STRINGMIXED_1)
 							||StringUtil.pattern(ido.getSourceString(),RulePatternConstant.STRINGMIXED_2))
-				    ||(StringUtil.pattern(ido.getSourceString(), RulePatternConstant.NUMBER))
-				    ||(checkDateFormat(ido.getSourceString()))
-				    ||(StringUtil.untranstlatable(ido.getSourceString()))){
+				    || StringUtil.pattern(ido.getSourceString(), RulePatternConstant.NUMBER)
+				    || checkDateFormat(ido.getSourceString())
+				    || StringUtil.untranstlatable(ido.getSourceString())
+				    || StringUtil.haveTag(ido.getSourceString())
+				    ){
 				on = true;
 			}
 			if(!on){
@@ -92,7 +94,7 @@ public class SpellingCheckRule implements IRule{
 				for(String word:words){
 					word = StringUtil.getStringWithChar(word);
 					word = word.trim();
-					if(!"".equals(word) && !spellingCheck.isCorrect(word)){
+					if(StringUtil.isRightWord(word) && !spellingCheck.isCorrect(word)){
 						wrongWords = wrongWords + word + ";";
 						suggestion = suggestion + spellingCheck.getSuggestionsLessThanThree(word) + ";";
 					}
@@ -109,7 +111,8 @@ public class SpellingCheckRule implements IRule{
 					}
 					hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
 					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-							Constant.SPELLING,"Warning:unknown strings \"" + wrongWords.trim() + "\".\n Suggestion:"+suggestion ,ido.getFileVersion(),null));
+							Constant.SPELLING,"Warning:unknown strings \"" + wrongWords.trim().substring(0,wrongWords.length()-1) 
+							+ "\".\n Suggestion:"+suggestion.trim().substring(0,suggestion.length()-1) ,ido.getFileVersion(),null));
 					flag = true;
 				}
 				if(log.isDebugEnabled()){
