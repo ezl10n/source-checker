@@ -20,7 +20,7 @@ import com.hpe.g11n.sourcechecker.utils.constant.Constant;
 import com.hpe.g11n.sourcechecker.utils.constant.RulePatternConstant;
 import com.typesafe.config.Config;
 
-@RuleData(id="StringsMixedCheckRule",name=Constant.STRINGMIXED,order=6,ruleClass = StringsMixedCheckRule.class)
+//@RuleData(id="StringsMixedCheckRule",name=Constant.STRINGMIXED,order=6,ruleClass = StringsMixedCheckRule.class)
 public class StringsMixedCheckRule implements IRule{
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
