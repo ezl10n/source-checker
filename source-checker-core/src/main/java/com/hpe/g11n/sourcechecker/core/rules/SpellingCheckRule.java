@@ -70,31 +70,20 @@ public class SpellingCheckRule implements IRule{
 		int duplicatedWordCount =0;
 		int validatedWordCount =0;
 		for(InputData ido:lstIdo){
-			if(log.isDebugEnabled()){
-				log.debug("Start SpellingCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());
-			}
-			totalWordCount = totalWordCount + StringUtil.getCountWords(ido.getSourceString());
-			boolean on =false;
-			if(StringUtil.pattern(ido.getSourceString(),RulePatternConstant.CAPITAL_CHECK_RULE)
-					||(!StringUtil.getStringWithChar(ido.getSourceString().trim()).contains(" ")
-							&& (StringUtil.pattern(ido.getSourceString().trim(),RulePatternConstant.CAMEL_CASE_CHECK_RULE)))
-					||(StringUtil.pattern(ido.getSourceString(),RulePatternConstant.STRINGMIXED_1)
-							||StringUtil.pattern(ido.getSourceString(),RulePatternConstant.STRINGMIXED_2))
-				    || StringUtil.pattern(ido.getSourceString(), RulePatternConstant.NUMBER)
-				    || checkDateFormat(ido.getSourceString())
-				    || StringUtil.untranstlatable(ido.getSourceString())
-				    || StringUtil.haveTag(ido.getSourceString())
-				    ){
-				on = true;
-			}
-			if(!on){
-				String[] words = StringUtil.getWordsFromString(StringUtil.getStringWithNoPunctuation(ido.getSourceString()));
+			if(!StringUtil.untranstlatable(ido.getSourceString())
+				    && !StringUtil.haveTag(ido.getSourceString())){
+				if(log.isDebugEnabled()){
+					log.debug("Start SpellingCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());
+				}
+				totalWordCount = totalWordCount + StringUtil.getCountWords(ido.getSourceString());
+				String[] words = StringUtil.getWordsFromString(ido.getSourceString());
 				String wrongWords="";
 				String suggestion="";
 				for(String word:words){
 					word = StringUtil.getStringWithChar(word);
-					word = word.trim();
-					if(StringUtil.isRightWord(word) && !spellingCheck.isCorrect(word)){
+					if(StringUtil.isRightWord(word) 
+							&& !spellingCheck.isCorrect(word)
+							&& !isPass(word)){
 						wrongWords = wrongWords + word + ";";
 						suggestion = suggestion + spellingCheck.getSuggestionsLessThanThree(word) + ";";
 					}
@@ -127,11 +116,24 @@ public class SpellingCheckRule implements IRule{
 		return flag;
 	}
 	
-	public boolean checkDateFormat(String string){
+	private boolean checkDateFormat(String string){
 		for(String k : keywords) {
 			if (string.contains(k.trim())){
 				return true;
 			}
+		}
+		return false;
+	}
+	
+	private boolean isPass(String word){
+		if(StringUtil.pattern(word.trim(),RulePatternConstant.CAPITAL_CHECK_RULE)
+				||(StringUtil.pattern(word.trim(),RulePatternConstant.CAMEL_CASE_CHECK_RULE))
+				||(StringUtil.pattern(word.trim(),RulePatternConstant.STRINGMIXED_1)
+						||StringUtil.pattern(word.trim(),RulePatternConstant.STRINGMIXED_2))
+			    || StringUtil.pattern(word.trim(), RulePatternConstant.NUMBER)
+			    || checkDateFormat(word.trim())
+			    ){
+			return true;
 		}
 		return false;
 	}

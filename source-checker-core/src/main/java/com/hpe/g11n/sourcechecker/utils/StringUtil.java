@@ -13,28 +13,31 @@ import java.util.regex.Pattern;
  */
 public class StringUtil {
 	public static int getCountWords(String string) {
-		string = string.replaceAll("[^A-Za-z]", " ");
-		string = string.replaceAll("\\s+", " ");
+//		string = string.replaceAll("[^A-Za-z]", " ");
+//		string = string.replaceAll("\\s+", " ");
+//		String[] words;
+//		words = string.trim().split("\\s+");
+//		return words.length;
 		String[] words;
-		words = string.trim().split("\\s+");
+		words = string.trim().split(" ");
 		return words.length;
 	}
 	
 	public static String getStringWithChar(String string) {
-		if(pattern(string,"[A-Za-z\\-]+'?[A-Za-z\\-]+$")){
+		if(pattern(string,"[A-Za-z]+'?[A-Za-z]+$")){
 			return string.trim();
 		}else{
-			string = string.replaceAll("[^A-Za-z\\-\\[\\]\\<\\>\\@\\&\\*\\%\\#\\$\\^]", " ");
+			string = string.replaceAll("[^A-Za-z\\[\\]\\<\\>\\@\\&\\*\\%\\#\\$\\^]", " ");
 			string = string.replaceAll("\\s+", " ");
 			return string.trim();
 		}
 		
 	}
-	public static String getStringWithNoPunctuation(String string) {
-		string = string.replaceAll("[^A-Za-z'\\-\\[\\]\\<\\>\\@\\&\\*\\%\\#\\$\\^]", " ");
-		string = string.replaceAll("\\s+", " ");
-		return string.trim();
-	}
+//	public static String getStringWithNoPunctuation(String string) {
+//		string = string.replaceAll("[^A-Za-z'\\-\\[\\]\\<\\>\\@\\&\\*\\%\\#\\$\\^]", " ");
+//		string = string.replaceAll("\\s+", " ");
+//		return string.trim();
+//	}
 	
 	public static String[] getWordsFromString(String string){
 		String[] words;
