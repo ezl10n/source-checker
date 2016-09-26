@@ -27,7 +27,7 @@ public class StringUtil {
 		if(pattern(string,"[A-Za-z]+'?[A-Za-z]+$")){
 			return string.trim();
 		}else{
-			string = string.replaceAll("[^A-Za-z\\[\\]\\<\\>\\@\\&\\*\\%\\#\\$\\^]", " ");
+			string = string.replaceAll("[^A-Za-z\\[\\]\\<\\>\\@\\&\\*\\%\\#\\$\\^\\{\\}]", " ");
 			string = string.replaceAll("\\s+", " ");
 			return string.trim();
 		}

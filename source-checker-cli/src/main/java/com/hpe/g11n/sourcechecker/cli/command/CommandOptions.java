@@ -1,14 +1,14 @@
 package com.hpe.g11n.sourcechecker.cli.command;
 
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.beust.jcommander.Parameter;
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -75,15 +75,15 @@ public class CommandOptions {
     }
     public boolean validate(){
         if(Strings.isNullOrEmpty(sourceUrl)){
-            logger.error("-i or --input is need to set source url!");
+            logger.debug("-i or --input is need to set source url!");
             return false;
         }
         if(Strings.isNullOrEmpty(outputUrl)){
-            logger.error("-o or --output is need to set output url!");
+            logger.debug("-o or --output is need to set output url!");
             return false;
         }
         if(selectRules == null || selectRules.size() == 0){
-            logger.error("-r or --rules is need to set rules index to be select !");
+            logger.debug("-r or --rules is need to set rules index to be select !");
             return false;
         }
         return true;

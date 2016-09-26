@@ -31,16 +31,26 @@ import com.typesafe.config.Config;
 @RuleData(id="CapitalCheckRule",name=Constant.CAPITAL,order=5,ruleClass = CapitalCheckRule.class)
 public class CapitalCheckRule implements IRule{
 	private final Logger log = LoggerFactory.getLogger(getClass());
-
+	private static final String CAPITAL_WHITELIST="psl.source-checker-white-list.Capital";
 	private List<ReportData> report =null;
+	private List<String> whitelist;
+	private Config config;
 	
 	public CapitalCheckRule(){
 
 	}
+	
 	@Override
 	public List<ReportData> gatherReport() {
 		return report;
 	}
+	
+	@Override
+	public void setConfig(Config config) {
+		this.config=config;
+		whitelist=this.config.getStringList(CAPITAL_WHITELIST);
+	}
+	
 	@Override
 	public boolean check(List<InputData> lstIdo) {
 		Preconditions.checkNotNull(lstIdo);
@@ -58,22 +68,44 @@ public class CapitalCheckRule implements IRule{
 				log.debug("Start CapitalCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());
 			}
 			totalWordCount = totalWordCount + StringUtil.getCountWords(ido.getSourceString());
-			if (StringUtil.pattern(ido.getSourceString(),RulePatternConstant.CAPITAL_CHECK_RULE)) {
-				hitStrCount++;
-				int hs = hashSet.size();
-				hashSet.add(ido.getSourceString());
-				if(hs == hashSet.size()){
-					duplicatedStringCount++;
-					duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-				}else{
-					validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+			if(whitelist !=null && whitelist.size()>0){
+				for(String string:whitelist){
+					if(!ido.getSourceString().equals(string)){
+						if (StringUtil.pattern(ido.getSourceString(),RulePatternConstant.CAPITAL_CHECK_RULE)) {
+							hitStrCount++;
+							int hs = hashSet.size();
+							hashSet.add(ido.getSourceString());
+							if(hs == hashSet.size()){
+								duplicatedStringCount++;
+								duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+							}else{
+								validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+							}
+							hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
+							report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+									Constant.CAPITAL,"Warning:capital string \"" + ido.getSourceString() + "\" detected.",ido.getFileVersion(),null));
+							flag = true;
+						}
+						break;
+					}
 				}
-				hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
-				report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-						Constant.CAPITAL,"Warning:capital string \"" + ido.getSourceString() + "\" detected.",ido.getFileVersion(),null));
-				flag = true;
+			}else{
+				if (StringUtil.pattern(ido.getSourceString(),RulePatternConstant.CAPITAL_CHECK_RULE)) {
+					hitStrCount++;
+					int hs = hashSet.size();
+					hashSet.add(ido.getSourceString());
+					if(hs == hashSet.size()){
+						duplicatedStringCount++;
+						duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+					}else{
+						validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+					}
+					hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
+					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+							Constant.CAPITAL,"Warning:capital string \"" + ido.getSourceString() + "\" detected.",ido.getFileVersion(),null));
+					flag = true;
+				}
 			}
-			
 			if(log.isDebugEnabled()){
 				log.debug("END CapitalCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());
 			}
@@ -83,9 +115,5 @@ public class CapitalCheckRule implements IRule{
 				duplicatedStringCount,duplicatedWordCount, hashSet.size(),validatedWordCount,lstIdo.size(), totalWordCount,new BigDecimal(0));
 		report.add(new ReportData(null,null,null,null,null,null,null,reportDataCount));
 		return flag;
-	}
-
-	@Override
-	public void setConfig(Config config) {
 	}
 }

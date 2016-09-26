@@ -30,10 +30,12 @@ import com.typesafe.config.Config;
 @RuleData(id = "DateTimeFormatCheckRule", name = Constant.DATETIMEFORMAT, order = 3, ruleClass = DateTimeFormatCheckRule.class)
 public class DateTimeFormatCheckRule implements IRule {
 	private static final String KEY_WORDS = "psl.psl-generate-sourcechecker-report.date-time-format";
+	private static final String DATETIMEFORMAT_WHITELIST="psl.source-checker-white-list.DateTimeFormat";
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	private List<String> keywords;
 	private List<ReportData> report = null;
+	private List<String> whitelist;
 	private Config config;
 
 	public DateTimeFormatCheckRule() {
@@ -49,6 +51,7 @@ public class DateTimeFormatCheckRule implements IRule {
 	public void setConfig(Config config) {
 		this.config = config;
 		keywords = this.config.getStringList(KEY_WORDS);
+		whitelist = this.config.getStringList(DATETIMEFORMAT_WHITELIST);
 	}
 
 	@Override
@@ -70,28 +73,56 @@ public class DateTimeFormatCheckRule implements IRule {
 				log.debug("Start DateTimeFormatCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());
 			}
 			totalWordCount = totalWordCount + StringUtil.getCountWords(ido.getSourceString());
-			for(String k : keywords) {
-				if (ido.getSourceString().contains(k.trim())){
-					hitStrCount++;
-					int hs = hashSet.size();
-					hashSet.add(ido.getSourceString());
-					if(hs == hashSet.size()){
-						duplicatedStringCount++;
-						duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-					}else{
-						validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+			if(whitelist !=null && whitelist.size()>0){
+				for(String string:whitelist){
+					if(!ido.getSourceString().equals(string)){
+						for(String k : keywords) {
+							if (ido.getSourceString().contains(k.trim())){
+								hitStrCount++;
+								int hs = hashSet.size();
+								hashSet.add(ido.getSourceString());
+								if(hs == hashSet.size()){
+									duplicatedStringCount++;
+									duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+								}else{
+									validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+								}
+								hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
+								report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+										Constant.DATETIMEFORMAT,"Warning:date & time format keyword \""+k.trim()+"\" detected.",ido.getFileVersion(),null));
+								if(log.isDebugEnabled()){
+									log.debug("ConcatenationCheckRule, value:"+ ido.getSourceString() +"detected.");
+								}
+								flag = true;
+								break;
+							}
+						}
+						break;
 					}
-					hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
-					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-							Constant.DATETIMEFORMAT,"Warning:date & time format keyword \""+k.trim()+"\" detected.",ido.getFileVersion(),null));
-					if(log.isDebugEnabled()){
-						log.debug("ConcatenationCheckRule, value:"+ ido.getSourceString() +"detected.");
+				}
+			}else{
+				for(String k : keywords) {
+					if (ido.getSourceString().contains(k.trim())){
+						hitStrCount++;
+						int hs = hashSet.size();
+						hashSet.add(ido.getSourceString());
+						if(hs == hashSet.size()){
+							duplicatedStringCount++;
+							duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+						}else{
+							validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+						}
+						hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
+						report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+								Constant.DATETIMEFORMAT,"Warning:date & time format keyword \""+k.trim()+"\" detected.",ido.getFileVersion(),null));
+						if(log.isDebugEnabled()){
+							log.debug("ConcatenationCheckRule, value:"+ ido.getSourceString() +"detected.");
+						}
+						flag = true;
+						break;
 					}
-					flag = true;
-					break;
 				}
 			}
-			
 			if(log.isDebugEnabled()){
 				log.debug("END DateTimeFormatCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());
 			}

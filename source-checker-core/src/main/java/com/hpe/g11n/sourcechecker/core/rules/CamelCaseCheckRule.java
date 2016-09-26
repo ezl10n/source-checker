@@ -32,9 +32,11 @@ import com.typesafe.config.Config;
 @RuleData(id="CamelCaseCheckRule",name=Constant.CAMELCASE,order=2,ruleClass = CamelCaseCheckRule.class)
 public class CamelCaseCheckRule implements IRule{
 	private final Logger log = LoggerFactory.getLogger(getClass());
-
+	private static final String CAMELCASE_WHITELIST="psl.source-checker-white-list.CamelCase";
 	private List<ReportData> report =null;
-	
+	private List<String> whitelist;
+	private Config config;
+
 	public CamelCaseCheckRule(){
 
 	}
@@ -45,7 +47,8 @@ public class CamelCaseCheckRule implements IRule{
 	
 	@Override
 	public void setConfig(Config config) {
-
+		this.config=config;
+		whitelist=this.config.getStringList(CAMELCASE_WHITELIST);
 	}
 
 	@Override
@@ -65,23 +68,49 @@ public class CamelCaseCheckRule implements IRule{
 				log.debug("Start CamelCaseCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());
 			}
 			totalWordCount = totalWordCount + StringUtil.getCountWords(ido.getSourceString());
-			if (!StringUtil.getStringWithChar(ido.getSourceString().trim()).contains(" ")
-					&& (StringUtil.pattern(ido.getSourceString().trim(),RulePatternConstant.CAMEL_CASE_CHECK_RULE))) {
-				hitStrCount++;
-				int hs = hashSet.size();
-				hashSet.add(ido.getSourceString());
-				if(hs == hashSet.size()){
-					duplicatedStringCount++;
-					duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-				}else{
-					validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+			if(whitelist !=null && whitelist.size()>0){
+				for(String string:whitelist){
+					if(!ido.getSourceString().equals(string)){
+						if (!StringUtil.getStringWithChar(ido.getSourceString().trim()).contains(" ")
+								&& (StringUtil.pattern(ido.getSourceString().trim(),RulePatternConstant.CAMEL_CASE_CHECK_RULE))) {
+							hitStrCount++;
+							int hs = hashSet.size();
+							hashSet.add(ido.getSourceString());
+							if(hs == hashSet.size()){
+								duplicatedStringCount++;
+								duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+							}else{
+								validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+							}
+							
+							hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
+							report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+									Constant.CAMELCASE,"Warning:camelcase \"" + ido.getSourceString() +"\" detected.",ido.getFileVersion(),null));
+							flag = true;
+						}
+						break;
+					}
 				}
-				
-				hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
-				report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-						Constant.CAMELCASE,"Warning:camelcase \"" + ido.getSourceString() +"\" detected.",ido.getFileVersion(),null));
-				flag = true;
+			}else{
+				if (!StringUtil.getStringWithChar(ido.getSourceString().trim()).contains(" ")
+						&& (StringUtil.pattern(ido.getSourceString().trim(),RulePatternConstant.CAMEL_CASE_CHECK_RULE))) {
+					hitStrCount++;
+					int hs = hashSet.size();
+					hashSet.add(ido.getSourceString());
+					if(hs == hashSet.size()){
+						duplicatedStringCount++;
+						duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+					}else{
+						validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+					}
+					
+					hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
+					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+							Constant.CAMELCASE,"Warning:camelcase \"" + ido.getSourceString() +"\" detected.",ido.getFileVersion(),null));
+					flag = true;
+				}
 			}
+			
 			
 			if(log.isDebugEnabled()){
 				log.debug("END LongSentencesCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());

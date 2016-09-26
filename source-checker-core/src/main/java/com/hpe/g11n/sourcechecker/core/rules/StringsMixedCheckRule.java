@@ -23,8 +23,10 @@ import com.typesafe.config.Config;
 //@RuleData(id="StringsMixedCheckRule",name=Constant.STRINGMIXED,order=6,ruleClass = StringsMixedCheckRule.class)
 public class StringsMixedCheckRule implements IRule{
 	private final Logger log = LoggerFactory.getLogger(getClass());
-
+	private static final String STRINGMIXED_WHITELIST="psl.source-checker-white-list.Punctuation";
 	private List<ReportData> report =null;
+	private List<String> whitelist;
+	private Config config;
 	
 	public StringsMixedCheckRule(){
 
@@ -33,6 +35,13 @@ public class StringsMixedCheckRule implements IRule{
 	public List<ReportData> gatherReport() {
 		return report;
 	}
+	
+	@Override
+	public void setConfig(Config config) {
+		this.config=config;
+		whitelist=this.config.getStringList(STRINGMIXED_WHITELIST);
+	}
+	
 	@Override
 	public boolean check(List<InputData> lstIdo) {
 		Preconditions.checkNotNull(lstIdo);
@@ -50,22 +59,48 @@ public class StringsMixedCheckRule implements IRule{
 				log.debug("Start StringsMixedCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());
 			}
 			totalWordCount = totalWordCount + StringUtil.getCountWords(ido.getSourceString());
-			if (StringUtil.pattern(ido.getSourceString(),RulePatternConstant.STRINGMIXED_1)
-					||StringUtil.pattern(ido.getSourceString(),RulePatternConstant.STRINGMIXED_2)) {
-				hitStrCount++;
-				int hs = hashSet.size();
-				hashSet.add(ido.getSourceString());
-				if(hs == hashSet.size()){
-					duplicatedStringCount++;
-					duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-				}else{
-					validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+			if(whitelist !=null && whitelist.size()>0){
+				for(String string:whitelist){
+					if(!ido.getSourceString().equals(string)){
+						if (StringUtil.pattern(ido.getSourceString(),RulePatternConstant.STRINGMIXED_1)
+								||StringUtil.pattern(ido.getSourceString(),RulePatternConstant.STRINGMIXED_2)) {
+							hitStrCount++;
+							int hs = hashSet.size();
+							hashSet.add(ido.getSourceString());
+							if(hs == hashSet.size()){
+								duplicatedStringCount++;
+								duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+							}else{
+								validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+							}
+							hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
+							report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+									Constant.STRINGMIXED,"Warning:Mixed with punctuation strings \"" + ido.getSourceString() + "\" detected.",ido.getFileVersion(),null));
+							flag = true;
+						}
+						break;
+					}
 				}
-				hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
-				report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-						Constant.STRINGMIXED,"Warning:Mixed with punctuation strings \"" + ido.getSourceString() + "\" detected.",ido.getFileVersion(),null));
-				flag = true;
+			}else{
+				if (StringUtil.pattern(ido.getSourceString(),RulePatternConstant.STRINGMIXED_1)
+						||StringUtil.pattern(ido.getSourceString(),RulePatternConstant.STRINGMIXED_2)) {
+					hitStrCount++;
+					int hs = hashSet.size();
+					hashSet.add(ido.getSourceString());
+					if(hs == hashSet.size()){
+						duplicatedStringCount++;
+						duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+					}else{
+						validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+					}
+					hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
+					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+							Constant.STRINGMIXED,"Warning:Mixed with punctuation strings \"" + ido.getSourceString() + "\" detected.",ido.getFileVersion(),null));
+					flag = true;
+				}
 			}
+			
+			
 			
 			if(log.isDebugEnabled()){
 				log.debug("END StringsMixedCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());
@@ -76,9 +111,5 @@ public class StringsMixedCheckRule implements IRule{
 				duplicatedStringCount,duplicatedWordCount, hashSet.size(),validatedWordCount,lstIdo.size(), totalWordCount,new BigDecimal(0));
 		report.add(new ReportData(null,null,null,null,null,null,null,reportDataCount));
 		return flag;
-	}
-
-	@Override
-	public void setConfig(Config config) {
 	}
 }

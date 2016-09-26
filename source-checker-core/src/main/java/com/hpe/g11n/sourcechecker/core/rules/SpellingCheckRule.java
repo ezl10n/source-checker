@@ -33,8 +33,9 @@ import com.typesafe.config.Config;
 @RuleData(id="SpellingCheckRule",name=Constant.SPELLING,order=9,ruleClass = SpellingCheckRule.class)
 public class SpellingCheckRule implements IRule{
 	private static final String KEY_WORDS = "psl.psl-generate-sourcechecker-report.date-time-format";
-
+	private static final String SPELLING_WHITELIST="psl.source-checker-white-list.Spelling";
 	private List<String> keywords;
+	private List<String> whitelist;
 	private Config config;
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
@@ -51,6 +52,7 @@ public class SpellingCheckRule implements IRule{
 	public void setConfig(Config config) {
 		this.config = config;
 		keywords = this.config.getStringList(KEY_WORDS);
+		whitelist = this.config.getStringList(SPELLING_WHITELIST);
 	}
 	
 	@Override
@@ -70,43 +72,81 @@ public class SpellingCheckRule implements IRule{
 		int duplicatedWordCount =0;
 		int validatedWordCount =0;
 		for(InputData ido:lstIdo){
+			if(log.isDebugEnabled()){
+				log.debug("Start SpellingCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());
+			}
+			totalWordCount = totalWordCount + StringUtil.getCountWords(ido.getSourceString());
 			if(!StringUtil.untranstlatable(ido.getSourceString())
 				    && !StringUtil.haveTag(ido.getSourceString())){
-				if(log.isDebugEnabled()){
-					log.debug("Start SpellingCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());
-				}
-				totalWordCount = totalWordCount + StringUtil.getCountWords(ido.getSourceString());
-				String[] words = StringUtil.getWordsFromString(ido.getSourceString());
-				String wrongWords="";
-				String suggestion="";
-				for(String word:words){
-					word = StringUtil.getStringWithChar(word);
-					if(StringUtil.isRightWord(word) 
-							&& !spellingCheck.isCorrect(word)
-							&& !isPass(word)){
-						wrongWords = wrongWords + word + ";";
-						suggestion = suggestion + spellingCheck.getSuggestionsLessThanThree(word) + ";";
+				if(whitelist !=null && whitelist.size()>0){
+					for(String string:whitelist){
+						if(!ido.getSourceString().equals(string)){
+							String[] words = StringUtil.getWordsFromString(ido.getSourceString());
+							String wrongWords="";
+							String suggestion="";
+							for(String word:words){
+								word = StringUtil.getStringWithChar(word);
+								if(!isPass(word) 
+										&& StringUtil.isRightWord(word) 
+										&& !spellingCheck.isCorrect(word)
+										){
+									wrongWords = wrongWords + word + ";";
+									suggestion = suggestion + spellingCheck.getSuggestionsLessThanThree(word) + ";";
+								}
+							}
+							if (wrongWords !=null && !"".equals(wrongWords)) {
+								hitStrCount++;
+								int hs = hashSet.size();
+								hashSet.add(ido.getSourceString());
+								if(hs == hashSet.size()){
+									duplicatedStringCount++;
+									duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+								}else{
+									validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+								}
+								hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
+								report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+										Constant.SPELLING,"Warning:unknown strings \"" + wrongWords.trim().substring(0,wrongWords.length()-1) 
+										+ "\".\n Suggestion:"+suggestion.trim().substring(0,suggestion.length()-1) ,ido.getFileVersion(),null));
+								flag = true;
+							}
+							break;
+						}
+					}
+				}else{
+					String[] words = StringUtil.getWordsFromString(ido.getSourceString());
+					String wrongWords="";
+					String suggestion="";
+					for(String word:words){
+						word = StringUtil.getStringWithChar(word);
+						if(!isPass(word) 
+								&& StringUtil.isRightWord(word) 
+								&& !spellingCheck.isCorrect(word)
+								){
+							wrongWords = wrongWords + word + ";";
+							suggestion = suggestion + spellingCheck.getSuggestionsLessThanThree(word) + ";";
+						}
+					}
+					if (wrongWords !=null && !"".equals(wrongWords)) {
+						hitStrCount++;
+						int hs = hashSet.size();
+						hashSet.add(ido.getSourceString());
+						if(hs == hashSet.size()){
+							duplicatedStringCount++;
+							duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+						}else{
+							validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+						}
+						hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
+						report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+								Constant.SPELLING,"Warning:unknown strings \"" + wrongWords.trim().substring(0,wrongWords.length()-1) 
+								+ "\".\n Suggestion:"+suggestion.trim().substring(0,suggestion.length()-1) ,ido.getFileVersion(),null));
+						flag = true;
 					}
 				}
-				if (wrongWords !=null && !"".equals(wrongWords)) {
-					hitStrCount++;
-					int hs = hashSet.size();
-					hashSet.add(ido.getSourceString());
-					if(hs == hashSet.size()){
-						duplicatedStringCount++;
-						duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-					}else{
-						validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-					}
-					hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
-					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-							Constant.SPELLING,"Warning:unknown strings \"" + wrongWords.trim().substring(0,wrongWords.length()-1) 
-							+ "\".\n Suggestion:"+suggestion.trim().substring(0,suggestion.length()-1) ,ido.getFileVersion(),null));
-					flag = true;
-				}
-				if(log.isDebugEnabled()){
-					log.debug("END SpellingCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());
-				}
+			}
+			if(log.isDebugEnabled()){
+				log.debug("END SpellingCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());
 			}
 		}
 		ReportDataUtil reportDataUtil = new ReportDataUtil();
