@@ -64,6 +64,8 @@ public class MainViewController extends BaseController  implements Initializable
 	
 	private String chooseSourcePath;
 	private String outputPath;
+	
+	private int closeCount =0;
 
 	@Inject
 	@Named("ruleNames")
@@ -166,16 +168,24 @@ public class MainViewController extends BaseController  implements Initializable
 			alert.setHeaderText("Warning:");
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 				progressBar.setVisible(false);
-				if(PslUtils.isPassoloStarted()){
+				if(PslUtils.isPassoloStarted() && closeCount ==0){
 					PslUtils.killPassolo();
+					closeCount++;
+				}
+				if(!PslUtils.isPassoloStarted()){
+					closeCount = 0;
 				}
 				t.stop();
 			});
 		}else{
-			if(PslUtils.isPassoloStarted()){
+			if(PslUtils.isPassoloStarted() && closeCount ==0){
 				PslUtils.killPassolo();
+				closeCount++;
 			}
 			System.exit(WindowConstants.DO_NOTHING_ON_CLOSE);
+			if(!PslUtils.isPassoloStarted()){
+				closeCount = 0;
+			}
 		}
 		
 	}
@@ -324,5 +334,6 @@ public class MainViewController extends BaseController  implements Initializable
 		t = new Thread(task);
 		t.setDaemon(true);
 		t.start();
+		closeCount = 0;
 	}
 }
