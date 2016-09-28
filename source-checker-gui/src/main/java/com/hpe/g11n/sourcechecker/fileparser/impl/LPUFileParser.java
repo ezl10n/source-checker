@@ -100,18 +100,6 @@ public class LPUFileParser extends BaseParser {
 		return parser(source);
 	}
 
-	@Override
-	public void stopChecker() {
-		if (project != null) {
-			project.close();
-			project.safeRelease();
-		}
-		if (app != null) {
-			IPassoloApp.quit();
-			app.safeRelease();
-		}
-	}
-
 	public String getName(String path) {
 		int index = path.lastIndexOf("\\");
 		return path.substring(index+1, path.length());

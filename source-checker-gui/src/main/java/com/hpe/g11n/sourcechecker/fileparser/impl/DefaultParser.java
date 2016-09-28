@@ -24,10 +24,4 @@ public class DefaultParser extends BaseParser {
 	public List<InputData> getInputData(String source) {
 		throw new RuntimeException("Failue");
 	}
-
-	@Override
-	public void stopChecker() {
-		
-	}
-
 }

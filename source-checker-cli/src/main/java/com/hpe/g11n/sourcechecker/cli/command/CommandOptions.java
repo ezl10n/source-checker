@@ -1,5 +1,9 @@
 package com.hpe.g11n.sourcechecker.cli.command;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -74,6 +78,48 @@ public class CommandOptions {
         return sb.toString();
     }
     public boolean validate(){
+    	try{
+    	List<String> lst = new ArrayList<String>();
+    	lst.add("-i or --input is need to set source url:");
+    	lst.add("-o or --output is need to set output url:");
+    	lst.add("-r or --rules is need to set rules index to be select:");
+    	 BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+    	for(int i=0; i<lst.size();i++){
+    		String s = lst.get(i);
+    		 System.err.print(s);
+    		 String line = in.readLine();
+             if (line.length() <= 0)
+                 break;
+             if(i==0){
+            	 File file = new File(line);
+            	 if(!file.isFile() || !file.exists()){
+            		 logger.debug("'"+ line + "' is not a file or is not exist!");
+            		 return false;
+            	 }
+            	 setSourceUrl(line); 
+             }
+            	 
+             if(i==1){
+            	 File file = new File(line);
+            	 if(!file.isDirectory() || !file.exists()){
+            		 logger.debug("'"+ line + "' is not directory or is not exist!");
+            		 return false;
+            	 }
+            	 setOutputUrl(line); 
+             }
+            	
+             if(i==2){
+            	 String[] rule = line.split(",");
+            	 List<Integer> list = new ArrayList<Integer>();
+            	 for(String r:rule){
+            		 list.add(Integer.valueOf(r));
+            	 }
+            	 setSelectRules(list);
+             }
+    	}
+    	}catch(Exception e){
+    		 e.printStackTrace();
+    	}
         if(Strings.isNullOrEmpty(sourceUrl)){
             logger.debug("-i or --input is need to set source url!");
             return false;

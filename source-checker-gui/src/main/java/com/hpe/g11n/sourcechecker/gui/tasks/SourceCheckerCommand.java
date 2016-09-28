@@ -8,10 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import javafx.concurrent.Task;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +34,7 @@ import com.hpe.g11n.sourcechecker.xml.XMLHandler;
  * @Time: 下午3:07:25
  *
  */
-public class SourceCheckerTask extends Task<Void> {
+public class SourceCheckerCommand{
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	private String source;
 	private String report;
@@ -60,8 +56,7 @@ public class SourceCheckerTask extends Task<Void> {
 		checkReport.build(rulesCheckedIdx);
 	}
 
-	@Override
-	protected Void call() throws Exception {
+	public void call() throws Exception {
 		// output
 		SourceChecker sourceChecker = new SourceChecker();
 		sourceChecker.setProductVersion(Constant.PRODUCT_VERSION);
@@ -73,7 +68,7 @@ public class SourceCheckerTask extends Task<Void> {
 		for (String sourcePath : sourcePaths) {
             lstIdo.addAll(fileParser.parser(sourcePath));
 		}
-		checkReport.check(lstIdo,(now,total) ->{this.updateProgress(now, total);});
+		checkReport.check(lstIdo,null);
 		Date startEndTime = new Date();
 		// report
 		List<ReportData> lstReport = checkReport.report();
@@ -211,18 +206,6 @@ public class SourceCheckerTask extends Task<Void> {
 		lstExcel.add(detail);
 		
 		ExcelPoiUtils.exportExcel(lstExcel,excelPath.toString());
-		return null;
-	}
-
-	@Override
-	protected void succeeded() {
-		super.succeeded();
-		Alert alert = new Alert(Alert.AlertType.INFORMATION,
-				"All files are finished!");
-		alert.setHeaderText("Note:");
-		alert.showAndWait().filter(response -> response == ButtonType.OK)
-				.ifPresent(response -> {
-
-				});
+		log.info("All files are finished!");
 	}
 }

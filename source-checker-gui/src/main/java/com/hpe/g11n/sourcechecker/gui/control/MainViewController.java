@@ -28,6 +28,7 @@ import javax.swing.WindowConstants;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.hp.g11n.jassolo.utils.PslUtils;
 import com.hpe.g11n.sourcechecker.gui.tasks.SourceCheckerTask;
 
 /**
@@ -165,10 +166,15 @@ public class MainViewController extends BaseController  implements Initializable
 			alert.setHeaderText("Warning:");
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 				progressBar.setVisible(false);
-//				task.stopChecker();
+				if(PslUtils.isPassoloStarted()){
+					PslUtils.killPassolo();
+				}
 				t.stop();
 			});
 		}else{
+			if(PslUtils.isPassoloStarted()){
+				PslUtils.killPassolo();
+			}
 			System.exit(WindowConstants.DO_NOTHING_ON_CLOSE);
 		}
 		
@@ -204,6 +210,18 @@ public class MainViewController extends BaseController  implements Initializable
 	
 	@FXML
 	public void checker(ActionEvent event) {
+		if(PslUtils.isPassoloStarted()){ 
+		    Alert alert=new Alert(Alert.AlertType.INFORMATION,"We need close Passolo now.");
+			alert.setHeaderText("Infomation:");
+			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
+				 Alert alert_info=new Alert(Alert.AlertType.INFORMATION,"Passolo is closing...");
+				 alert_info.setHeaderText("Infomation:");
+				 alert_info.show();
+				 logger.debug("MainViewController: about to shutdown passolo [{}]");
+			});
+			return;
+		}
+		
 		List<Integer> rules = new ArrayList<Integer>();
 		for (int i = 0; i < checkRules.getChildren().size(); i++) {
 			CheckBox cb = (CheckBox) checkRules.getChildren().get(i);

@@ -8,7 +8,7 @@ import com.hpe.g11n.sourcechecker.cli.guice.CliModule;
 import com.hpe.g11n.sourcechecker.config.guice.ConfigModule;
 import com.hpe.g11n.sourcechecker.core.guice.CoreModule;
 import com.hpe.g11n.sourcechecker.gui.guice.GUIModule;
-import com.hpe.g11n.sourcechecker.gui.tasks.SourceCheckerTask;
+import com.hpe.g11n.sourcechecker.gui.tasks.SourceCheckerCommand;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,7 +21,7 @@ public class CommandLineApplication {
     protected Injector injector = Guice.createInjector(new CoreModule(),
             new ConfigModule(),new GUIModule() ,new CliModule());
     CommandOptions options = new CommandOptions();
-    SourceCheckerTask task = new SourceCheckerTask();
+    SourceCheckerCommand task = new SourceCheckerCommand();
     public CommandLineApplication() {
         injector.injectMembers(options);
         injector.injectMembers(task);
@@ -39,12 +39,14 @@ public class CommandLineApplication {
         }else{
             application.execute();
         }
-
     }
     public void execute(){
-        task.setUp(options.getSourceUrl(),options.getOutputUrl(),options.getSelectRules());
-        Thread t= new Thread(task);
-        t.setDaemon(true);
-        t.start();
+    	task.setUp(options.getSourceUrl(),options.getOutputUrl(),options.getSelectRules());
+    	try {
+			task.call();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	
     }
 }

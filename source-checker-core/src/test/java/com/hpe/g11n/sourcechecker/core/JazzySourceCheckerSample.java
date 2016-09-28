@@ -1,14 +1,13 @@
 package com.hpe.g11n.sourcechecker.core;
 
-import com.swabunga.spell.engine.SpellDictionary;
-import com.swabunga.spell.engine.SpellDictionaryHashMap;
-import com.swabunga.spell.event.SpellChecker;
-import com.swabunga.spell.event.StringWordTokenizer;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.file.Paths;
 import java.util.List;
+
+import com.swabunga.spell.engine.SpellDictionary;
+import com.swabunga.spell.engine.SpellDictionaryHashMap;
+import com.swabunga.spell.event.SpellChecker;
 
 /**
  * Created with IntelliJ IDEA.
