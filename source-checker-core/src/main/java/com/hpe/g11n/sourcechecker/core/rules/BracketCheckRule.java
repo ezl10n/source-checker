@@ -99,7 +99,7 @@ public class BracketCheckRule implements IRule{
 							}
 							hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
 							report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-									Constant.BRACKET,"Warning:bracket string \"" + ido.getSourceString() + "\" detected.\n"+info,ido.getFileVersion(),null));
+									Constant.BRACKET,info,ido.getFileVersion(),null));
 							flag = true;
 						}
 						break;
@@ -146,7 +146,7 @@ public class BracketCheckRule implements IRule{
 					}
 					hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
 					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-							Constant.BRACKET,"Warning:bracket string \"" + ido.getSourceString() + "\" detected.\n"+info,ido.getFileVersion(),null));
+							Constant.BRACKET,info,ido.getFileVersion(),null));
 					flag = true;
 				}
 			}
