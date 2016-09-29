@@ -221,12 +221,9 @@ public class MainViewController extends BaseController  implements Initializable
 	@FXML
 	public void checker(ActionEvent event) {
 		if(PslUtils.isPassoloStarted()){ 
-		    Alert alert=new Alert(Alert.AlertType.INFORMATION,"We need close Passolo now.");
+		    Alert alert=new Alert(Alert.AlertType.INFORMATION,"We need close Passolo now. Passolo is closing...");
 			alert.setHeaderText("Infomation:");
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
-				 Alert alert_info=new Alert(Alert.AlertType.INFORMATION,"Passolo is closing...");
-				 alert_info.setHeaderText("Infomation:");
-				 alert_info.show();
 				 logger.debug("MainViewController: about to shutdown passolo [{}]");
 			});
 			return;

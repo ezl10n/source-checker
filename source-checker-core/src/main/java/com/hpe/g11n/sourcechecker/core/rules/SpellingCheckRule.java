@@ -79,38 +79,35 @@ public class SpellingCheckRule implements IRule{
 			if(!StringUtil.untranstlatable(ido.getSourceString())
 				    && !StringUtil.haveTag(ido.getSourceString())){
 				if(whitelist !=null && whitelist.size()>0){
-					for(String string:whitelist){
-						if(!ido.getSourceString().equals(string)){
-							String[] words = StringUtil.getWordsFromString(ido.getSourceString());
-							String wrongWords="";
-							String suggestion="";
-							for(String word:words){
-								word = StringUtil.getStringWithChar(word);
-								if(!isPass(word) 
-										&& StringUtil.isRightWord(word) 
-										&& !spellingCheck.isCorrect(word)
-										){
-									wrongWords = wrongWords + word + ";";
-									suggestion = suggestion + spellingCheck.getSuggestionsLessThanThree(word) + ";";
-								}
+					if(!StringUtil.isWhiteList(whitelist,ido.getSourceString())){
+						String[] words = StringUtil.getWordsFromString(ido.getSourceString());
+						String wrongWords="";
+						String suggestion="";
+						for(String word:words){
+							word = StringUtil.getStringWithChar(word);
+							if(!isPass(word) 
+									&& StringUtil.isRightWord(word) 
+									&& !spellingCheck.isCorrect(word)
+									){
+								wrongWords = wrongWords + word + ";";
+								suggestion = suggestion + spellingCheck.getSuggestionsLessThanThree(word) + ";";
 							}
-							if (wrongWords !=null && !"".equals(wrongWords)) {
-								hitStrCount++;
-								int hs = hashSet.size();
-								hashSet.add(ido.getSourceString());
-								if(hs == hashSet.size()){
-									duplicatedStringCount++;
-									duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-								}else{
-									validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-								}
-								hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
-								report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-										Constant.SPELLING,"Warning:unknown strings \"" + wrongWords.trim().substring(0,wrongWords.length()-1) 
-										+ "\".\n Suggestion:"+suggestion.trim().substring(0,suggestion.length()-1) ,ido.getFileVersion(),null));
-								flag = true;
+						}
+						if (wrongWords !=null && !"".equals(wrongWords)) {
+							hitStrCount++;
+							int hs = hashSet.size();
+							hashSet.add(ido.getSourceString());
+							if(hs == hashSet.size()){
+								duplicatedStringCount++;
+								duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+							}else{
+								validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
 							}
-							break;
+							hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
+							report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+									Constant.SPELLING,"Warning:unknown strings \"" + wrongWords.trim().substring(0,wrongWords.length()-1) 
+									+ "\".\n Suggestion:"+suggestion.trim().substring(0,suggestion.length()-1) ,ido.getFileVersion(),null));
+							flag = true;
 						}
 					}
 				}else{

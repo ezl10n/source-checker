@@ -74,30 +74,27 @@ public class DateTimeFormatCheckRule implements IRule {
 			}
 			totalWordCount = totalWordCount + StringUtil.getCountWords(ido.getSourceString());
 			if(whitelist !=null && whitelist.size()>0){
-				for(String string:whitelist){
-					if(!ido.getSourceString().equals(string)){
-						for(String k : keywords) {
-							if (ido.getSourceString().contains(k.trim())){
-								hitStrCount++;
-								int hs = hashSet.size();
-								hashSet.add(ido.getSourceString());
-								if(hs == hashSet.size()){
-									duplicatedStringCount++;
-									duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-								}else{
-									validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-								}
-								hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
-								report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-										Constant.DATETIMEFORMAT,"Warning:date & time format keyword \""+k.trim()+"\" detected.",ido.getFileVersion(),null));
-								if(log.isDebugEnabled()){
-									log.debug("ConcatenationCheckRule, value:"+ ido.getSourceString() +"detected.");
-								}
-								flag = true;
-								break;
+				if(!StringUtil.isWhiteList(whitelist,ido.getSourceString())){
+					for(String k : keywords) {
+						if (ido.getSourceString().contains(k.trim())){
+							hitStrCount++;
+							int hs = hashSet.size();
+							hashSet.add(ido.getSourceString());
+							if(hs == hashSet.size()){
+								duplicatedStringCount++;
+								duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+							}else{
+								validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
 							}
+							hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
+							report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+									Constant.DATETIMEFORMAT,"Warning:date & time format keyword \""+k.trim()+"\" detected.",ido.getFileVersion(),null));
+							if(log.isDebugEnabled()){
+								log.debug("ConcatenationCheckRule, value:"+ ido.getSourceString() +"detected.");
+							}
+							flag = true;
+							break;
 						}
-						break;
 					}
 				}
 			}else{

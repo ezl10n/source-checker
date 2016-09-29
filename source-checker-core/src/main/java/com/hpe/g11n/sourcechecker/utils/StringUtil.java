@@ -1,5 +1,6 @@
 package com.hpe.g11n.sourcechecker.utils;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -69,5 +70,16 @@ public class StringUtil {
 	
 	public static boolean isRightWord(String string){
 		return pattern(string, "^[A-Za-z]+['\\-]?[A-Za-z]+$");
+	}
+	
+	public static boolean isWhiteList(List<String> lst,String sourceString){
+		boolean flag=false;
+		for(String string:lst){
+			if(sourceString.equals(string)){
+				flag =true;
+				break;
+			}
+		}
+		return flag;
 	}
 }

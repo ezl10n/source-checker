@@ -69,26 +69,23 @@ public class CamelCaseCheckRule implements IRule{
 			}
 			totalWordCount = totalWordCount + StringUtil.getCountWords(ido.getSourceString());
 			if(whitelist !=null && whitelist.size()>0){
-				for(String string:whitelist){
-					if(!ido.getSourceString().equals(string)){
-						if (!StringUtil.getStringWithChar(ido.getSourceString().trim()).contains(" ")
-								&& (StringUtil.pattern(ido.getSourceString().trim(),RulePatternConstant.CAMEL_CASE_CHECK_RULE))) {
-							hitStrCount++;
-							int hs = hashSet.size();
-							hashSet.add(ido.getSourceString());
-							if(hs == hashSet.size()){
-								duplicatedStringCount++;
-								duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-							}else{
-								validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-							}
-							
-							hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
-							report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-									Constant.CAMELCASE,"Warning:camelcase \"" + ido.getSourceString() +"\" detected.",ido.getFileVersion(),null));
-							flag = true;
+				if(!StringUtil.isWhiteList(whitelist,ido.getSourceString())){
+					if (!StringUtil.getStringWithChar(ido.getSourceString().trim()).contains(" ")
+							&& (StringUtil.pattern(ido.getSourceString().trim(),RulePatternConstant.CAMEL_CASE_CHECK_RULE))) {
+						hitStrCount++;
+						int hs = hashSet.size();
+						hashSet.add(ido.getSourceString());
+						if(hs == hashSet.size()){
+							duplicatedStringCount++;
+							duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+						}else{
+							validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
 						}
-						break;
+						
+						hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
+						report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+								Constant.CAMELCASE,"Warning:camelcase \"" + ido.getSourceString() +"\" detected.",ido.getFileVersion(),null));
+						flag = true;
 					}
 				}
 			}else{
