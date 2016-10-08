@@ -79,44 +79,36 @@ public class CommandOptions {
     }
     public boolean validate(){
     	try{
-    	List<String> lst = new ArrayList<String>();
-    	lst.add("-i or --input is need to set source url:");
-    	lst.add("-o or --output is need to set output url:");
-    	lst.add("-r or --rules is need to set rules index to be select:");
-    	 BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-    	for(int i=0; i<lst.size();i++){
-    		String s = lst.get(i);
-    		 System.err.print(s);
-    		 String line = in.readLine();
-             if (line.length() <= 0)
-                 break;
-             if(i==0){
-            	 File file = new File(line);
-            	 if(!file.isFile() || !file.exists()){
-            		 logger.debug("'"+ line + "' is not a file or is not exist!");
-            		 return false;
-            	 }
-            	 setSourceUrl(line); 
-             }
-            	 
-             if(i==1){
-            	 File file = new File(line);
-            	 if(!file.isDirectory() || !file.exists()){
-            		 logger.debug("'"+ line + "' is not directory or is not exist!");
-            		 return false;
-            	 }
-            	 setOutputUrl(line); 
-             }
-            	
-             if(i==2){
-            	 String[] rule = line.split(",");
-            	 List<Integer> list = new ArrayList<Integer>();
-            	 for(String r:rule){
-            		 list.add(Integer.valueOf(r));
-            	 }
-            	 setSelectRules(list);
-             }
-    	}
+//    		String s ="-i ddd;-o ddd;-r d,d,d";
+    	BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+    	String line = in.readLine();
+         if (line.length() <= 0)
+        	 return false;
+         
+         String[] param = line.trim().split(";");
+         String inPath=param[0].split(" ")[1];
+    	 File file_input = new File(inPath);
+    	 if(!file_input.isFile() || !file_input.exists()){
+    		 logger.debug("'"+ inPath + "' is not a file or is not exist!");
+    		 return false;
+    	 }
+    	 setSourceUrl(inPath); 
+    	 
+    	 String outPath=param[1].split(" ")[1];
+    	 File file_output = new File(outPath);
+    	 if(!file_output.isDirectory() || !file_output.exists()){
+    		 logger.debug("'"+ outPath + "' is not directory or is not exist!");
+    		 return false;
+    	 }
+    	 setOutputUrl(outPath); 
+    	
+    	 String selectRule=param[2].split(" ")[1];
+    	 String[] rule = selectRule.split(",");
+    	 List<Integer> list = new ArrayList<Integer>();
+    	 for(String r:rule){
+    		 list.add(Integer.valueOf(r));
+    	 }
+    	 setSelectRules(list);
     	}catch(Exception e){
     		 e.printStackTrace();
     	}

@@ -65,13 +65,16 @@ public class BracketCheckRule implements IRule{
 					int count_4 =0;//counting }
 					int count_5 =0;//counting [
 					int count_6 =0;//counting [
+					int last=0;
 				    for(byte b:bytes){
 				    	if(b==60){
 				    		count_1++;
 				    	}
-				    	if(b==62){
+				    	//filter "'>'" and "->"
+				    	if((last !=39 && last !=45) && b==62){
 				    		count_2++;
 				    	}
+				    	last = b;
 				    	if(b==123){
 				    		count_3++;
 				    	}
@@ -110,13 +113,16 @@ public class BracketCheckRule implements IRule{
 				int count_4 =0;//counting }
 				int count_5 =0;//counting [
 				int count_6 =0;//counting [
+				int last=0;
 			    for(byte b:bytes){
 			    	if(b==60){
 			    		count_1++;
 			    	}
-			    	if(b==62){
+			    	//filter "'>'" and "->"
+			    	if((last !=39 && last !=45) && b==62){
 			    		count_2++;
 			    	}
+			    	last = b;
 			    	if(b==123){
 			    		count_3++;
 			    	}
