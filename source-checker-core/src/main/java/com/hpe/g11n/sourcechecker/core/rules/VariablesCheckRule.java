@@ -82,16 +82,18 @@ public class VariablesCheckRule implements IRule{
 					String[] sourceStrings = ido.getSourceString().split(" ");
 					//check xxxx one{xxx} other{xxx} xxxx
 					if(StringUtil.pattern(ido.getSourceString(),RulePatternConstant.VARIABLES_CHECK_RULE_1)){
-						report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-								Constant.VARIABLES,"Warning: variable pattern \"one {xxx} other {xxx}\" detected. Please confirm which string(s) are translatable.",ido.getFileVersion(),null));
 						hitStrCount++;
 						int hs = hashSet.size();
 						hashSet.add(ido.getSourceString());
 						if(hs == hashSet.size()){
 							duplicatedStringCount++;
 							duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+							report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+									Constant.VARIABLES,"Warning: variable pattern \"one {xxx} other {xxx}\" detected. Please confirm which string(s) are translatable.",ido.getFileVersion(),true,null));
 						}else{
 							validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+							report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+									Constant.VARIABLES,"Warning: variable pattern \"one {xxx} other {xxx}\" detected. Please confirm which string(s) are translatable.",ido.getFileVersion(),false,null));
 						}
 						hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
 						continue;
@@ -104,16 +106,18 @@ public class VariablesCheckRule implements IRule{
 							}
 						}
 						if(new Float(variablesCount)/new Float(wordsCount) >new Float(0.5)){
-							report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-									Constant.VARIABLES,"Warning: variables count exceeded threshold.",ido.getFileVersion(),null));
 							hitStrCount++;
 							int hs = hashSet.size();
 							hashSet.add(ido.getSourceString());
 							if(hs == hashSet.size()){
 								duplicatedStringCount++;
 								duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+								report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+										Constant.VARIABLES,"Warning: variables count exceeded threshold.",ido.getFileVersion(),true,null));
 							}else{
 								validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+								report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+										Constant.VARIABLES,"Warning: variables count exceeded threshold.",ido.getFileVersion(),false,null));
 							}
 							hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
 							break;
@@ -126,16 +130,18 @@ public class VariablesCheckRule implements IRule{
 				String[] sourceStrings = ido.getSourceString().split(" ");
 				//check xxxx one{xxx} other{xxx} xxxx
 				if(StringUtil.pattern(ido.getSourceString(),RulePatternConstant.VARIABLES_CHECK_RULE_1)){
-					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-							Constant.VARIABLES,"Warning: variable pattern \"one {xxx} other {xxx}\" detected. Please confirm which string(s) are translatable.",ido.getFileVersion(),null));
 					hitStrCount++;
 					int hs = hashSet.size();
 					hashSet.add(ido.getSourceString());
 					if(hs == hashSet.size()){
 						duplicatedStringCount++;
 						duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+						report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+								Constant.VARIABLES,"Warning: variable pattern \"one {xxx} other {xxx}\" detected. Please confirm which string(s) are translatable.",ido.getFileVersion(),true,null));
 					}else{
 						validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+						report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+								Constant.VARIABLES,"Warning: variable pattern \"one {xxx} other {xxx}\" detected. Please confirm which string(s) are translatable.",ido.getFileVersion(),false,null));
 					}
 					hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
 					continue;
@@ -148,16 +154,18 @@ public class VariablesCheckRule implements IRule{
 						}
 					}
 					if(new Float(variablesCount)/new Float(wordsCount) >new Float(0.5)){
-						report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-								Constant.VARIABLES,"Warning: variables count exceeded threshold.",ido.getFileVersion(),null));
 						hitStrCount++;
 						int hs = hashSet.size();
 						hashSet.add(ido.getSourceString());
 						if(hs == hashSet.size()){
 							duplicatedStringCount++;
 							duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+							report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+									Constant.VARIABLES,"Warning: variables count exceeded threshold.",ido.getFileVersion(),true,null));
 						}else{
 							validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+							report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+									Constant.VARIABLES,"Warning: variables count exceeded threshold.",ido.getFileVersion(),false,null));
 						}
 						hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
 						break;
@@ -174,7 +182,7 @@ public class VariablesCheckRule implements IRule{
 		ReportDataUtil reportDataUtil = new ReportDataUtil();
 		ReportDataCount reportDataCount = reportDataUtil.getEndReportData(Constant.VARIABLES, hitStrCount,hitNewChangeWordCount,
 				duplicatedStringCount,duplicatedWordCount, hashSet.size(),validatedWordCount,lstIdo.size(), totalWordCount,new BigDecimal(0));
-		report.add(new ReportData(null,null,null,null,null,null,null,reportDataCount));
+		report.add(new ReportData(null,null,null,null,null,null,null,false,reportDataCount));
 		return flag;
 	}
 }

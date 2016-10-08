@@ -16,10 +16,11 @@ public class ReportData {
 	private String errorType;
 	private String details;
 	private String fileVersion;
+	private boolean duplicated;
 	private ReportDataCount endReportData;
 
 	public ReportData(String lpuName, String subFileName, String stringId,String sourceString, 
-			String errorType, String details,String fileVersion,ReportDataCount endReportData) {
+			String errorType, String details,String fileVersion,boolean duplicated,ReportDataCount endReportData) {
 		super();
 		this.lpuName = lpuName;
 		this.subFileName = subFileName;
@@ -28,6 +29,7 @@ public class ReportData {
 		this.errorType = errorType;
 		this.details = details;
 		this.fileVersion=fileVersion;
+		this.duplicated=duplicated;
 		this.endReportData = endReportData;
 	}
 	
@@ -93,6 +95,14 @@ public class ReportData {
 
 	public void setFileVersion(String fileVersion) {
 		this.fileVersion = fileVersion;
+	}
+
+	public boolean isDuplicated() {
+		return duplicated;
+	}
+
+	public void setDuplicated(boolean duplicated) {
+		this.duplicated = duplicated;
 	}
 
 }

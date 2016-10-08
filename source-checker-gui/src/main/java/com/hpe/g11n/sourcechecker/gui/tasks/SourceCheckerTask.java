@@ -179,8 +179,11 @@ public class SourceCheckerTask extends Task<Void> {
 		}
 		
 		Excel detail = new Excel();
+		Excel duplicatedDetail = new Excel();
 		
 		detail.setName("Details");
+		duplicatedDetail.setName("DuplicatedDetails");
+		
 		List<String> lstDetailsHeader = new ArrayList<String>();
 		lstDetailsHeader.add("FILE NAME");
 		lstDetailsHeader.add("SUB FILE NAME");
@@ -189,26 +192,41 @@ public class SourceCheckerTask extends Task<Void> {
 		lstDetailsHeader.add("ERROR TYPE");
 		lstDetailsHeader.add("DETAILS");
 		detail.setHeader(lstDetailsHeader);
+		duplicatedDetail.setHeader(lstDetailsHeader);
 		
 		List<List<String>> lstDetailsValue = new ArrayList<List<String>>();
+		List<List<String>> lstDuplicatedDetailsValue = new ArrayList<List<String>>();
 		Iterator iterator = set.iterator();
 		while(iterator.hasNext()){
 			String name = (String)iterator.next();
 			for(ReportData rd : lstReport){
 				if (rd.getLpuName() != null && name.equals(rd.getLpuName())) {
-					List<String> lstDetail = new ArrayList<String>();
-					lstDetail.add(rd.getLpuName());
-					lstDetail.add(rd.getSubFileName());
-					lstDetail.add(rd.getStringId());
-					lstDetail.add(rd.getSourceString());
-					lstDetail.add(rd.getErrorType());
-					lstDetail.add(rd.getDetails());
-					lstDetailsValue.add(lstDetail);
+					if(rd.isDuplicated()){
+						List<String> lstDuplicatedDetail = new ArrayList<String>();
+						lstDuplicatedDetail.add(rd.getLpuName());
+						lstDuplicatedDetail.add(rd.getSubFileName());
+						lstDuplicatedDetail.add(rd.getStringId());
+						lstDuplicatedDetail.add(rd.getSourceString());
+						lstDuplicatedDetail.add(rd.getErrorType());
+						lstDuplicatedDetail.add(rd.getDetails());
+						lstDuplicatedDetailsValue.add(lstDuplicatedDetail);
+					}else{
+						List<String> lstDetail = new ArrayList<String>();
+						lstDetail.add(rd.getLpuName());
+						lstDetail.add(rd.getSubFileName());
+						lstDetail.add(rd.getStringId());
+						lstDetail.add(rd.getSourceString());
+						lstDetail.add(rd.getErrorType());
+						lstDetail.add(rd.getDetails());
+						lstDetailsValue.add(lstDetail);
+					}
 				}
 			}
 		}
 		detail.setValue(lstDetailsValue);
 		lstExcel.add(detail);
+		duplicatedDetail.setValue(lstDuplicatedDetailsValue);
+		lstExcel.add(duplicatedDetail);
 		
 		ExcelPoiUtils.exportExcel(lstExcel,excelPath.toString());
 		return null;

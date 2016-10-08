@@ -15,8 +15,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.hpe.g11n.sourcechecker.pojo.Excel;
 
@@ -28,8 +26,8 @@ import com.hpe.g11n.sourcechecker.pojo.Excel;
  * @Time: 上午10:25:39
  *
  */
+@SuppressWarnings("deprecation")
 public class ExcelPoiUtils {
-	private final Logger log = LoggerFactory.getLogger(getClass());
 	/**
 	 * @功能描述 设置excel文档(多表单)
 	 * @param lstExcel
@@ -39,12 +37,12 @@ public class ExcelPoiUtils {
 	 * @throws Exception
 	 *             异常往上抛出
 	 */
-	@SuppressWarnings("unchecked")
 	public static Workbook exportExcel(List<Excel> lstExcel,
 			String filePath) throws Exception {
 		Excel summary = lstExcel.get(0);
 		Excel count = lstExcel.get(1);
 		Excel detail = lstExcel.get(2);
+		Excel duplicatedDetail = lstExcel.get(3);
 		FileOutputStream fos = new FileOutputStream(filePath);
 		
 		String fileType = filePath.substring(filePath.lastIndexOf(".") + 1, filePath.length());
@@ -136,6 +134,7 @@ public class ExcelPoiUtils {
         	}
         }
         
+        //write detail
         Sheet detailSheet = wb.createSheet(detail.getName());
         //write detail header
         Row detailRow = detailSheet.createRow(0);
@@ -168,11 +167,47 @@ public class ExcelPoiUtils {
         	}	
         	
         }
+        
+        //write duplicated detail
+        Sheet duplicatedDetailSheet = wb.createSheet(duplicatedDetail.getName());
+        //write duplicated header
+        Row duplicatedDetailRow = duplicatedDetailSheet.createRow(0);
+        for(int k=0;k<duplicatedDetail.getHeader().size();k++){
+        	Cell headCell = duplicatedDetailRow.createCell(k);
+        	headCell.setCellValue(duplicatedDetail.getHeader().get(k));
+        	headCell.setCellStyle(getHeaderStyle(wb));
+        }
+        
+        //write duplicated value
+        for(int i=0;i<duplicatedDetail.getValue().size();i++){
+        	List<String> lstObj = (List<String>)duplicatedDetail.getValue().get(i);
+        	Row valueRow= duplicatedDetailSheet.createRow(i+1);
+        	for(int n =0;n<lstObj.size();n++){
+        		Cell valueCell = valueRow.createCell(n);
+        		if(n==lstObj.size()-1 && lstObj.get(n).contains("\"")){
+        			//设置红色高亮
+        			HSSFRichTextString ts= new HSSFRichTextString(lstObj.get(n));
+        			String[] str =lstObj.get(n).split("\"");
+        			int index = lstObj.get(n).lastIndexOf("\"");
+        			ts.applyFont(0,str[0].length()+1,black);
+        			ts.applyFont(str[0].length()+1,index,red);
+        			
+        			valueCell.setCellValue(ts);
+        			valueCell.setCellStyle(redCellStyle);
+        		}else{
+        			valueCell.setCellValue(lstObj.get(n));
+        			valueCell.setCellStyle(blackCellStyle);
+        		}
+        	}	
+        	
+        }
+        
         for(int i=0;i<10;i++){
 	    	summarySheet.autoSizeColumn((short)i);
 	    }
         for(int i=0;i<6;i++){
         	detailSheet.autoSizeColumn((short)i);
+        	duplicatedDetailSheet.autoSizeColumn((short)i);
 	    }
         // 写入数据
         wb.write(fos);

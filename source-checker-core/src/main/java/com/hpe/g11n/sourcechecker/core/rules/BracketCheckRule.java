@@ -71,7 +71,7 @@ public class BracketCheckRule implements IRule{
 				    		count_1++;
 				    	}
 				    	//filter "'>'" and "->"
-				    	if((last !=39 && last !=45) && b==62){
+				    	if(last !=39 && last !=45 && b==62){
 				    		count_2++;
 				    	}
 				    	last = b;
@@ -96,12 +96,14 @@ public class BracketCheckRule implements IRule{
 						if(hs == hashSet.size()){
 							duplicatedStringCount++;
 							duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+							report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+									Constant.BRACKET,"Warning:"+info+".",ido.getFileVersion(),true,null));
 						}else{
 							validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+							report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+									Constant.BRACKET,"Warning:"+info+".",ido.getFileVersion(),false,null));
 						}
 						hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
-						report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-								Constant.BRACKET,"Warning:"+info+".",ido.getFileVersion(),null));
 						flag = true;
 					}
 				}
@@ -119,7 +121,7 @@ public class BracketCheckRule implements IRule{
 			    		count_1++;
 			    	}
 			    	//filter "'>'" and "->"
-			    	if((last !=39 && last !=45) && b==62){
+			    	if(last !=39 && last !=45 && b==62){
 			    		count_2++;
 			    	}
 			    	last = b;
@@ -144,12 +146,14 @@ public class BracketCheckRule implements IRule{
 					if(hs == hashSet.size()){
 						duplicatedStringCount++;
 						duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+						report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+								Constant.BRACKET,"Warning:"+info+".",ido.getFileVersion(),true,null));
 					}else{
 						validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+						report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+								Constant.BRACKET,"Warning:"+info+".",ido.getFileVersion(),false,null));
 					}
 					hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
-					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-							Constant.BRACKET,"Warning:"+info+".",ido.getFileVersion(),null));
 					flag = true;
 				}
 			}
@@ -160,7 +164,7 @@ public class BracketCheckRule implements IRule{
 		ReportDataUtil reportDataUtil = new ReportDataUtil();
 		ReportDataCount reportDataCount = reportDataUtil.getEndReportData(Constant.BRACKET, hitStrCount,hitNewChangeWordCount,
 				duplicatedStringCount,duplicatedWordCount, hashSet.size(),validatedWordCount,lstIdo.size(), totalWordCount,new BigDecimal(0));
-		report.add(new ReportData(null,null,null,null,null,null,null,reportDataCount));
+		report.add(new ReportData(null,null,null,null,null,null,null,false,reportDataCount));
 		return flag;
 	}
 
