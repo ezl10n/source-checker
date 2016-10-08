@@ -15,116 +15,123 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Foy Lian
- * Date: 2016-08-23
+ * Created with IntelliJ IDEA. 
+ * User: Foy Lian 
+ * Date: 2016-08-23 
  * Time: 15:25
  */
 public class CommandOptions {
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
-    @Parameter(names = {"-h", "-help", "--help"}, help = true, description = "Lists available commands.")
-    private boolean help;
-    @Parameter(names = {"-i", "--input"}, description = "File to be processed.")
-    private String sourceUrl;
-    @Parameter(names = {"-o", "--output"}, description = "Write Output to the folder.")
-    private String outputUrl;
-    @Parameter(names = {"-r", "--rules"}, description = "Rules select to run.")
-    private List<Integer> selectRules;
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
+	@Parameter(names = { "-h", "-help", "--help" }, help = true, description = "Lists available commands.")
+	private boolean help;
+	@Parameter(names = { "-i", "--input" }, description = "File to be processed.")
+	private String sourceUrl;
+	@Parameter(names = { "-o", "--output" }, description = "Write Output to the folder.")
+	private String outputUrl;
+	@Parameter(names = { "-r", "--rules" }, description = "Rules select to run.")
+	private List<Integer> selectRules;
 
-    @Inject
-    @Named("ruleNames")
-    private List<String> ruleNames;
+	@Inject
+	@Named("ruleNames")
+	private List<String> ruleNames;
 
-    public String getSourceUrl() {
-        return sourceUrl;
-    }
+	public String getSourceUrl() {
+		return sourceUrl;
+	}
 
-    public void setSourceUrl(String sourceUrl) {
-        this.sourceUrl = sourceUrl;
-    }
+	public void setSourceUrl(String sourceUrl) {
+		this.sourceUrl = sourceUrl;
+	}
 
-    public String getOutputUrl() {
-        return outputUrl;
-    }
+	public String getOutputUrl() {
+		return outputUrl;
+	}
 
-    public void setOutputUrl(String outputUrl) {
-        this.outputUrl = outputUrl;
-    }
+	public void setOutputUrl(String outputUrl) {
+		this.outputUrl = outputUrl;
+	}
 
-    public List<Integer> getSelectRules() {
-        return selectRules;
-    }
+	public List<Integer> getSelectRules() {
+		return selectRules;
+	}
 
-    public void setSelectRules(List<Integer> selectRules) {
-        this.selectRules = selectRules;
-    }
+	public void setSelectRules(List<Integer> selectRules) {
+		this.selectRules = selectRules;
+	}
 
-    public boolean isHelp() {
-        return help;
-    }
+	public boolean isHelp() {
+		return help;
+	}
 
-    public void setHelp(boolean help) {
-        this.help = help;
-    }
+	public void setHelp(boolean help) {
+		this.help = help;
+	}
 
-    public String rulesUseage() {
-        StringBuffer sb = new StringBuffer(100);
-        sb.append("\tavailable rules:\n");
-        for (int i = 0; i < ruleNames.size(); i++) {
-            sb.append("\t" + i + ":" + ruleNames.get(i) + "\n");
-        }
+	public String rulesUseage() {
+		StringBuffer sb = new StringBuffer(100);
+		sb.append("\tavailable rules:\n");
+		for (int i = 0; i < ruleNames.size(); i++) {
+			sb.append("\t" + i + ":" + ruleNames.get(i) + "\n");
+		}
 
-        sb.append(String.format("\tfor example: -r 0,1 means using rules %s and %s to check and report.", ruleNames.get(0), ruleNames.get(1)));
-        return sb.toString();
-    }
-    public boolean validate(){
-    	try{
-//    		String s ="-i ddd;-o ddd;-r d,d,d";
-    	BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-    	String line = in.readLine();
-         if (line.length() <= 0)
-        	 return false;
-         
-         String[] param = line.trim().split(";");
-         String inPath=param[0].split(" ")[1];
-    	 File file_input = new File(inPath);
-    	 if(!file_input.isFile() || !file_input.exists()){
-    		 logger.debug("'"+ inPath + "' is not a file or is not exist!");
-    		 return false;
-    	 }
-    	 setSourceUrl(inPath); 
-    	 
-    	 String outPath=param[1].split(" ")[1];
-    	 File file_output = new File(outPath);
-    	 if(!file_output.isDirectory() || !file_output.exists()){
-    		 logger.debug("'"+ outPath + "' is not directory or is not exist!");
-    		 return false;
-    	 }
-    	 setOutputUrl(outPath); 
-    	
-    	 String selectRule=param[2].split(" ")[1];
-    	 String[] rule = selectRule.split(",");
-    	 List<Integer> list = new ArrayList<Integer>();
-    	 for(String r:rule){
-    		 list.add(Integer.valueOf(r));
-    	 }
-    	 setSelectRules(list);
-    	}catch(Exception e){
-    		 e.printStackTrace();
-    	}
-        if(Strings.isNullOrEmpty(sourceUrl)){
-            logger.debug("-i or --input is need to set source url!");
-            return false;
-        }
-        if(Strings.isNullOrEmpty(outputUrl)){
-            logger.debug("-o or --output is need to set output url!");
-            return false;
-        }
-        if(selectRules == null || selectRules.size() == 0){
-            logger.debug("-r or --rules is need to set rules index to be select !");
-            return false;
-        }
-        return true;
-    }
+		sb.append(String
+				.format("\tfor example: -r 0,1 means using rules %s and %s to check and report.",
+						ruleNames.get(0), ruleNames.get(1)));
+		return sb.toString();
+	}
+
+	public boolean validate() {
+		try {
+			// String s ="-i ddd;-o ddd;-r d,d,d";
+			System.out
+					.println("Please input the parameters (e.g. -i C:\\test.lpu;-o C:\\tmp;-r 0,1,2,3):");
+			BufferedReader in = new BufferedReader(new InputStreamReader(
+					System.in));
+			String line = in.readLine();
+			if (line.length() <= 0)
+				return false;
+
+			String[] param = line.trim().split(";");
+			String inPath = param[0].split(" ")[1];
+			File file_input = new File(inPath);
+			if (!file_input.isFile() || !file_input.exists()) {
+				logger.debug("'" + inPath + "' is not a file or is not exist!");
+				return false;
+			}
+			setSourceUrl(inPath);
+
+			String outPath = param[1].split(" ")[1];
+			File file_output = new File(outPath);
+			if (!file_output.isDirectory() || !file_output.exists()) {
+				logger.debug("'" + outPath
+						+ "' is not directory or is not exist!");
+				return false;
+			}
+			setOutputUrl(outPath + "/");
+
+			String selectRule = param[2].split(" ")[1];
+			String[] rule = selectRule.split(",");
+			List<Integer> list = new ArrayList<Integer>();
+			for (String r : rule) {
+				list.add(Integer.valueOf(r));
+			}
+			setSelectRules(list);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (Strings.isNullOrEmpty(sourceUrl)) {
+			logger.debug("-i or --input is need to set source url!");
+			return false;
+		}
+		if (Strings.isNullOrEmpty(outputUrl)) {
+			logger.debug("-o or --output is need to set output url!");
+			return false;
+		}
+		if (selectRules == null || selectRules.size() == 0) {
+			logger.debug("-r or --rules is need to set rules index to be select !");
+			return false;
+		}
+		return true;
+	}
 
 }
