@@ -59,36 +59,27 @@ public class BracketCheckRule implements IRule{
 			if(whitelist !=null && whitelist.size()>0){
 				if(!StringUtil.isWhiteList(whitelist,ido.getSourceString())){
 					byte[] bytes  = ido.getSourceString().getBytes();
-					int count_1 =0;//counting <
-					int count_2 =0;//counting >
 					int count_3 =0;//counting {
 					int count_4 =0;//counting }
 					int count_5 =0;//counting [
 					int count_6 =0;//counting [
 					int last=0;
 				    for(byte b:bytes){
-				    	if(b==60){
-				    		count_1++;
-				    	}
-				    	//filter "'>'" and "->"
-				    	if(last !=39 && last !=45 && b==62){
-				    		count_2++;
-				    	}
-				    	last = b;
-				    	if(b==123){
+				    	if(last !=39 && last !=45 && b==123){
 				    		count_3++;
 				    	}
-				    	if(b==125){
+				    	if(last !=39 && last !=45 && b==125){
 				    		count_4++;
 				    	}
-				    	if(b==91){
+				    	if(last !=39 && last !=45 && b==91){
 				    		count_5++;
 				    	}
-				    	if(b==93){
+				    	if(last !=39 && last !=45 && b==93){
 				    		count_6++;
 				    	}
+				    	last = b;
 				    }
-				    String info=getInfo(count_1,count_2,count_3,count_4,count_5,count_6);
+				    String info=getInfo(count_3,count_4,count_5,count_6);
 					if (!info.equals("")) {
 						hitStrCount++;
 						int hs = hashSet.size();
@@ -109,36 +100,27 @@ public class BracketCheckRule implements IRule{
 				}
 			}else{
 				byte[] bytes  = ido.getSourceString().getBytes();
-				int count_1 =0;//counting <
-				int count_2 =0;//counting >
 				int count_3 =0;//counting {
 				int count_4 =0;//counting }
 				int count_5 =0;//counting [
 				int count_6 =0;//counting [
 				int last=0;
 			    for(byte b:bytes){
-			    	if(b==60){
-			    		count_1++;
-			    	}
-			    	//filter "'>'" and "->"
-			    	if(last !=39 && last !=45 && b==62){
-			    		count_2++;
-			    	}
-			    	last = b;
-			    	if(b==123){
+			    	if(last !=39 && last !=45 &&b==123){
 			    		count_3++;
 			    	}
-			    	if(b==125){
+			    	if(last !=39 && last !=45 &&b==125){
 			    		count_4++;
 			    	}
-			    	if(b==91){
+			    	if(last !=39 && last !=45 &&b==91){
 			    		count_5++;
 			    	}
-			    	if(b==93){
+			    	if(last !=39 && last !=45 &&b==93){
 			    		count_6++;
 			    	}
+			    	last = b;
 			    }
-			    String info=getInfo(count_1,count_2,count_3,count_4,count_5,count_6);
+			    String info=getInfo(count_3,count_4,count_5,count_6);
 				if (!info.equals("")) {
 					hitStrCount++;
 					int hs = hashSet.size();
@@ -168,19 +150,13 @@ public class BracketCheckRule implements IRule{
 		return flag;
 	}
 
-	private String getInfo(int count_1,int count_2,int count_3,int count_4,int count_5,int count_6){
+	private String getInfo(int count_3,int count_4,int count_5,int count_6){
 		String info="";
-		if(count_1>count_2){
-			info = info + "Missing close '>' and ";
-		}
 		if(count_3>count_4){
 			info = info + "Missing close '}' and ";
 		}
 		if(count_5>count_6){
 			info = info + "Missing close ']' and ";
-		}
-		if(count_2>count_1){
-			info = info + "Missing open '<' and ";
 		}
 		if(count_4>count_3){
 			info = info + "Missing open '{' and ";

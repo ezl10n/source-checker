@@ -85,51 +85,57 @@ public class CommandOptions {
 			// String s ="-i ddd;-o ddd;-r d,d,d";
 			System.out
 					.println("Please input the parameters (e.g. -i C:\\test.lpu;-o C:\\tmp;-r 0,1,2,3):");
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					System.in));
-			String line = in.readLine();
-			if (line.length() <= 0)
-				return false;
+			boolean flag = true;
+			while(flag){
+				BufferedReader in = new BufferedReader(new InputStreamReader(
+						System.in));
+				String line = in.readLine();
+				if (line.length() <= 0){
+					logger.debug("Please input the parameters!");
+					continue;
+				}
+				String[] param = line.trim().split(";");
+				String inPath = param[0].split(" ")[1];
+				File file_input = new File(inPath);
+				if (!file_input.isFile() || !file_input.exists()) {
+					logger.debug("'" + inPath + "' is not a file or is not exist!");
+					continue;
+				}
+				setSourceUrl(inPath);
 
-			String[] param = line.trim().split(";");
-			String inPath = param[0].split(" ")[1];
-			File file_input = new File(inPath);
-			if (!file_input.isFile() || !file_input.exists()) {
-				logger.debug("'" + inPath + "' is not a file or is not exist!");
-				return false;
-			}
-			setSourceUrl(inPath);
+				String outPath = param[1].split(" ")[1];
+				File file_output = new File(outPath);
+				if (!file_output.isDirectory() || !file_output.exists()) {
+					logger.debug("'" + outPath
+							+ "' is not directory or is not exist!");
+					continue;
+				}
+				setOutputUrl(outPath + "/");
 
-			String outPath = param[1].split(" ")[1];
-			File file_output = new File(outPath);
-			if (!file_output.isDirectory() || !file_output.exists()) {
-				logger.debug("'" + outPath
-						+ "' is not directory or is not exist!");
-				return false;
+				String selectRule = param[2].split(" ")[1];
+				String[] rule = selectRule.split(",");
+				List<Integer> list = new ArrayList<Integer>();
+				for (String r : rule) {
+					list.add(Integer.valueOf(r));
+				}
+				setSelectRules(list);
+				if (Strings.isNullOrEmpty(sourceUrl)) {
+					logger.debug("-i or --input is need to set source url!");
+					continue;
+				}
+				if (Strings.isNullOrEmpty(outputUrl)) {
+					logger.debug("-o or --output is need to set output url!");
+					continue;
+				}
+				if (selectRules == null || selectRules.size() == 0) {
+					logger.debug("-r or --rules is need to set rules index to be select !");
+					continue;
+				}
+				flag = false;
 			}
-			setOutputUrl(outPath + "/");
-
-			String selectRule = param[2].split(" ")[1];
-			String[] rule = selectRule.split(",");
-			List<Integer> list = new ArrayList<Integer>();
-			for (String r : rule) {
-				list.add(Integer.valueOf(r));
-			}
-			setSelectRules(list);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		if (Strings.isNullOrEmpty(sourceUrl)) {
-			logger.debug("-i or --input is need to set source url!");
-			return false;
-		}
-		if (Strings.isNullOrEmpty(outputUrl)) {
-			logger.debug("-o or --output is need to set output url!");
-			return false;
-		}
-		if (selectRules == null || selectRules.size() == 0) {
-			logger.debug("-r or --rules is need to set rules index to be select !");
-			return false;
 		}
 		return true;
 	}

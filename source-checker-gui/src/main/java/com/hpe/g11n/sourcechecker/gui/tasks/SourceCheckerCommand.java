@@ -68,6 +68,9 @@ public class SourceCheckerCommand{
 		for (String sourcePath : sourcePaths) {
             lstIdo.addAll(fileParser.parser(sourcePath));
 		}
+		if(lstIdo.size()<0){
+					return null;
+				}
 		checkReport.check(lstIdo,null);
 		Date startEndTime = new Date();
 		// report
@@ -177,7 +180,7 @@ public class SourceCheckerCommand{
 		Excel duplicatedDetail = new Excel();
 		
 		detail.setName("Details");
-		duplicatedDetail.setName("DuplicatedDetails");
+		duplicatedDetail.setName("Unique");
 		
 		List<String> lstDetailsHeader = new ArrayList<String>();
 		lstDetailsHeader.add("FILE NAME");

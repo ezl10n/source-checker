@@ -73,6 +73,9 @@ public class SourceCheckerTask extends Task<Void> {
 		for (String sourcePath : sourcePaths) {
             lstIdo.addAll(fileParser.parser(sourcePath));
 		}
+		if(lstIdo.size()<0){
+			return null;
+		}
 		checkReport.check(lstIdo,(now,total) ->{this.updateProgress(now, total);});
 		Date startEndTime = new Date();
 		// report
@@ -182,7 +185,7 @@ public class SourceCheckerTask extends Task<Void> {
 		Excel duplicatedDetail = new Excel();
 		
 		detail.setName("Details");
-		duplicatedDetail.setName("DuplicatedDetails");
+		duplicatedDetail.setName("Unique");
 		
 		List<String> lstDetailsHeader = new ArrayList<String>();
 		lstDetailsHeader.add("FILE NAME");

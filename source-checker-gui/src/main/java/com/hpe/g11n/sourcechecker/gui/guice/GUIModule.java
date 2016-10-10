@@ -11,6 +11,7 @@ import com.hpe.g11n.sourcechecker.fileparser.FileParserManager;
 import com.hpe.g11n.sourcechecker.fileparser.IFileParser;
 import com.hpe.g11n.sourcechecker.fileparser.impl.DefaultParser;
 import com.hpe.g11n.sourcechecker.fileparser.impl.LPUFileParser;
+import com.hpe.g11n.sourcechecker.fileparser.impl.PropertyParser;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,6 +29,7 @@ public class GUIModule extends AbstractModule {
     public List<BaseParser> getFileParsers(){
     	List<BaseParser> parsers=new ArrayList<>(15);
     	parsers.add(new LPUFileParser());
+    	parsers.add(new PropertyParser());
     	parsers.add(new DefaultParser());
     	return parsers;
     }
