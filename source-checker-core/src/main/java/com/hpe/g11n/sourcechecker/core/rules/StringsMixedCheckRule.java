@@ -69,14 +69,12 @@ public class StringsMixedCheckRule implements IRule{
 						if(hs == hashSet.size()){
 							duplicatedStringCount++;
 							duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-							report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-									Constant.STRINGMIXED,"Warning:Mixed with punctuation strings \"" + ido.getSourceString() + "\" detected.",ido.getFileVersion(),true,null));
 						}else{
 							validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-							report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-									Constant.STRINGMIXED,"Warning:Mixed with punctuation strings \"" + ido.getSourceString() + "\" detected.",ido.getFileVersion(),false,null));
 						}
 						hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
+						report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+								Constant.STRINGMIXED,"Warning:Mixed with punctuation strings \"" + ido.getSourceString() + "\" detected.",ido.getFileVersion(),null));
 						flag = true;
 					}
 				}
@@ -89,14 +87,12 @@ public class StringsMixedCheckRule implements IRule{
 					if(hs == hashSet.size()){
 						duplicatedStringCount++;
 						duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-						report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-								Constant.STRINGMIXED,"Warning:Mixed with punctuation strings \"" + ido.getSourceString() + "\" detected.",ido.getFileVersion(),true,null));
 					}else{
 						validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-						report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-								Constant.STRINGMIXED,"Warning:Mixed with punctuation strings \"" + ido.getSourceString() + "\" detected.",ido.getFileVersion(),false,null));
 					}
 					hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
+					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+							Constant.STRINGMIXED,"Warning:Mixed with punctuation strings \"" + ido.getSourceString() + "\" detected.",ido.getFileVersion(),null));
 					flag = true;
 				}
 			}
@@ -110,7 +106,7 @@ public class StringsMixedCheckRule implements IRule{
 		ReportDataUtil reportDataUtil = new ReportDataUtil();
 		ReportDataCount reportDataCount = reportDataUtil.getEndReportData(Constant.STRINGMIXED, hitStrCount,hitNewChangeWordCount,
 				duplicatedStringCount,duplicatedWordCount, hashSet.size(),validatedWordCount,lstIdo.size(), totalWordCount,new BigDecimal(0));
-		report.add(new ReportData(null,null,null,null,null,null,null,false,reportDataCount));
+		report.add(new ReportData(null,null,null,null,null,null,null,reportDataCount));
 		return flag;
 	}
 }

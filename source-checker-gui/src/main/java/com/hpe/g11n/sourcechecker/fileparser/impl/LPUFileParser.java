@@ -43,7 +43,6 @@ public class LPUFileParser extends BaseParser {
 		lstState = config.getStringList(STATE);
 		app = PassoloApp.getInstance();
 		int license = app.getLicense();
-		app.getVersionInfo(); // Result: 11.9 
 		short sh = app.getVersion(); // Result: 1100
         if(license ==0){
         	Alert alert=new Alert(Alert.AlertType.ERROR,"Failed to check, the passolo is not activated");
@@ -95,7 +94,7 @@ public class LPUFileParser extends BaseParser {
 			
 			
 		} catch (Exception ex) {
-			log.error("LPUFileParser exception." + ex);
+			log.error("LPUFileParser exception:" + ex.getMessage());
 		} finally {
 			project.close();
 			IPassoloApp.quit();

@@ -63,21 +63,19 @@ public class BracketCheckRule implements IRule{
 					int count_4 =0;//counting }
 					int count_5 =0;//counting [
 					int count_6 =0;//counting [
-					int last=0;
 				    for(byte b:bytes){
-				    	if(last !=39 && last !=45 && b==123){
+				    	if(b==123){
 				    		count_3++;
 				    	}
-				    	if(last !=39 && last !=45 && b==125){
+				    	if(b==125){
 				    		count_4++;
 				    	}
-				    	if(last !=39 && last !=45 && b==91){
+				    	if(b==91){
 				    		count_5++;
 				    	}
-				    	if(last !=39 && last !=45 && b==93){
+				    	if(b==93){
 				    		count_6++;
 				    	}
-				    	last = b;
 				    }
 				    String info=getInfo(count_3,count_4,count_5,count_6);
 					if (!info.equals("")) {
@@ -87,14 +85,12 @@ public class BracketCheckRule implements IRule{
 						if(hs == hashSet.size()){
 							duplicatedStringCount++;
 							duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-							report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-									Constant.BRACKET,"Warning:"+info+".",ido.getFileVersion(),true,null));
 						}else{
 							validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-							report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-									Constant.BRACKET,"Warning:"+info+".",ido.getFileVersion(),false,null));
 						}
 						hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
+						report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+								Constant.BRACKET,"Warning:"+info+".",ido.getFileVersion(),null));
 						flag = true;
 					}
 				}
@@ -104,21 +100,19 @@ public class BracketCheckRule implements IRule{
 				int count_4 =0;//counting }
 				int count_5 =0;//counting [
 				int count_6 =0;//counting [
-				int last=0;
 			    for(byte b:bytes){
-			    	if(last !=39 && last !=45 &&b==123){
+			    	if(b==123){
 			    		count_3++;
 			    	}
-			    	if(last !=39 && last !=45 &&b==125){
+			    	if(b==125){
 			    		count_4++;
 			    	}
-			    	if(last !=39 && last !=45 &&b==91){
+			    	if(b==91){
 			    		count_5++;
 			    	}
-			    	if(last !=39 && last !=45 &&b==93){
+			    	if(b==93){
 			    		count_6++;
 			    	}
-			    	last = b;
 			    }
 			    String info=getInfo(count_3,count_4,count_5,count_6);
 				if (!info.equals("")) {
@@ -128,14 +122,12 @@ public class BracketCheckRule implements IRule{
 					if(hs == hashSet.size()){
 						duplicatedStringCount++;
 						duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-						report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-								Constant.BRACKET,"Warning:"+info+".",ido.getFileVersion(),true,null));
 					}else{
 						validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-						report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-								Constant.BRACKET,"Warning:"+info+".",ido.getFileVersion(),false,null));
 					}
 					hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
+					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+							Constant.BRACKET,"Warning:"+info+".",ido.getFileVersion(),null));
 					flag = true;
 				}
 			}
@@ -146,7 +138,7 @@ public class BracketCheckRule implements IRule{
 		ReportDataUtil reportDataUtil = new ReportDataUtil();
 		ReportDataCount reportDataCount = reportDataUtil.getEndReportData(Constant.BRACKET, hitStrCount,hitNewChangeWordCount,
 				duplicatedStringCount,duplicatedWordCount, hashSet.size(),validatedWordCount,lstIdo.size(), totalWordCount,new BigDecimal(0));
-		report.add(new ReportData(null,null,null,null,null,null,null,false,reportDataCount));
+		report.add(new ReportData(null,null,null,null,null,null,null,reportDataCount));
 		return flag;
 	}
 

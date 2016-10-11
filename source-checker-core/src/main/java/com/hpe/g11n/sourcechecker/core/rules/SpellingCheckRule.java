@@ -100,16 +100,13 @@ public class SpellingCheckRule implements IRule{
 							if(hs == hashSet.size()){
 								duplicatedStringCount++;
 								duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-								report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-										Constant.SPELLING,"Warning:unknown strings \"" + wrongWords.trim().substring(0,wrongWords.length()-1) 
-										+ "\".\n Suggestion:"+suggestion.trim().substring(0,suggestion.length()-1) ,ido.getFileVersion(),true,null));
 							}else{
 								validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-								report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-										Constant.SPELLING,"Warning:unknown strings \"" + wrongWords.trim().substring(0,wrongWords.length()-1) 
-										+ "\".\n Suggestion:"+suggestion.trim().substring(0,suggestion.length()-1) ,ido.getFileVersion(),false,null));
 							}
 							hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
+							report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+									Constant.SPELLING,"Warning:unknown strings \"" + wrongWords.trim().substring(0,wrongWords.length()-1) 
+									+ "\".\n Suggestion:"+suggestion.trim().substring(0,suggestion.length()-1) ,ido.getFileVersion(),null));
 							flag = true;
 						}
 					}
@@ -134,16 +131,13 @@ public class SpellingCheckRule implements IRule{
 						if(hs == hashSet.size()){
 							duplicatedStringCount++;
 							duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-							report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-									Constant.SPELLING,"Warning:unknown strings \"" + wrongWords.trim().substring(0,wrongWords.length()-1) 
-									+ "\".\n Suggestion:"+suggestion.trim().substring(0,suggestion.length()-1) ,ido.getFileVersion(),true,null));
 						}else{
 							validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-							report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-									Constant.SPELLING,"Warning:unknown strings \"" + wrongWords.trim().substring(0,wrongWords.length()-1) 
-									+ "\".\n Suggestion:"+suggestion.trim().substring(0,suggestion.length()-1) ,ido.getFileVersion(),false,null));
 						}
 						hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
+						report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+								Constant.SPELLING,"Warning:unknown strings \"" + wrongWords.trim().substring(0,wrongWords.length()-1) 
+								+ "\".\n Suggestion:"+suggestion.trim().substring(0,suggestion.length()-1) ,ido.getFileVersion(),null));
 						flag = true;
 					}
 				}
@@ -155,7 +149,7 @@ public class SpellingCheckRule implements IRule{
 		ReportDataUtil reportDataUtil = new ReportDataUtil();
 		ReportDataCount reportDataCount = reportDataUtil.getEndReportData(Constant.SPELLING, hitStrCount,hitNewChangeWordCount,
 				duplicatedStringCount,duplicatedWordCount, hashSet.size(),validatedWordCount,lstIdo.size(), totalWordCount,new BigDecimal(0));
-		report.add(new ReportData(null,null,null,null,null,null,null,false,reportDataCount));
+		report.add(new ReportData(null,null,null,null,null,null,null,reportDataCount));
 		return flag;
 	}
 	
