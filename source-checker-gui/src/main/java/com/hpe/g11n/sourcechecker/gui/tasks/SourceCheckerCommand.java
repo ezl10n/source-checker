@@ -68,9 +68,6 @@ public class SourceCheckerCommand{
 		for (String sourcePath : sourcePaths) {
             lstIdo.addAll(fileParser.parser(sourcePath));
 		}
-		if (lstIdo.size() < 0) {
-			return;
-		}
 		checkReport.check(lstIdo,null);
 		Date startEndTime = new Date();
 		// report
@@ -195,9 +192,9 @@ public class SourceCheckerCommand{
 		List<List<String>> lstDetailsValue = new ArrayList<List<String>>();
 		List<List<String>> lstUniqueDetailsValue = new ArrayList<List<String>>();
 		Iterator iterator = set.iterator();
+		HashSet<String> setErrorType = new HashSet<String>();
 		while(iterator.hasNext()){
 			String name = (String)iterator.next();
-			HashSet<String> hashSet = new HashSet<String>();
 			for(ReportData rd : lstReport){
 				if (rd.getLpuName() != null && name.equals(rd.getLpuName())) {
 					List<String> lstDetail = new ArrayList<String>();
@@ -208,10 +205,20 @@ public class SourceCheckerCommand{
 					lstDetail.add(rd.getErrorType());
 					lstDetail.add(rd.getDetails());
 					lstDetailsValue.add(lstDetail);
-
-					int size = hashSet.size();
-					hashSet.add(rd.getSourceString());
-					if (hashSet.size() > size) {
+					setErrorType.add(rd.getErrorType());
+				}
+			}
+		}
+		
+		Iterator iteratorErrorType = setErrorType.iterator();
+		while(iteratorErrorType.hasNext()){
+			String errorType = (String)iteratorErrorType.next();
+			HashSet<String> setUnique = new HashSet<String>();
+			for(ReportData rd : lstReport){
+				if (rd.getErrorType() != null && errorType.equals(rd.getErrorType())) {
+					int size = setUnique.size();
+					setUnique.add(rd.getSourceString());
+					if(setUnique.size()>size){
 						List<String> lstUniqueDetail = new ArrayList<String>();
 						lstUniqueDetail.add(rd.getLpuName());
 						lstUniqueDetail.add(rd.getSubFileName());
@@ -224,6 +231,7 @@ public class SourceCheckerCommand{
 				}
 			}
 		}
+		
 		detail.setValue(lstDetailsValue);
 		lstExcel.add(detail);
 		uniqueDetail.setValue(lstUniqueDetailsValue);

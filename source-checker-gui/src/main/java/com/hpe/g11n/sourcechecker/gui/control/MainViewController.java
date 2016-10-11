@@ -26,6 +26,9 @@ import javafx.stage.Stage;
 
 import javax.swing.WindowConstants;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.hp.g11n.jassolo.utils.PslUtils;
@@ -36,7 +39,7 @@ import com.hpe.g11n.sourcechecker.gui.tasks.SourceCheckerTask;
  */
 
 public class MainViewController extends BaseController  implements Initializable{
-
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	@FXML
 	private Parent root;
 
@@ -333,4 +336,5 @@ public class MainViewController extends BaseController  implements Initializable
 		t.start();
 		closeCount = 0;
 	}
+	
 }

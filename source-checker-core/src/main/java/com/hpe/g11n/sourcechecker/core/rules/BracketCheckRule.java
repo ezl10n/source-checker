@@ -58,7 +58,8 @@ public class BracketCheckRule implements IRule{
 			totalWordCount = totalWordCount + StringUtil.getCountWords(ido.getSourceString());
 			if(whitelist !=null && whitelist.size()>0){
 				if(!StringUtil.isWhiteList(whitelist,ido.getSourceString())){
-					byte[] bytes  = ido.getSourceString().getBytes();
+					String string = StringUtil.filter(ido.getSourceString());
+					byte[] bytes  = string.getBytes();
 					int count_3 =0;//counting {
 					int count_4 =0;//counting }
 					int count_5 =0;//counting [
@@ -95,7 +96,8 @@ public class BracketCheckRule implements IRule{
 					}
 				}
 			}else{
-				byte[] bytes  = ido.getSourceString().getBytes();
+				String string = StringUtil.filter(ido.getSourceString());
+				byte[] bytes  = string.getBytes();
 				int count_3 =0;//counting {
 				int count_4 =0;//counting }
 				int count_5 =0;//counting [

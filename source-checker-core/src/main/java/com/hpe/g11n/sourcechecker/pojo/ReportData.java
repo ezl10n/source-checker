@@ -94,4 +94,5 @@ public class ReportData {
 	public void setFileVersion(String fileVersion) {
 		this.fileVersion = fileVersion;
 	}
+
 }

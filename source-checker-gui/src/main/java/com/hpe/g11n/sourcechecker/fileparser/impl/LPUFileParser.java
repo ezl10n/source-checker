@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javafx.scene.control.Alert;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,22 +40,6 @@ public class LPUFileParser extends BaseParser {
 		lstIdo = new ArrayList<InputData>();
 		lstState = config.getStringList(STATE);
 		app = PassoloApp.getInstance();
-		int license = app.getLicense();
-		short sh = app.getVersion(); // Result: 1100
-        if(license ==0){
-        	Alert alert=new Alert(Alert.AlertType.ERROR,"Failed to check, the passolo is not activated");
-			alert.setHeaderText("Error:");
-			alert.show();
-			log.debug("Failed to check, the passolo is not activated");
-			return lstIdo;
-        }
-        if(sh !=(short)1100){
-        	Alert alert=new Alert(Alert.AlertType.ERROR,"Failed to check, the version of Passolo is not 2011");
-			alert.setHeaderText("Error:");
-			alert.show();
-			log.debug("Failed to check, the version of Passolo is not 2011");
-			return lstIdo;
-        }
 		project = app.open(filePath);
 		long startTime = System.currentTimeMillis();
 		log.debug("PassoloApp to read file start at:" + startTime);
