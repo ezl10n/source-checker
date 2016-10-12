@@ -32,6 +32,9 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.hp.g11n.jassolo.utils.PslUtils;
+import com.hp.g11n.sdl.psl.interop.core.IPassoloApp;
+import com.hp.g11n.sdl.psl.interop.core.IPslProject;
+import com.hp.g11n.sdl.psl.interop.core.impl.impl.PassoloApp;
 import com.hpe.g11n.sourcechecker.gui.tasks.SourceCheckerTask;
 
 /**
@@ -326,6 +329,39 @@ public class MainViewController extends BaseController  implements Initializable
 			});
 			return;
 		}
+		
+		String[] paths = sourceUrl.getText().split(";");
+		IPslProject project = null;
+		for(String filePath:paths){
+			if(filePath.endsWith(".lpu")){
+				try{
+					IPassoloApp app = PassoloApp.getInstance();
+					project = app.open(filePath);
+					project.getSourceLists();
+					} catch (Exception ex) {
+						log.debug("Failed to check, the version of Passolo is not 2011");
+						log.error("LPUFileParser exception:" + ex.getMessage());
+						Alert alert=new Alert(Alert.AlertType.ERROR,"Failed to check, the version of Passolo is not 2011");
+						alert.setHeaderText("Error:");
+						alert.showAndWait();
+						if(project != null){
+							project = null;
+//							project.close();
+						}
+						IPassoloApp.quit();
+						return;
+					} finally {
+						if(project != null){
+							project.close();
+						}
+						if(PslUtils.isPassoloStarted()){
+							IPassoloApp.quit();
+						}
+					}
+				break;
+			}
+		}
+		
 		task = new SourceCheckerTask();
 		injector.injectMembers(task);
 		progressBar.setVisible(true);
