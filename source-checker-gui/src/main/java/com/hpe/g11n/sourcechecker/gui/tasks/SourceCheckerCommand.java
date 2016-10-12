@@ -51,7 +51,7 @@ public class SourceCheckerCommand{
 	public void setUp(String sourceDir, String reportDir,
 			List<Integer> rulesCheckedIdx) {
 		this.source = sourceDir;
-		this.report = reportDir;
+		this.report = reportDir+"/";
 		this.rulesCheckedIdx = rulesCheckedIdx;
 		checkReport.build(rulesCheckedIdx);
 	}

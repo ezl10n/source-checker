@@ -84,7 +84,7 @@ public class CommandOptions {
 		try {
 			// String s ="-i ddd;-o ddd;-r d,d,d";
 			System.out
-					.println("Please input the parameters (e.g. -i C:\\test.lpu;-o C:\\tmp;-r 0,1,2,3):");
+					.println("Please input the parameters (e.g. -i C:\\test.lpu>-o C:\\tmp>-r 0,1,2,3):");
 			boolean flag = true;
 			while(flag){
 				BufferedReader in = new BufferedReader(new InputStreamReader(
@@ -94,7 +94,7 @@ public class CommandOptions {
 					logger.debug("Please input the parameters!");
 					continue;
 				}
-				String[] param = line.trim().split(";");
+				String[] param = line.trim().split(">");
 				String inPath = param[0].split(" ")[1];
 				File file_input = new File(inPath);
 				if (!file_input.isFile() || !file_input.exists()) {
