@@ -86,7 +86,7 @@ public class StringUtil {
 	public static String filter(String string){
 		if(string !=null && !"".equals(string)){
 			return string.replaceAll("'\\{'", "").replaceAll("'\\}'", "").replaceAll("'\\['", "").replaceAll("'\\]'", "")
-					.replaceAll("']]>'", "").replaceAll("':]'", "").replaceAll("':['", "").replaceAll("'\\\\\\['", "")
+					.replaceAll("']]>'", "").replaceAll("'\\:\\]'", "").replaceAll("'\\:\\['", "").replaceAll("'\\\\\\['", "")
 					.replaceAll("'\\\\\\]'", "").replaceAll("'\\&\\['", "").replaceAll("'\\&\\]'", "").trim();
 		}
 		return string;

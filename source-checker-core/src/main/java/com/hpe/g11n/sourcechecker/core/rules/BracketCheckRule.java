@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +29,14 @@ public class BracketCheckRule implements IRule{
 	private List<String> whitelist;
 	private Config config;
 	
+	int hitStrCount=0;
+	int totalWordCount=0;
+	int hitNewChangeWordCount =0;
+	int duplicatedStringCount =0;
+	int duplicatedWordCount =0;
+	int validatedWordCount =0;
+	boolean flag = false;
+	
 	public BracketCheckRule(){
 
 	}
@@ -42,96 +52,104 @@ public class BracketCheckRule implements IRule{
 	@Override
 	public boolean check(List<InputData> lstIdo) {
 		Preconditions.checkNotNull(lstIdo);
-		boolean flag = false;
 		report = new ArrayList<ReportData>();
 		HashSet<String> hashSet = new HashSet<String>();
-		int hitStrCount=0;
-		int totalWordCount=0;
-		int hitNewChangeWordCount =0;
-		int duplicatedStringCount =0;
-		int duplicatedWordCount =0;
-		int validatedWordCount =0;
+		int theadCount =1;
+		if(lstIdo.size()>1000){
+			theadCount =500;
+		}
+		ExecutorService service = Executors.newFixedThreadPool(theadCount);
 		for(InputData ido:lstIdo){
 			if(log.isDebugEnabled()){
 				log.debug("Start BracketCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());
 			}
 			totalWordCount = totalWordCount + StringUtil.getCountWords(ido.getSourceString());
-			if(whitelist !=null && whitelist.size()>0){
-				if(!StringUtil.isWhiteList(whitelist,ido.getSourceString())){
-					String string = StringUtil.filter(ido.getSourceString());
-					byte[] bytes  = string.getBytes();
-					int count_3 =0;//counting {
-					int count_4 =0;//counting }
-					int count_5 =0;//counting [
-					int count_6 =0;//counting [
-				    for(byte b:bytes){
-				    	if(b==123){
-				    		count_3++;
-				    	}
-				    	if(b==125){
-				    		count_4++;
-				    	}
-				    	if(b==91){
-				    		count_5++;
-				    	}
-				    	if(b==93){
-				    		count_6++;
-				    	}
-				    }
-				    String info=getInfo(count_3,count_4,count_5,count_6);
-					if (!info.equals("")) {
-						hitStrCount++;
-						int hs = hashSet.size();
-						hashSet.add(ido.getSourceString());
-						if(hs == hashSet.size()){
-							duplicatedStringCount++;
-							duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+			String sourceString = ido.getSourceString();
+			if(sourceString.contains("{")
+					|| sourceString.contains("}")
+					|| sourceString.contains("[")
+					|| sourceString.contains("]")){
+				service.execute(new Runnable() {
+					public void run() {
+						if(whitelist !=null && whitelist.size()>0){
+							if(!StringUtil.isWhiteList(whitelist,ido.getSourceString())){
+								String string = StringUtil.filter(ido.getSourceString());
+								byte[] bytes  = string.getBytes();
+								int count_3 =0;//counting {
+								int count_4 =0;//counting }
+								int count_5 =0;//counting [
+								int count_6 =0;//counting [
+							    for(byte b:bytes){
+							    	if(b==123){
+							    		count_3++;
+							    	}
+							    	if(b==125){
+							    		count_4++;
+							    	}
+							    	if(b==91){
+							    		count_5++;
+							    	}
+							    	if(b==93){
+							    		count_6++;
+							    	}
+							    }
+							    String info=getInfo(count_3,count_4,count_5,count_6);
+								if (!info.equals("")) {
+									hitStrCount++;
+									int hs = hashSet.size();
+									hashSet.add(ido.getSourceString());
+									if(hs == hashSet.size()){
+										duplicatedStringCount++;
+										duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+									}else{
+										validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+									}
+									hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
+									report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+											Constant.BRACKET,"Warning:"+info+".",ido.getFileVersion(),null));
+									flag = true;
+								}
+							}
 						}else{
-							validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+							String string = StringUtil.filter(ido.getSourceString());
+							byte[] bytes  = string.getBytes();
+							int count_3 =0;//counting {
+							int count_4 =0;//counting }
+							int count_5 =0;//counting [
+							int count_6 =0;//counting [
+						    for(byte b:bytes){
+						    	if(b==123){
+						    		count_3++;
+						    	}
+						    	if(b==125){
+						    		count_4++;
+						    	}
+						    	if(b==91){
+						    		count_5++;
+						    	}
+						    	if(b==93){
+						    		count_6++;
+						    	}
+						    }
+						    String info=getInfo(count_3,count_4,count_5,count_6);
+							if (!info.equals("")) {
+								hitStrCount++;
+								int hs = hashSet.size();
+								hashSet.add(ido.getSourceString());
+								if(hs == hashSet.size()){
+									duplicatedStringCount++;
+									duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+								}else{
+									validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+								}
+								hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
+								report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+										Constant.BRACKET,"Warning:"+info+".",ido.getFileVersion(),null));
+								flag = true;
+							}
 						}
-						hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
-						report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-								Constant.BRACKET,"Warning:"+info+".",ido.getFileVersion(),null));
-						flag = true;
 					}
-				}
-			}else{
-				String string = StringUtil.filter(ido.getSourceString());
-				byte[] bytes  = string.getBytes();
-				int count_3 =0;//counting {
-				int count_4 =0;//counting }
-				int count_5 =0;//counting [
-				int count_6 =0;//counting [
-			    for(byte b:bytes){
-			    	if(b==123){
-			    		count_3++;
-			    	}
-			    	if(b==125){
-			    		count_4++;
-			    	}
-			    	if(b==91){
-			    		count_5++;
-			    	}
-			    	if(b==93){
-			    		count_6++;
-			    	}
-			    }
-			    String info=getInfo(count_3,count_4,count_5,count_6);
-				if (!info.equals("")) {
-					hitStrCount++;
-					int hs = hashSet.size();
-					hashSet.add(ido.getSourceString());
-					if(hs == hashSet.size()){
-						duplicatedStringCount++;
-						duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-					}else{
-						validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-					}
-					hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
-					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-							Constant.BRACKET,"Warning:"+info+".",ido.getFileVersion(),null));
-					flag = true;
-				}
+				});
 			}
 			if(log.isDebugEnabled()){
 				log.debug("END BracketCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());

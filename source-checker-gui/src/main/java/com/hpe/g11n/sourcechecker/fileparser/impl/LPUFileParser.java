@@ -46,7 +46,7 @@ public class LPUFileParser extends BaseParser {
 		try {
 			IPslSourceLists sourceLists = project.getSourceLists();
 			ExecutorService service;
-			if(sourceLists.toList().size()<50){
+			if(sourceLists.toList().size()<100){
 				for (int i = 0; i < sourceLists.toList().size(); i++) {
 					List<IPslSourceString> lstSourceString = sourceLists.toList()
 							.get(i).getSourceStrings();
@@ -57,7 +57,7 @@ public class LPUFileParser extends BaseParser {
 							lstSourceString);
 				}
 			}else{
-				service = Executors.newFixedThreadPool(50);
+				service = Executors.newFixedThreadPool(sourceLists.toList().size());
 				for (int i = 0; i < sourceLists.toList().size(); i++) {
 					List<IPslSourceString> lstSourceString = sourceLists.toList()
 							.get(i).getSourceStrings();
@@ -71,11 +71,14 @@ public class LPUFileParser extends BaseParser {
 						}
 					});
 				}
-				service.shutdown();
+				if(service.isTerminated()){
+					service.shutdown();
+				}
 			}
 			
 			
 		} catch (Exception ex) {
+			log.debug("Failed to check, the version of Passolo is not 2011");
 			log.error("LPUFileParser exception:" + ex.getMessage());
 		} finally {
 			project.close();
@@ -85,7 +88,7 @@ public class LPUFileParser extends BaseParser {
 					+ "ms");
 		}
 		long endTime = System.currentTimeMillis();
-		log.debug("PassoloApp to read to read file end at:" + endTime);
+		log.debug("PassoloApp to read file end at:" + endTime);
 		log.debug("Duration time:" + (endTime - startTime));
 		return lstIdo;
 	}
