@@ -70,7 +70,8 @@ public class CapitalCheckRule implements IRule{
 			totalWordCount = totalWordCount + StringUtil.getCountWords(ido.getSourceString());
 			if(whitelist !=null && whitelist.size()>0){
 				if(!StringUtil.isWhiteList(whitelist,ido.getSourceString())){
-					if (StringUtil.pattern(ido.getSourceString(),RulePatternConstant.CAPITAL_CHECK_RULE)) {
+					if (StringUtil.pattern(ido.getSourceString(),RulePatternConstant.CAPITAL_CHECK_RULE)
+							&& ido.getSourceString().trim().length()>1) {
 						hitStrCount++;
 						int hs = hashSet.size();
 						hashSet.add(ido.getSourceString());
@@ -87,7 +88,8 @@ public class CapitalCheckRule implements IRule{
 					}
 				}
 			}else{
-				if (StringUtil.pattern(ido.getSourceString(),RulePatternConstant.CAPITAL_CHECK_RULE)) {
+				if (StringUtil.pattern(ido.getSourceString(),RulePatternConstant.CAPITAL_CHECK_RULE)
+						&& ido.getSourceString().trim().length()>1) {
 					hitStrCount++;
 					int hs = hashSet.size();
 					hashSet.add(ido.getSourceString());

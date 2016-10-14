@@ -19,6 +19,7 @@ import com.hpe.g11n.sourcechecker.pojo.ReportDataCount;
 import com.hpe.g11n.sourcechecker.utils.ReportDataUtil;
 import com.hpe.g11n.sourcechecker.utils.StringUtil;
 import com.hpe.g11n.sourcechecker.utils.constant.Constant;
+import com.hpe.g11n.sourcechecker.utils.constant.RulePatternConstant;
 import com.typesafe.config.Config;
 
 @RuleData(id="BracketCheckRule",name=Constant.BRACKET,order=11,ruleClass = BracketCheckRule.class)
@@ -64,17 +65,12 @@ public class BracketCheckRule implements IRule{
 				log.debug("Start BracketCheckRule check key/value:"+ido.getStringId()+"/"+ido.getSourceString());
 			}
 			totalWordCount = totalWordCount + StringUtil.getCountWords(ido.getSourceString());
-			String sourceString = ido.getSourceString();
-			if(sourceString.contains("{")
-					|| sourceString.contains("}")
-					|| sourceString.contains("[")
-					|| sourceString.contains("]")){
+			if(StringUtil.pattern(ido.getSourceString(), RulePatternConstant.BRACKET_CHECK_RULE)){
 				service.execute(new Runnable() {
 					public void run() {
 						if(whitelist !=null && whitelist.size()>0){
 							if(!StringUtil.isWhiteList(whitelist,ido.getSourceString())){
-								String string = StringUtil.filter(ido.getSourceString());
-								byte[] bytes  = string.getBytes();
+								byte[] bytes  = ido.getSourceString().getBytes();
 								int count_3 =0;//counting {
 								int count_4 =0;//counting }
 								int count_5 =0;//counting [
@@ -111,8 +107,7 @@ public class BracketCheckRule implements IRule{
 								}
 							}
 						}else{
-							String string = StringUtil.filter(ido.getSourceString());
-							byte[] bytes  = string.getBytes();
+							byte[] bytes  = ido.getSourceString().getBytes();
 							int count_3 =0;//counting {
 							int count_4 =0;//counting }
 							int count_5 =0;//counting [
