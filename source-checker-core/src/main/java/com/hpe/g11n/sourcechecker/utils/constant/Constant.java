@@ -16,7 +16,7 @@ public class Constant {
    public static final String CONCATENATION_KEYWORDS_KEY="psl.psl-generate-sourcechecker-report.concatenation.key-words";
    public static final String CONCATENATION_KEYWORDS_VARIABLES="psl.psl-generate-sourcechecker-report.concatenation.variables";
    public static final String CAMELCASE_FORMAT="psl.psl-generate-sourcechecker-report.camel-case";
-   
+  
    // check rule name
    public static final String CAMELCASE ="CamelCase";
    public static final String CONCATENATION ="Concatenation";

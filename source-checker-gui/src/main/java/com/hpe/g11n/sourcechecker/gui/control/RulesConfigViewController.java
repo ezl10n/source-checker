@@ -51,7 +51,7 @@ public class RulesConfigViewController extends BaseController implements Initial
     public void initialize(URL location,ResourceBundle resources) {
         concatenationKeyWords.setText(config.getStringList(Constant.CONCATENATION_KEYWORDS_KEY).toString());
         concatenationVariables.setText(config.getStringList(Constant.CONCATENATION_KEYWORDS_VARIABLES).toString());
-        camelCaseFormat.setText(config.getString(Constant.CAMELCASE_FORMAT));
+        camelCaseFormat.setText(config.getStringList(Constant.CAMELCASE_FORMAT).toString());
     }
 
     @FXML
@@ -69,7 +69,8 @@ public class RulesConfigViewController extends BaseController implements Initial
         String varibales=concatenationVariables.getText().replaceAll("\\[","").replaceAll("\\]","");
         config=config.withValue(Constant.CONCATENATION_KEYWORDS_VARIABLES, ConfigValueFactory.fromAnyRef(Arrays.asList(varibales.split(","))));
 
-        config=config.withValue(Constant.CAMELCASE_FORMAT, ConfigValueFactory.fromAnyRef(camelCaseFormat.getText()));
+        String camelCase =camelCaseFormat.getText().replaceAll("\\[","").replaceAll("\\]","");
+        config=config.withValue(Constant.CAMELCASE_FORMAT, ConfigValueFactory.fromAnyRef(Arrays.asList(camelCase.split(","))));
         ConfigModule.saveConfig(config);
         close(event);
     }

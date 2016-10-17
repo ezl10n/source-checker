@@ -37,12 +37,12 @@ public class ConfigModule extends AbstractModule {
         String passInDir=System.getProperty("source.checker.config.basedir");
         if(passInDir == null){
             passInDir = System.getProperty("user.dir");
-            fileName=preFix+fileName;
+            fileName = preFix + fileName;
         }
         return ConfigFactory.parseFileAnySyntax(Paths.get(passInDir, fileName).toFile());
     }
     public static void saveConfig(Config config){
-        String preFix=String.format("%1$ssrc%1$smain%1$sconfig",File.separator);
+        String preFix=String.format("..%1$ssrc%1$smain%1$sconfig",File.separator);
         String fileName=String.format("%1$ssource-checker-standalone-config.conf",File.separator);
         String passInDir=System.getProperty("source.checker.config.basedir");
         if(passInDir == null){

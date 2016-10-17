@@ -38,7 +38,7 @@
         </rowConstraints>
       </GridPane>
       <ProgressBar fx:id="progressBar" layoutX="230.0" layoutY="560.0" prefHeight="17.0" prefWidth="548.0" progress="0.0" visible="false" />
-      <!--  
+      <!--
       <MenuBar layoutX="3.0" layoutY="2.0" prefHeight="24.0" prefWidth="1000.0">
         <menus>
           <Menu mnemonicParsing="false" text="Settings">
@@ -48,7 +48,7 @@
           </Menu>
         </menus>
       </MenuBar>
-      -->
+     -->
       <Button id="runBtn" layoutX="250.0" layoutY="520.0" mnemonicParsing="false" onAction="#checker" text="Run" />
    </children>
 </Pane>

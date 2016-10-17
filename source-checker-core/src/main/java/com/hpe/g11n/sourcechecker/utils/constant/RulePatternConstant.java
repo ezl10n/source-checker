@@ -19,6 +19,6 @@ public class RulePatternConstant {
 	 public static final String STRINGMIXED_1 ="^[A-Za-z]+[\\.|\\,|\\:|\\'|\\\"|\\?|\\/|\\$|\\*|\\@|\\#|\\!]+[A-Za-z]+.?$";
 	 public static final String STRINGMIXED_2 ="[\\.|\\,|\\:|\\'|\\\"|\\?|\\/|\\$|\\*|\\@|\\#|\\!]+[A-Za-z]+[[\\.|\\,|\\:|\\'|\\\"|\\?|\\/|\\$|\\*|\\@|\\#|\\!]+[A-Za-z]+]*.?$";
 	 public static final String NUMBER ="[0-9]+$|^-[0-9]+[\\.][0-9]+$|[0-9]+[\\.][0-9]+$";
-	 public static final String BRACKET_CHECK_RULE=".*('\\{\\s?(\\d+)\\s?.?').*|.*('.?\\s?(\\d+)\\s?\\}').*|.*('\\[\\s?(\\d+)\\s?.?').*|.*('.?\\s?(\\d+)\\s?\\]').*";
+	 public static final String BRACKET_CHECK_RULE=".*(\\{\\s?(\\d+)\\s?.?).*|.*(.?\\s?(\\d+)\\s?\\}).*|.*(\\[\\s?(\\d+)\\s?.?).*|.*(.?\\s?(\\d+)\\s?\\]).*";
 	 
 }
