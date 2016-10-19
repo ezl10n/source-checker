@@ -206,8 +206,13 @@ public class ExcelPoiUtils {
 	    	summarySheet.autoSizeColumn((short)i);
 	    }
         for(int i=0;i<6;i++){
-        	detailSheet.autoSizeColumn((short)i);
-        	duplicatedDetailSheet.autoSizeColumn((short)i);
+        	if(i !=2 && i !=3 && i!=5){
+            	detailSheet.autoSizeColumn((short)i);
+            	duplicatedDetailSheet.autoSizeColumn((short)i);
+        	}else{
+            	detailSheet.setColumnWidth(i, 100*256);
+            	duplicatedDetailSheet.setColumnWidth(i, 100*256);
+        	}
 	    }
         // 写入数据
         wb.write(fos);

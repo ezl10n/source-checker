@@ -31,4 +31,8 @@ public class Constant {
    public static final String BRACKET ="Bracket";
    public static final String UNTRANSLATABLE ="Untranslatable";
    public static final String HTML ="Html";
+   
+   public static final String CONCATENATION_STRING_1 ="hh:mm:ss a";
+   public static final String CONCATENATION_STRING_2 ="h:mm a";
+   public static final String CONCATENATION_STRING_3 ="EEE MMM d,yyy hh:mm a";
 }

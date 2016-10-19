@@ -32,12 +32,10 @@ import com.typesafe.config.Config;
 @RuleData(id="ConcatenationCheckRule",name=Constant.CONCATENATION,order=1,ruleClass = ConcatenationCheckRule.class)
 public class ConcatenationCheckRule implements IRule{
 	private static final String KEY_WORDS="psl.psl-generate-sourcechecker-report.concatenation.key-words";
-	private static final String VARIABLES="psl.psl-generate-sourcechecker-report.concatenation.variables";
 	private static final String CONCATENATION_WHITELIST="psl.source-checker-white-list.Concatenation";
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	private List<String> keywords;
-	private List<String> variables;
 	private List<String> whitelist;
 	private List<ReportData> report =null;
 	private Config config;
@@ -55,14 +53,12 @@ public class ConcatenationCheckRule implements IRule{
 	public void setConfig(Config config) {
 		this.config=config;
 		keywords=this.config.getStringList(KEY_WORDS);
-		variables=this.config.getStringList(VARIABLES);
 		whitelist=this.config.getStringList(CONCATENATION_WHITELIST);
 	}
 
 	@Override
 	public boolean check(List<InputData> lstIdo) {
 		Preconditions.checkNotNull(keywords);
-		Preconditions.checkNotNull(variables);
 		Preconditions.checkNotNull(lstIdo);
 		boolean flag = false;
 		report = new ArrayList<ReportData>();
@@ -80,9 +76,32 @@ public class ConcatenationCheckRule implements IRule{
 			totalWordCount = totalWordCount + StringUtil.getCountWords(ido.getSourceString());
 			if(whitelist !=null && whitelist.size()>0){
 				if(!StringUtil.isWhiteList(whitelist,ido.getSourceString())){
+					if(StringUtil.pattern(ido.getSourceString(),RulePatternConstant.CONCATENATION_CHECK_RULE_2)){
+						hitStrCount++;
+						int hs = hashSet.size();
+						hashSet.add(ido.getSourceString());
+						if(hs == hashSet.size()){
+							duplicatedStringCount++;
+							duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+						}else{
+							validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+						}
+						hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
+						String message =".";
+						if(ido.getSourceString().endsWith(",")){
+							message =",";
+						}
+						report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+								Constant.CONCATENATION,"Warning: ending with \"" + message + "\". Possible concatenated strings.",ido.getFileVersion(),null));
+						flag = true;
+						continue;
+					}
 					for(String k : keywords) {
-						if (ido.getSourceString().startsWith(k.trim().concat(" ")) 
-								|| ido.getSourceString().endsWith(" ".concat(k.trim()))
+						if ((ido.getSourceString().startsWith(k.trim().concat(" ")) 
+								|| ido.getSourceString().endsWith(" ".concat(k.trim())))
+								&& (!ido.getSourceString().endsWith(Constant.CONCATENATION_STRING_1)
+								&& !ido.getSourceString().endsWith(Constant.CONCATENATION_STRING_2)
+								&& !ido.getSourceString().endsWith(Constant.CONCATENATION_STRING_3))
 								){
 							hitStrCount++;
 							int hs = hashSet.size();
@@ -100,9 +119,9 @@ public class ConcatenationCheckRule implements IRule{
 								log.debug("ConcatenationCheckRule, value:"+ ido.getSourceString() +" start or end with:+"+k);
 							}
 							flag = true;
-							break;
+							continue;
 						}
-						if (StringUtil.pattern(ido.getSourceString(),RulePatternConstant.CONCATENATION_CHECK_RULE)
+						if (StringUtil.pattern(ido.getSourceString(),RulePatternConstant.CONCATENATION_CHECK_RULE_1)
 								&& ido.getSourceString().toLowerCase().equals(k)) {
 							hitStrCount++;
 							int hs = hashSet.size();
@@ -120,30 +139,34 @@ public class ConcatenationCheckRule implements IRule{
 							break;
 						}
 					}
-					for(String v:variables){
-						if (ido.getSourceString().contains(v.trim().toLowerCase())
-								|| ido.getSourceString().contains(v.trim().toUpperCase())) {
-							hitStrCount++;
-							int hs = hashSet.size();
-							hashSet.add(ido.getSourceString());
-							if(hs == hashSet.size()){
-								duplicatedStringCount++;
-								duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-							}else{
-								validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-							}
-							hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
-							report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-									Constant.CONCATENATION,"Warning: composed of variables \""+v.trim()+"\". Possible concatenated strings.",ido.getFileVersion(),null));
-							flag = true;
-							break;
-						}
-					}
 				}
 			}else{
+				if(StringUtil.pattern(ido.getSourceString(),RulePatternConstant.CONCATENATION_CHECK_RULE_2)){
+					hitStrCount++;
+					int hs = hashSet.size();
+					hashSet.add(ido.getSourceString());
+					if(hs == hashSet.size()){
+						duplicatedStringCount++;
+						duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+					}else{
+						validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+					}
+					hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
+					String message =".";
+					if(ido.getSourceString().endsWith(",")){
+						message =",";
+					}
+					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+							Constant.CONCATENATION,"Warning: ending with \"" + message + "\". Possible concatenated strings.",ido.getFileVersion(),null));
+					flag = true;
+					break;
+				}
 				for(String k : keywords) {
-					if (ido.getSourceString().startsWith(k.trim().concat(" ")) 
-							|| ido.getSourceString().endsWith(" ".concat(k.trim()))
+					if ((ido.getSourceString().startsWith(k.trim().concat(" ")) 
+							|| ido.getSourceString().endsWith(" ".concat(k.trim())))
+							&& (!ido.getSourceString().endsWith(Constant.CONCATENATION_STRING_1)
+							&& !ido.getSourceString().endsWith(Constant.CONCATENATION_STRING_2)
+							&& !ido.getSourceString().endsWith(Constant.CONCATENATION_STRING_3))
 							){
 						hitStrCount++;
 						int hs = hashSet.size();
@@ -163,7 +186,7 @@ public class ConcatenationCheckRule implements IRule{
 						flag = true;
 						break;
 					}
-					if (StringUtil.pattern(ido.getSourceString(),RulePatternConstant.CONCATENATION_CHECK_RULE)
+					if (StringUtil.pattern(ido.getSourceString(),RulePatternConstant.CONCATENATION_CHECK_RULE_2)
 							&& ido.getSourceString().toLowerCase().equals(k)) {
 						hitStrCount++;
 						int hs = hashSet.size();
@@ -177,25 +200,6 @@ public class ConcatenationCheckRule implements IRule{
 						hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
 						report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
 								Constant.CONCATENATION,"Warning: with the first letter in capital \""+ido.getSourceString()+"\". Possible concatenated strings.",ido.getFileVersion(),null));
-						flag = true;
-						break;
-					}
-				}
-				for(String v:variables){
-					if (ido.getSourceString().contains(v.trim().toLowerCase())
-							|| ido.getSourceString().contains(v.trim().toUpperCase())) {
-						hitStrCount++;
-						int hs = hashSet.size();
-						hashSet.add(ido.getSourceString());
-						if(hs == hashSet.size()){
-							duplicatedStringCount++;
-							duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-						}else{
-							validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-						}
-						hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
-						report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-								Constant.CONCATENATION,"Warning: composed of variables \""+v.trim()+"\". Possible concatenated strings.",ido.getFileVersion(),null));
 						flag = true;
 						break;
 					}

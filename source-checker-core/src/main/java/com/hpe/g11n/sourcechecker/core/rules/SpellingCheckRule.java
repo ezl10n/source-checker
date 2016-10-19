@@ -33,8 +33,10 @@ import com.typesafe.config.Config;
 @RuleData(id="SpellingCheckRule",name=Constant.SPELLING,order=9,ruleClass = SpellingCheckRule.class)
 public class SpellingCheckRule implements IRule{
 	private static final String KEY_WORDS = "psl.psl-generate-sourcechecker-report.date-time-format";
+	private static final String SPELLING = "psl.psl-generate-sourcechecker-report.spelling";
 	private static final String SPELLING_WHITELIST="psl.source-checker-white-list.Spelling";
 	private List<String> keywords;
+	private List<String> spelling;
 	private List<String> whitelist;
 	private Config config;
 
@@ -52,6 +54,7 @@ public class SpellingCheckRule implements IRule{
 	public void setConfig(Config config) {
 		this.config = config;
 		keywords = this.config.getStringList(KEY_WORDS);
+		spelling = this.config.getStringList(SPELLING);
 		whitelist = this.config.getStringList(SPELLING_WHITELIST);
 	}
 	
@@ -85,12 +88,43 @@ public class SpellingCheckRule implements IRule{
 						String suggestion="";
 						for(String word:words){
 							word = StringUtil.getStringWithChar(word);
-							if(!isPass(word) 
-									&& StringUtil.isRightWord(word) 
-									&& !spellingCheck.isCorrect(word)
-									){
-								wrongWords = wrongWords + word + ";";
-								suggestion = suggestion + spellingCheck.getSuggestionsLessThanThree(word) + ";";
+							if(!isPass(word) && StringUtil.isRightWord(word) && !spellingCheck.isCorrect(word)){
+								if(!isSpecialWord(word)){
+									if(!word.contains("-")){
+										wrongWords = wrongWords + word + ";";
+										suggestion = suggestion + spellingCheck.getSuggestionsLessThanThree(word) + ";";
+									}else{
+										String[] newWords = word.split("-");
+										wrongWords = wrongWords + word + ";";
+										if(spellingCheck.isCorrect(newWords[0]) && !spellingCheck.isCorrect(newWords[1])){
+											suggestion = suggestion + spellingCheck.getSuggestionsLessThanThree(newWords[1]) + ";";	
+										}else if(!spellingCheck.isCorrect(newWords[0]) && spellingCheck.isCorrect(newWords[1])){
+											suggestion = suggestion + spellingCheck.getSuggestionsLessThanThree(newWords[0]) + ";";
+										}else if(!spellingCheck.isCorrect(newWords[0]) && !spellingCheck.isCorrect(newWords[1])){
+											suggestion = suggestion + "NA;";
+										}
+									}
+									
+								}else{
+									if(word.contains("-")){
+										String[] newWords = word.split("-");
+										if(!spellingCheck.isCorrect(newWords[1])){
+											wrongWords = wrongWords + word + ";";
+											suggestion = suggestion + spellingCheck.getSuggestionsLessThanThree(newWords[1]) + ";";	
+										}
+									}else{
+										String newWord="";
+										for(String s:spelling){
+											if(word.startsWith(s)){
+												newWord = word.replace(s,"");
+												if(!spellingCheck.isCorrect(newWord)){
+													wrongWords = wrongWords + word + ";";
+													suggestion = suggestion + spellingCheck.getSuggestionsLessThanThree(newWord) + ";";
+												}
+											}
+										}
+									}
+								}
 							}
 						}
 						if (wrongWords !=null && !"".equals(wrongWords)) {
@@ -116,12 +150,43 @@ public class SpellingCheckRule implements IRule{
 					String suggestion="";
 					for(String word:words){
 						word = StringUtil.getStringWithChar(word);
-						if(!isPass(word) 
-								&& StringUtil.isRightWord(word) 
-								&& !spellingCheck.isCorrect(word)
-								){
-							wrongWords = wrongWords + word + ";";
-							suggestion = suggestion + spellingCheck.getSuggestionsLessThanThree(word) + ";";
+						if(!isPass(word) && StringUtil.isRightWord(word) && !spellingCheck.isCorrect(word)){
+							if(!isSpecialWord(word)){
+								if(!word.contains("-")){
+									wrongWords = wrongWords + word + ";";
+									suggestion = suggestion + spellingCheck.getSuggestionsLessThanThree(word) + ";";
+								}else{
+									String[] newWords = word.split("-");
+									wrongWords = wrongWords + word + ";";
+									if(spellingCheck.isCorrect(newWords[0]) && !spellingCheck.isCorrect(newWords[1])){
+										suggestion = suggestion + spellingCheck.getSuggestionsLessThanThree(newWords[1]) + ";";	
+									}else if(!spellingCheck.isCorrect(newWords[0]) && spellingCheck.isCorrect(newWords[1])){
+										suggestion = suggestion + spellingCheck.getSuggestionsLessThanThree(newWords[0]) + ";";
+									}else if(!spellingCheck.isCorrect(newWords[0]) && !spellingCheck.isCorrect(newWords[1])){
+										suggestion = suggestion + "NA;";
+									}
+								}
+								
+							}else{
+								if(word.contains("-")){
+									String[] newWords = word.split("-");
+									if(!spellingCheck.isCorrect(newWords[1])){
+										wrongWords = wrongWords + word + ";";
+										suggestion = suggestion + spellingCheck.getSuggestionsLessThanThree(newWords[1]) + ";";	
+									}
+								}else{
+									String newWord="";
+									for(String s:spelling){
+										if(word.startsWith(s)){
+											newWord = word.replace(s,"");
+											if(!spellingCheck.isCorrect(newWord)){
+												wrongWords = wrongWords + word + ";";
+												suggestion = suggestion + spellingCheck.getSuggestionsLessThanThree(newWord) + ";";
+											}
+										}
+									}
+								}
+							}
 						}
 					}
 					if (wrongWords !=null && !"".equals(wrongWords)) {
@@ -173,5 +238,25 @@ public class SpellingCheckRule implements IRule{
 			return true;
 		}
 		return false;
+	}
+	
+	private boolean isSpecialWord(String word){
+		boolean flag =false;
+		if(word.contains("-")){
+			for(String s:spelling){
+				if(word.split("-")[0].equals(s)){
+					flag =true;
+					return flag;
+				}
+			}
+		}else{
+			for(String s:spelling){
+				if(word.startsWith(s)){
+					flag =true;
+					return flag;
+				}
+			}
+		}
+		return flag;
 	}
 }
