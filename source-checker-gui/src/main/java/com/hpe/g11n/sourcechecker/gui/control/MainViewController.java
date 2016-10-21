@@ -255,6 +255,14 @@ public class MainViewController extends BaseController  implements Initializable
 			});
 			return;
 		}
+		if(state.getSelectionModel().selectedItemProperty().getValue() == null){
+			Alert alert=new Alert(Alert.AlertType.ERROR,"Please choose the state!");
+			alert.setHeaderText("Error:");
+			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
+				return;
+			});
+			return;
+		}
 		if(projectVersion.getText() == null || "".equals(projectVersion.getText())){
 			Alert alert=new Alert(Alert.AlertType.ERROR,"Project version is not empty!");
 			alert.setHeaderText("Error:");
@@ -390,7 +398,6 @@ public class MainViewController extends BaseController  implements Initializable
 //				break;
 //			}
 //		}
-		
 		String s = state.getSelectionModel().selectedItemProperty().getValue().toString();
 		task = new SourceCheckerTask();
 		injector.injectMembers(task);

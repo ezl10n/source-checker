@@ -229,7 +229,12 @@ public class SourceCheckerTask extends Task<Void> {
 			for(ReportData rd : lstReport){
 				if (rd.getErrorType() != null && errorType.equals(rd.getErrorType())) {
 					int size = setUnique.size();
-					setUnique.add(rd.getSourceString());
+					if(rd.getErrorType().equals(Constant.SPELLING)
+							|| rd.getErrorType().equals(Constant.CAMELCASE)){
+						setUnique.add(rd.getDetails());
+					}else{
+						setUnique.add(rd.getSourceString());	
+					}
 					if(setUnique.size()>size){
 						List<String> lstUniqueDetail = new ArrayList<String>();
 						lstUniqueDetail.add(rd.getLpuName());
