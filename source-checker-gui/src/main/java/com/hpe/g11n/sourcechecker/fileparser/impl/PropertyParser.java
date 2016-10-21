@@ -23,7 +23,7 @@ public class PropertyParser extends BaseParser{
 
 	InputData ido;
 	List<InputData> lstIdo;
-	private List<InputData> parser(String filePath){
+	private List<InputData> parser(String filePath,String state){
 		lstIdo = new ArrayList<InputData>();
 		try {
 			FileReader reader = new FileReader(filePath);
@@ -57,8 +57,8 @@ public class PropertyParser extends BaseParser{
 		return source.endsWith(".properties");
 	}
 	@Override
-	public List<InputData> getInputData(String source){
-		return parser(source);
+	public List<InputData> getInputData(String source,String state){
+		return parser(source,state);
 	}
 	public String getName(String path) {
 		int index = path.lastIndexOf("\\");

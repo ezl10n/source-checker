@@ -11,7 +11,7 @@ import org.junit.Test;
 public class CommandLineApplicationTest {
     @Test
     public void cliTest() {
-        String[] args = {"-i", "C:\\tmp\\psl-generate-sorucechecker-report\\RC_9.50_SW_source_scoring.lpu", "-o", "C:\\tmp\\psl-generate-sorucechecker-report", "-r", "0,1,2,3"};
+        String[] args = {"-p","LR","-v","V1.0","-s","All","-i", "C:\\tmp\\psl-generate-sorucechecker-report\\RC_9.50_SW_source_scoring.lpu", "-o", "C:\\tmp\\psl-generate-sorucechecker-report", "-r", "0,1,2,3"};
         CommandLineApplication.main(args);
     }
 }

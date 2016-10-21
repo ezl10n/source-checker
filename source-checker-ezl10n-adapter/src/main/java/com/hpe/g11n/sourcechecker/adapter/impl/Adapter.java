@@ -20,13 +20,13 @@ public class Adapter implements IAdapter {
     }
 
     @Override
-	public void execute(String sourcePath, String targetPath, String rules) {
+	public void execute(String projectName,String projectVersion,String state,String sourcePath, String targetPath, String rules) {
 		String[] rule =rules.split(",");
 		List<Integer> lst = new ArrayList<Integer>();
 		for(String r:rule){
 			lst.add(Integer.valueOf(r));
 		}
-		sourceChecker.setUp(sourcePath,targetPath,lst);
+		sourceChecker.setUp(projectName,projectVersion,state,sourcePath,targetPath,lst);
 	    	try {
 	    		sourceChecker.call();
 			} catch (Exception e) {

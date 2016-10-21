@@ -16,6 +16,7 @@ import com.hp.g11n.sdl.psl.interop.core.enums.PslState;
 import com.hp.g11n.sdl.psl.interop.core.impl.impl.PassoloApp;
 import com.hpe.g11n.sourcechecker.fileparser.BaseParser;
 import com.hpe.g11n.sourcechecker.pojo.InputData;
+import com.hpe.g11n.sourcechecker.utils.constant.Constant;
 
 /**
  * 
@@ -29,16 +30,13 @@ public class LPUFileParser extends BaseParser {
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	InputData ido;
-	private static final String STATE = "psl.psl-generate-sourcechecker-report.state";
-	private List<String> lstState;
 	private IPassoloApp app;
 	private IPslProject project;
 	List<InputData> lstIdo;
 
-	private List<InputData> parser(String filePath) {
+	private List<InputData> parser(String filePath,String state) {
 		long start = System.currentTimeMillis();
 		lstIdo = new ArrayList<InputData>();
-		lstState = config.getStringList(STATE);
 		app = PassoloApp.getInstance();
 		project = app.open(filePath);
 		long startTime = System.currentTimeMillis();
@@ -53,7 +51,7 @@ public class LPUFileParser extends BaseParser {
 					String sourceFileName = sourceLists.toList().get(i)
 							.getSourceFile();
 
-					lstIdo = getInputData(filePath, sourceFileName,
+					lstIdo = getInputData(filePath, state, sourceFileName,
 							lstSourceString);
 				}
 			}else{
@@ -66,7 +64,7 @@ public class LPUFileParser extends BaseParser {
 
 					service.execute(new Runnable() {
 						public void run() {
-							lstIdo = getInputData(filePath, sourceFileName,
+							lstIdo = getInputData(filePath, state, sourceFileName,
 									lstSourceString);
 						}
 					});
@@ -99,8 +97,8 @@ public class LPUFileParser extends BaseParser {
 	}
 
 	@Override
-	public List<InputData> getInputData(String source) {
-		return parser(source);
+	public List<InputData> getInputData(String source,String state) {
+		return parser(source,state);
 	}
 
 	public String getName(String path) {
@@ -108,10 +106,10 @@ public class LPUFileParser extends BaseParser {
 		return path.substring(index+1, path.length());
 	}
 
-	public synchronized List<InputData> getInputData(String filePath,
+	public synchronized List<InputData> getInputData(String filePath,String state,
 			String sourceFile, List<IPslSourceString> lstSourceString) {
 		for (IPslSourceString sourceString : lstSourceString) {
-			if (lstState != null && lstState.size() > 0) {
+			if (state.equals(Constant.STATE_NEW_CHANGED)) {
 				if (isNewOrChanged(sourceString)) {
 					ido = new InputData();
 					ido.setLpuName(getName(filePath));

@@ -41,7 +41,8 @@ public class CommandLineApplication {
         }
     }
     public void execute(){
-    	task.setUp(options.getSourceUrl(),options.getOutputUrl(),options.getSelectRules());
+    	task.setUp(options.getProjectName(),options.getProjectVersion(),options.getState(),
+    			options.getSourceUrl(),options.getOutputUrl(),options.getSelectRules());
     	try {
 			task.call();
 		} catch (Exception e) {

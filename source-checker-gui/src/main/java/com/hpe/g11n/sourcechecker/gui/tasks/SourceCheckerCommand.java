@@ -36,6 +36,9 @@ import com.hpe.g11n.sourcechecker.xml.XMLHandler;
  */
 public class SourceCheckerCommand{
 	private final Logger log = LoggerFactory.getLogger(getClass());
+	private String projectName;
+	private String projectVersion;
+	private String state;
 	private String source;
 	private String report;
 	private List<Integer> rulesCheckedIdx;
@@ -48,10 +51,13 @@ public class SourceCheckerCommand{
 	int totalProgress = 0;
 	int totalCount = 0;
 
-	public void setUp(String sourceDir, String reportDir,
-			List<Integer> rulesCheckedIdx) {
+	public void setUp(String projectName, String projectVersion,String state,
+			String sourceDir, String reportDir,List<Integer> rulesCheckedIdx) {
+		this.projectName = projectName;
+		this.projectVersion = projectVersion;
+		this.state = state;
 		this.source = sourceDir;
-		this.report = reportDir+"/";
+		this.report = reportDir;
 		this.rulesCheckedIdx = rulesCheckedIdx;
 		checkReport.build(rulesCheckedIdx);
 	}
@@ -66,7 +72,7 @@ public class SourceCheckerCommand{
 		Date startScanTime = new Date();
 		String[] sourcePaths = source.split(";");
 		for (String sourcePath : sourcePaths) {
-            lstIdo.addAll(fileParser.parser(sourcePath));
+            lstIdo.addAll(fileParser.parser(sourcePath,state));
 		}
 		checkReport.check(lstIdo,null);
 		Date startEndTime = new Date();
@@ -75,7 +81,7 @@ public class SourceCheckerCommand{
 		sourceChecker.setLstReportData(lstReport);
 		
 		//create xml 
-		String dateFileName = dateUtil.format("YYYYMMddHHmmss",new Date());
+		String dateFileName = dateUtil.format("YYMMddHHmmss",new Date());
 		List<ReportDataCount> lstEndReportData = new ArrayList<ReportDataCount>();
 		Set<String> set = new HashSet<String>();
 		BigDecimal totalScore= new BigDecimal(0);
@@ -91,8 +97,8 @@ public class SourceCheckerCommand{
 		}
 		
 		Summary summary = new Summary();
-		summary.setProjectName("");//TODO get project name
-		summary.setReleaseVersion("");//TODO get project version
+		summary.setProjectName(projectName);
+		summary.setReleaseVersion(projectVersion);
 		summary.setScanStartTime(startScanTime);
 		summary.setScanEndTime(startEndTime);
 		summary.setTotalScore(totalScore);
@@ -101,11 +107,12 @@ public class SourceCheckerCommand{
 		
 		//create xml 
 		XMLHandler handler = new XMLHandler();
-		handler.createXML(report + "SourceChecker"
+		handler.createXML(report + projectName + "_" + projectVersion + "_"
 				+ dateFileName + ".xml", sourceChecker);
 		
 		//create excel 
-		String excelPath= report + "SourceChecker" + dateFileName + ".xls";
+		String excelPath= report + projectName + "_" + projectVersion + "_"
+		        + dateFileName + ".xls";
 		List<Excel> lstExcel = new ArrayList<Excel>();
 
 		Excel summaryExcel = new Excel();

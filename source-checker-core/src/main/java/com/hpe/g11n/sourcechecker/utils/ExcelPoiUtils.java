@@ -206,7 +206,7 @@ public class ExcelPoiUtils {
 	    	summarySheet.autoSizeColumn((short)i);
 	    }
         for(int i=0;i<6;i++){
-        	if(i !=2 && i !=3 && i!=5){
+        	if(i !=3 && i!=5){
             	detailSheet.autoSizeColumn((short)i);
             	duplicatedDetailSheet.autoSizeColumn((short)i);
         	}else{

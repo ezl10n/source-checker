@@ -19,7 +19,7 @@ public abstract class BaseParser {
 	
 	public abstract boolean isHandle(String source);
 
-	public abstract List<InputData> getInputData(String source);
+	public abstract List<InputData> getInputData(String source,String state);
 	
 	public void setConfig(Config config){
 		this.config=config;

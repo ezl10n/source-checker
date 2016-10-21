@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,6 +17,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -36,6 +38,7 @@ import com.hp.g11n.sdl.psl.interop.core.IPassoloApp;
 import com.hp.g11n.sdl.psl.interop.core.IPslProject;
 import com.hp.g11n.sdl.psl.interop.core.impl.impl.PassoloApp;
 import com.hpe.g11n.sourcechecker.gui.tasks.SourceCheckerTask;
+import com.hpe.g11n.sourcechecker.utils.constant.Constant;
 
 /**
  * Created by foy on 2016-08-05.
@@ -46,6 +49,15 @@ public class MainViewController extends BaseController  implements Initializable
 	@FXML
 	private Parent root;
 
+	@FXML
+	private TextField projectName;
+	
+	@FXML
+	private TextField projectVersion;
+	
+	@FXML
+	private ChoiceBox state;
+	
 	@FXML
 	private TextField sourceUrl;
 
@@ -79,6 +91,7 @@ public class MainViewController extends BaseController  implements Initializable
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		state.setItems(FXCollections.observableArrayList(Constant.STATE_ALL, Constant.STATE_NEW_CHANGED));
 		if (chooser == null) {
 			chooser = new DirectoryChooser();
 		}
@@ -234,6 +247,22 @@ public class MainViewController extends BaseController  implements Initializable
 			});
 			return;
 		}
+		if(projectName.getText() == null || "".equals(projectName.getText())){
+			Alert alert=new Alert(Alert.AlertType.ERROR,"Project name is not empty!");
+			alert.setHeaderText("Error:");
+			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
+				return;
+			});
+			return;
+		}
+		if(projectVersion.getText() == null || "".equals(projectVersion.getText())){
+			Alert alert=new Alert(Alert.AlertType.ERROR,"Project version is not empty!");
+			alert.setHeaderText("Error:");
+			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
+				return;
+			});
+			return;
+		}
 		
 		List<Integer> rules = new ArrayList<Integer>();
 		for (int i = 0; i < checkRules.getChildren().size(); i++) {
@@ -362,11 +391,12 @@ public class MainViewController extends BaseController  implements Initializable
 //			}
 //		}
 		
+		String s = state.getSelectionModel().selectedItemProperty().getValue().toString();
 		task = new SourceCheckerTask();
 		injector.injectMembers(task);
 		progressBar.setVisible(true);
 		progressBar.progressProperty().bind(task.progressProperty());
-		task.setUp(sourceUrl.getText(), outputUrl.getText() + "/", rules);
+		task.setUp(projectName.getText(),projectVersion.getText(),s,sourceUrl.getText(), outputUrl.getText() + "/", rules);
 		t = new Thread(task);
 		t.setDaemon(true);
 		t.start();
