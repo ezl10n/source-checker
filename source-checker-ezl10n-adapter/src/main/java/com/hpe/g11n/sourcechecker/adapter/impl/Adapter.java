@@ -2,6 +2,7 @@ package com.hpe.g11n.sourcechecker.adapter.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -20,7 +21,14 @@ public class Adapter implements IAdapter {
     }
 
     @Override
-	public void execute(String projectName,String projectVersion,String state,String sourcePath, String targetPath, String rules) {
+	public void execute(Map<String,String> paramMap) {
+    	
+    	String projectName=paramMap.get("-p");
+    	String projectVersion=paramMap.get("-v");
+    	String state=paramMap.get("-s");
+    	String sourcePath=paramMap.get("-i");
+    	String targetPath=paramMap.get("-o");
+    	String rules=paramMap.get("-r");
 		String[] rule =rules.split(",");
 		List<Integer> lst = new ArrayList<Integer>();
 		for(String r:rule){

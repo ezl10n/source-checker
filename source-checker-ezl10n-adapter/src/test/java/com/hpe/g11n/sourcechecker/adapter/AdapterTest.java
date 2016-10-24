@@ -1,5 +1,8 @@
 package com.hpe.g11n.sourcechecker.adapter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Test;
 
 import com.hpe.g11n.sourcechecker.adapter.impl.Adapter;
@@ -14,6 +17,13 @@ public class AdapterTest {
 		String sourcePath ="C:\\tmp\\psl-generate-sorucechecker-report\\ALI.lpu";
 		String targetPath ="C:\\tmp";
 		String rules ="0,1,2";
-		adapter.execute(projectName, projectVersion, state, sourcePath, targetPath, rules);
+		Map<String,String> paramMap = new HashMap<String,String>();
+		paramMap.put("-p", projectName);
+		paramMap.put("-v", projectVersion);
+		paramMap.put("-s", state);
+		paramMap.put("-i", sourcePath);
+		paramMap.put("-o", targetPath);
+		paramMap.put("-r", rules);
+		adapter.execute(paramMap);
 	}
 }

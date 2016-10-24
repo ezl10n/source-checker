@@ -101,7 +101,8 @@ public class ConcatenationCheckRule implements IRule{
 								|| ido.getSourceString().endsWith(" ".concat(k.trim())))
 								&& (!ido.getSourceString().endsWith(Constant.CONCATENATION_STRING_1)
 								&& !ido.getSourceString().endsWith(Constant.CONCATENATION_STRING_2)
-								&& !ido.getSourceString().endsWith(Constant.CONCATENATION_STRING_3))
+								&& !ido.getSourceString().endsWith(Constant.CONCATENATION_STRING_3)
+								&& !StringUtil.pattern(ido.getSourceString(),RulePatternConstant.CONCATENATION_CHECK_RULE_0))
 								){
 							hitStrCount++;
 							int hs = hashSet.size();
@@ -166,7 +167,8 @@ public class ConcatenationCheckRule implements IRule{
 							|| ido.getSourceString().endsWith(" ".concat(k.trim())))
 							&& (!ido.getSourceString().endsWith(Constant.CONCATENATION_STRING_1)
 							&& !ido.getSourceString().endsWith(Constant.CONCATENATION_STRING_2)
-							&& !ido.getSourceString().endsWith(Constant.CONCATENATION_STRING_3))
+							&& !ido.getSourceString().endsWith(Constant.CONCATENATION_STRING_3)
+							&& !StringUtil.pattern(ido.getSourceString(),RulePatternConstant.CONCATENATION_CHECK_RULE_0))
 							){
 						hitStrCount++;
 						int hs = hashSet.size();
@@ -186,7 +188,7 @@ public class ConcatenationCheckRule implements IRule{
 						flag = true;
 						break;
 					}
-					if (StringUtil.pattern(ido.getSourceString(),RulePatternConstant.CONCATENATION_CHECK_RULE_2)
+					if (StringUtil.pattern(ido.getSourceString(),RulePatternConstant.CONCATENATION_CHECK_RULE_1)
 							&& ido.getSourceString().toLowerCase().equals(k)) {
 						hitStrCount++;
 						int hs = hashSet.size();

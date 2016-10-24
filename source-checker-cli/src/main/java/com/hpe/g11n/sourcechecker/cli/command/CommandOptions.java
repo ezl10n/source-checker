@@ -183,7 +183,7 @@ public class CommandOptions {
 								+ "' is not directory or is not exist!");
 						continue;
 					}
-					setOutputUrl(outPath + "/");
+					setOutputUrl(outPath);
 
 					String selectRule = param[5].split(" ")[1];
 					String[] rule = selectRule.split(",");

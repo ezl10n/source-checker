@@ -230,7 +230,8 @@ public class SourceCheckerTask extends Task<Void> {
 				if (rd.getErrorType() != null && errorType.equals(rd.getErrorType())) {
 					int size = setUnique.size();
 					if(rd.getErrorType().equals(Constant.SPELLING)
-							|| rd.getErrorType().equals(Constant.CAMELCASE)){
+							|| rd.getErrorType().equals(Constant.CAMELCASE)
+							|| rd.getErrorType().equals(Constant.CAPITAL)){
 						setUnique.add(rd.getDetails());
 					}else{
 						setUnique.add(rd.getSourceString());	

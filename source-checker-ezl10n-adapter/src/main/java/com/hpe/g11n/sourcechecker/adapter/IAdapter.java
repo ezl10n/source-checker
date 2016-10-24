@@ -1,5 +1,7 @@
 package com.hpe.g11n.sourcechecker.adapter;
 
+import java.util.Map;
+
 public interface IAdapter {
-	public void execute(String projectName,String projectVersion,String state,String sourcePath, String targetPath, String rules);
+	public void execute(Map<String,String> paramMap);
 }

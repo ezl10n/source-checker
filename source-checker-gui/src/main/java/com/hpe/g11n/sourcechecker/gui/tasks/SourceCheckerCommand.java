@@ -57,7 +57,7 @@ public class SourceCheckerCommand{
 		this.projectVersion = projectVersion;
 		this.state = state;
 		this.source = sourceDir;
-		this.report = reportDir;
+		this.report = reportDir+"/";
 		this.rulesCheckedIdx = rulesCheckedIdx;
 		checkReport.build(rulesCheckedIdx);
 	}
