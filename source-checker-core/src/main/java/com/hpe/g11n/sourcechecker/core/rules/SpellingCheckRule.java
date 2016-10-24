@@ -115,8 +115,8 @@ public class SpellingCheckRule implements IRule{
 									}else{
 										String newWord="";
 										for(String s:spelling){
-											if(word.startsWith(s)){
-												newWord = word.replace(s,"");
+											if(word.toLowerCase().startsWith(s)){
+												newWord = word.toLowerCase().replace(s,"");
 												if(!spellingCheck.isCorrect(newWord)){
 													wrongWords = wrongWords + word + ";";
 													suggestion = suggestion + spellingCheck.getSuggestionsLessThanThree(newWord) + ";";
@@ -177,8 +177,8 @@ public class SpellingCheckRule implements IRule{
 								}else{
 									String newWord="";
 									for(String s:spelling){
-										if(word.startsWith(s)){
-											newWord = word.replace(s,"");
+										if(word.toLowerCase().startsWith(s)){
+											newWord = word.toLowerCase().replace(s,"");
 											if(!spellingCheck.isCorrect(newWord)){
 												wrongWords = wrongWords + word + ";";
 												suggestion = suggestion + spellingCheck.getSuggestionsLessThanThree(newWord) + ";";
@@ -241,6 +241,7 @@ public class SpellingCheckRule implements IRule{
 	}
 	
 	private boolean isSpecialWord(String word){
+		word =  word.toLowerCase();
 		boolean flag =false;
 		if(word.contains("-")){
 			for(String s:spelling){
