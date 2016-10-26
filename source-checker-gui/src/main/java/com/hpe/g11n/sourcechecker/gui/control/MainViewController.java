@@ -38,6 +38,7 @@ import com.hp.g11n.sdl.psl.interop.core.IPassoloApp;
 import com.hp.g11n.sdl.psl.interop.core.IPslProject;
 import com.hp.g11n.sdl.psl.interop.core.impl.impl.PassoloApp;
 import com.hpe.g11n.sourcechecker.gui.tasks.SourceCheckerTask;
+import com.hpe.g11n.sourcechecker.utils.StringUtil;
 import com.hpe.g11n.sourcechecker.utils.constant.Constant;
 
 /**
@@ -255,8 +256,8 @@ public class MainViewController extends BaseController  implements Initializable
 			});
 			return;
 		}
-		if(state.getSelectionModel().selectedItemProperty().getValue() == null){
-			Alert alert=new Alert(Alert.AlertType.ERROR,"Please choose the state!");
+		if(!StringUtil.formatRight(projectName.getText())){
+			Alert alert=new Alert(Alert.AlertType.ERROR,"Product's format is not correct, it is not be contains \"\\\",\"/\",\"<\" and \">\"!");
 			alert.setHeaderText("Error:");
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 				return;
@@ -271,7 +272,22 @@ public class MainViewController extends BaseController  implements Initializable
 			});
 			return;
 		}
-		
+		if(!StringUtil.formatRight(projectVersion.getText())){
+			Alert alert=new Alert(Alert.AlertType.ERROR,"Version's format is not correct, it is not be contains \"\\\",\"/\",\"<\" and \">\"!");
+			alert.setHeaderText("Error:");
+			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
+				return;
+			});
+			return;
+		}
+		if(state.getSelectionModel().selectedItemProperty().getValue() == null){
+			Alert alert=new Alert(Alert.AlertType.ERROR,"Please choose the state!");
+			alert.setHeaderText("Error:");
+			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
+				return;
+			});
+			return;
+		}
 		List<Integer> rules = new ArrayList<Integer>();
 		for (int i = 0; i < checkRules.getChildren().size(); i++) {
 			CheckBox cb = (CheckBox) checkRules.getChildren().get(i);

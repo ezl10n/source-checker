@@ -91,4 +91,15 @@ public class StringUtil {
 		}
 		return string;
 	}
+	
+	public static boolean formatRight(String string) {
+		if (string.contains("\\") 
+				|| string.contains("/")
+				|| string.contains("<") 
+				|| string.contains(">")) {
+			return false;
+		}else{
+			return true;
+		}
+	}
 }

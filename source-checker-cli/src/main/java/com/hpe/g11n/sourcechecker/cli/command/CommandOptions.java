@@ -13,6 +13,7 @@ import com.beust.jcommander.Parameter;
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.hpe.g11n.sourcechecker.utils.StringUtil;
 import com.hpe.g11n.sourcechecker.utils.constant.Constant;
 
 /**
@@ -140,6 +141,10 @@ public class CommandOptions {
 						logger.debug("project name is not empty!");
 						continue;
 					}
+					if(!StringUtil.formatRight(param[0].split(" ")[1])){
+						logger.debug("Product's format is not correct, it is not be contains \"\\\",\"/\",\"<\" and \">\"!");
+						continue;
+					}
 					
 					if(param[1].split(" ").length !=2 
 							|| param[1].split(" ")[1].equals("")
@@ -148,6 +153,10 @@ public class CommandOptions {
 						continue;
 					}
 					
+					if(!StringUtil.formatRight(param[1].split(" ")[1])){
+						logger.debug("Version's format is not correct, it is not be contains \"\\\",\"/\",\"<\" and \">\"!");
+						continue;
+					}
 					if(param[2].split(" ").length !=2 
 							|| param[2].split(" ")[1].equals("")
 							|| param[2].split(" ")[1] == null){
