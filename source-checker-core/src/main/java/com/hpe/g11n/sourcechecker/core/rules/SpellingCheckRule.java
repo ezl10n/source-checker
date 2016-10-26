@@ -240,6 +240,11 @@ public class SpellingCheckRule implements IRule{
 		return false;
 	}
 	
+	/**
+	 * check word is or not a special word
+	 * @param word
+	 * @return
+	 */
 	private boolean isSpecialWord(String word){
 		word =  word.toLowerCase();
 		boolean flag =false;

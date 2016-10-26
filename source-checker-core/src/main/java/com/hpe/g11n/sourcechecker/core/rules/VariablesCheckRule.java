@@ -179,6 +179,11 @@ public class VariablesCheckRule implements IRule{
 		return flag;
 	}
 	
+	/**
+	 * check the string is needed or not to checking
+	 * @param sourceString
+	 * @return
+	 */
 	public boolean isPass(String sourceString){
 		boolean flag = false;
 		String[] sourceStrings = sourceString.split(" ");
