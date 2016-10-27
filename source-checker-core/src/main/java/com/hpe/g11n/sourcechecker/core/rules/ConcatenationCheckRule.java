@@ -32,10 +32,12 @@ import com.typesafe.config.Config;
 @RuleData(id="ConcatenationCheckRule",name=Constant.CONCATENATION,order=1,ruleClass = ConcatenationCheckRule.class)
 public class ConcatenationCheckRule implements IRule{
 	private static final String KEY_WORDS="psl.psl-generate-sourcechecker-report.concatenation.key-words";
+	private static final String DATE_FORMAT_KEY_WORDS = "psl.psl-generate-sourcechecker-report.date-time-format";
 	private static final String CONCATENATION_WHITELIST="psl.source-checker-white-list.Concatenation";
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	private List<String> keywords;
+	private List<String> dateFormatKeywords;
 	private List<String> whitelist;
 	private List<ReportData> report =null;
 	private Config config;
@@ -53,12 +55,14 @@ public class ConcatenationCheckRule implements IRule{
 	public void setConfig(Config config) {
 		this.config=config;
 		keywords=this.config.getStringList(KEY_WORDS);
+		dateFormatKeywords = this.config.getStringList(DATE_FORMAT_KEY_WORDS);
 		whitelist=this.config.getStringList(CONCATENATION_WHITELIST);
 	}
 
 	@Override
 	public boolean check(List<InputData> lstIdo) {
 		Preconditions.checkNotNull(keywords);
+		Preconditions.checkNotNull(dateFormatKeywords);
 		Preconditions.checkNotNull(lstIdo);
 		boolean flag = false;
 		report = new ArrayList<ReportData>();
@@ -99,9 +103,7 @@ public class ConcatenationCheckRule implements IRule{
 					for(String k : keywords) {
 						if ((ido.getSourceString().startsWith(k.trim().concat(" ")) 
 								|| ido.getSourceString().endsWith(" ".concat(k.trim())))
-								&& (!ido.getSourceString().endsWith(Constant.CONCATENATION_STRING_1)
-								&& !ido.getSourceString().endsWith(Constant.CONCATENATION_STRING_2)
-								&& !ido.getSourceString().endsWith(Constant.CONCATENATION_STRING_3)
+								&& (!passDateFormat(ido.getSourceString())
 								&& !StringUtil.pattern(ido.getSourceString(),RulePatternConstant.CONCATENATION_CHECK_RULE_0))
 								){
 							hitStrCount++;
@@ -165,9 +167,7 @@ public class ConcatenationCheckRule implements IRule{
 				for(String k : keywords) {
 					if ((ido.getSourceString().startsWith(k.trim().concat(" ")) 
 							|| ido.getSourceString().endsWith(" ".concat(k.trim())))
-							&& (!ido.getSourceString().endsWith(Constant.CONCATENATION_STRING_1)
-							&& !ido.getSourceString().endsWith(Constant.CONCATENATION_STRING_2)
-							&& !ido.getSourceString().endsWith(Constant.CONCATENATION_STRING_3)
+							&& (!passDateFormat(ido.getSourceString())
 							&& !StringUtil.pattern(ido.getSourceString(),RulePatternConstant.CONCATENATION_CHECK_RULE_0))
 							){
 						hitStrCount++;
@@ -215,6 +215,18 @@ public class ConcatenationCheckRule implements IRule{
 		ReportDataCount reportDataCount = reportDataUtil.getEndReportData(Constant.CONCATENATION, hitStrCount,hitNewChangeWordCount,
 				duplicatedStringCount,duplicatedWordCount, hashSet.size(),validatedWordCount,lstIdo.size(), totalWordCount,new BigDecimal(0));
 		report.add(new ReportData(null,null,null,null,null,null,null,reportDataCount));
+		return flag;
+	}
+	
+	public boolean passDateFormat(String string){
+		boolean flag =false;
+		for(String date:dateFormatKeywords){
+			date = date + " a";
+			if(string.endsWith(date)){
+				flag =true;
+				break;
+			}
+		}
 		return flag;
 	}
 }
