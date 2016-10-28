@@ -65,6 +65,8 @@ public class SpellingCheckRule implements IRule{
 	@Override
 	public boolean check(List<InputData> lstIdo) {
 		Preconditions.checkNotNull(lstIdo);
+		Preconditions.checkNotNull(spelling);
+		Preconditions.checkNotNull(keywords);
 		boolean flag = false;
 		report = new ArrayList<ReportData>();
 		HashSet<String> hashSet = new HashSet<String>();
@@ -80,10 +82,12 @@ public class SpellingCheckRule implements IRule{
 			}
 			totalWordCount = totalWordCount + StringUtil.getCountWords(ido.getSourceString());
 			if(!StringUtil.untranstlatable(ido.getSourceString())
-				    && !StringUtil.haveTag(ido.getSourceString())){
+				    && !StringUtil.haveTag(ido.getSourceString())
+				    && !checkDateFormat(ido.getSourceString())){
 				if(whitelist !=null && whitelist.size()>0){
 					if(!StringUtil.isWhiteList(whitelist,ido.getSourceString())){
-						String[] words = StringUtil.getWordsFromString(ido.getSourceString());
+						String sourceString = getNoDateFormatString(ido.getSourceString());
+						String[] words = StringUtil.getWordsFromString(sourceString);
 						String wrongWords="";
 						String suggestion="";
 						for(String word:words){
@@ -145,7 +149,8 @@ public class SpellingCheckRule implements IRule{
 						}
 					}
 				}else{
-					String[] words = StringUtil.getWordsFromString(ido.getSourceString());
+					String sourceString = getNoDateFormatString(ido.getSourceString());
+					String[] words = StringUtil.getWordsFromString(sourceString);
 					String wrongWords="";
 					String suggestion="";
 					for(String word:words){
@@ -220,11 +225,20 @@ public class SpellingCheckRule implements IRule{
 	
 	private boolean checkDateFormat(String string){
 		for(String k : keywords) {
-			if (string.contains(k.trim())){
+			if (string.equals(k.trim())){
 				return true;
 			}
 		}
 		return false;
+	}
+	
+	private String getNoDateFormatString(String string){
+		for(String k : keywords) {
+			if (string.contains(k.trim())){
+				string = string.replaceAll(k.trim(), "");
+			}
+		}
+		return string;
 	}
 	
 	private boolean isPass(String word){
@@ -232,9 +246,7 @@ public class SpellingCheckRule implements IRule{
 				||(StringUtil.pattern(word.trim(),RulePatternConstant.CAMEL_CASE_CHECK_RULE))
 				||(StringUtil.pattern(word.trim(),RulePatternConstant.STRINGMIXED_1)
 						||StringUtil.pattern(word.trim(),RulePatternConstant.STRINGMIXED_2))
-			    || StringUtil.pattern(word.trim(), RulePatternConstant.NUMBER)
-			    || checkDateFormat(word.trim())
-			    ){
+			    || StringUtil.pattern(word.trim(), RulePatternConstant.NUMBER)){
 			return true;
 		}
 		return false;
