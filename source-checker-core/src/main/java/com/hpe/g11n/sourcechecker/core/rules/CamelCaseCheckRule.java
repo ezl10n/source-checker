@@ -18,6 +18,7 @@ import com.hpe.g11n.sourcechecker.pojo.ReportDataCount;
 import com.hpe.g11n.sourcechecker.utils.ReportDataUtil;
 import com.hpe.g11n.sourcechecker.utils.StringUtil;
 import com.hpe.g11n.sourcechecker.utils.constant.Constant;
+import com.hpe.g11n.sourcechecker.utils.constant.MessageConstant;
 import com.hpe.g11n.sourcechecker.utils.constant.RulePatternConstant;
 import com.typesafe.config.Config;
 
@@ -36,6 +37,8 @@ public class CamelCaseCheckRule implements IRule{
 	private List<ReportData> report =null;
 	private List<String> whitelist;
 	private Config config;
+	private Config projectConfig;
+	private List<String> projectWhitelist;
 
 	public CamelCaseCheckRule(){
 
@@ -52,8 +55,13 @@ public class CamelCaseCheckRule implements IRule{
 	}
 
 	@Override
-	public boolean check(List<InputData> lstIdo) {
+	public boolean check(List<InputData> lstIdo,String projectName) {
+		projectConfig = StringUtil.loadConfig(projectName);
+		projectWhitelist = projectConfig.getStringList(Constant.CAMELCASE_PATH);
+		whitelist.addAll(projectWhitelist);
+		whitelist = StringUtil.getUniqueList(whitelist);
 		Preconditions.checkNotNull(lstIdo);
+		Preconditions.checkNotNull(whitelist);
 		boolean flag = false;
 		report = new ArrayList<ReportData>();
 		HashSet<String> hashSet = new HashSet<String>();
@@ -83,7 +91,8 @@ public class CamelCaseCheckRule implements IRule{
 						}
 						hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
 						report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-								Constant.CAMELCASE,"Warning:camelcase \"" + ido.getSourceString() +"\" detected.",ido.getFileVersion(),null));
+								Constant.CAMELCASE,MessageConstant.CAMELCASE_MSG1_START + ido.getSourceString() + MessageConstant.CAMELCASE_MSG1_END,
+								ido.getFileVersion(),null));
 						flag = true;
 					}
 				}
@@ -101,7 +110,8 @@ public class CamelCaseCheckRule implements IRule{
 					}
 					hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
 					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-							Constant.CAMELCASE,"Warning:camelcase \"" + ido.getSourceString() +"\" detected.",ido.getFileVersion(),null));
+							Constant.CAMELCASE,MessageConstant.CAMELCASE_MSG1_START + ido.getSourceString() + MessageConstant.CAMELCASE_MSG1_END,
+							ido.getFileVersion(),null));
 					flag = true;
 				}
 			}

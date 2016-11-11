@@ -1,7 +1,16 @@
 package com.hpe.g11n.sourcechecker.utils;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -17,6 +26,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.hpe.g11n.sourcechecker.pojo.Excel;
+import com.hpe.g11n.sourcechecker.utils.constant.Constant;
 
 /**
  * 
@@ -67,7 +77,6 @@ public class ExcelPoiUtils {
         cell.setCellValue("HPE SourceChecker Result");
         row.setHeight((short) 1000);
         cell.setCellStyle(getMergeStyle(wb));
-        
         for(int j=0;j<summary.getValue().size();j++){
         	List<String> lstObj = summary.getValue().get(j);
         	for(int m=0;m<lstObj.size()-1;m++){
@@ -109,7 +118,6 @@ public class ExcelPoiUtils {
         		valueCell.setCellStyle(valueStyle);
         	}
         }
-        
       //write count header
         Row countRow= summarySheet.createRow(10);
         for(int k=0;k<count.getHeader().size();k++){
@@ -117,7 +125,6 @@ public class ExcelPoiUtils {
         	headCell.setCellValue(count.getHeader().get(k));
             headCell.setCellStyle(getHeaderStyle(wb));
         }
-        
         //write count value
         for(int i=0;i<count.getValue().size();i++){
         	List<String> lstObj = (List<String>)count.getValue().get(i);
@@ -133,7 +140,6 @@ public class ExcelPoiUtils {
         		
         	}
         }
-        
         //write detail
         Sheet detailSheet = wb.createSheet(detail.getName());
         //write detail header
@@ -143,31 +149,33 @@ public class ExcelPoiUtils {
         	headCell.setCellValue(detail.getHeader().get(k));
             headCell.setCellStyle(getHeaderStyle(wb));
         }
-        
         //write detail value
+        ExecutorService service = Executors.newFixedThreadPool(detail.getValue().size());
         for(int i=0;i<detail.getValue().size();i++){
         	List<String> lstObj = (List<String>)detail.getValue().get(i);
         	Row valueRow= detailSheet.createRow(i+1);
-    		for(int n =0;n<lstObj.size();n++){
-        		Cell valueCell = valueRow.createCell(n);
-        		if(n==lstObj.size()-1 && lstObj.get(n).contains("\"")){
-        			//设置红色高亮
-        			HSSFRichTextString ts= new HSSFRichTextString(lstObj.get(n));
-        			String[] str =lstObj.get(n).split("\"");
-        			int index = lstObj.get(n).lastIndexOf("\"");
-         		    ts.applyFont(0,str[0].length()+1,black);
-         		    ts.applyFont(str[0].length()+1,index,red);
-         		    
-         		    valueCell.setCellValue(ts);
-       			    valueCell.setCellStyle(redCellStyle);
-        		}else{
-        			valueCell.setCellValue(lstObj.get(n));
-        			valueCell.setCellStyle(blackCellStyle);
-        		}
-        	}	
-        	
+        	service.execute(new Runnable() {
+				public void run() {
+					for(int n =0;n<lstObj.size();n++){
+		        		Cell valueCell = valueRow.createCell(n);
+		        		if(n==lstObj.size()-1 && lstObj.get(n).contains("\"")){
+		        			//设置红色高亮
+		        			HSSFRichTextString ts= new HSSFRichTextString(lstObj.get(n));
+		        			String[] str =lstObj.get(n).split("\"");
+		        			int index = lstObj.get(n).lastIndexOf("\"");
+		         		    ts.applyFont(0,str[0].length()+1,black);
+		         		    ts.applyFont(str[0].length()+1,index,red);
+		         		    
+		         		    valueCell.setCellValue(ts);
+		       			    valueCell.setCellStyle(redCellStyle);
+		        		}else{
+		        			valueCell.setCellValue(lstObj.get(n));
+		        			valueCell.setCellStyle(blackCellStyle);
+		        		}
+		        	}
+				}
+			});
         }
-        
         //write duplicated detail
         Sheet duplicatedDetailSheet = wb.createSheet(duplicatedDetail.getName());
         //write duplicated header
@@ -177,29 +185,32 @@ public class ExcelPoiUtils {
         	headCell.setCellValue(duplicatedDetail.getHeader().get(k));
         	headCell.setCellStyle(getHeaderStyle(wb));
         }
-        
         //write duplicated value
+        ExecutorService service1 = Executors.newFixedThreadPool(duplicatedDetail.getValue().size());
         for(int i=0;i<duplicatedDetail.getValue().size();i++){
         	List<String> lstObj = (List<String>)duplicatedDetail.getValue().get(i);
         	Row valueRow= duplicatedDetailSheet.createRow(i+1);
-        	for(int n =0;n<lstObj.size();n++){
-        		Cell valueCell = valueRow.createCell(n);
-        		if(n==lstObj.size()-1 && lstObj.get(n).contains("\"")){
-        			//设置红色高亮
-        			HSSFRichTextString ts= new HSSFRichTextString(lstObj.get(n));
-        			String[] str =lstObj.get(n).split("\"");
-        			int index = lstObj.get(n).lastIndexOf("\"");
-        			ts.applyFont(0,str[0].length()+1,black);
-        			ts.applyFont(str[0].length()+1,index,red);
-        			
-        			valueCell.setCellValue(ts);
-        			valueCell.setCellStyle(redCellStyle);
-        		}else{
-        			valueCell.setCellValue(lstObj.get(n));
-        			valueCell.setCellStyle(blackCellStyle);
-        		}
-        	}	
-        	
+        	service1.execute(new Runnable() {
+				public void run() {
+					for(int n =0;n<lstObj.size();n++){
+		        		Cell valueCell = valueRow.createCell(n);
+		        		if(n==lstObj.size()-1 && lstObj.get(n).contains("\"")){
+		        			//设置红色高亮
+		        			HSSFRichTextString ts= new HSSFRichTextString(lstObj.get(n));
+		        			String[] str =lstObj.get(n).split("\"");
+		        			int index = lstObj.get(n).lastIndexOf("\"");
+		        			ts.applyFont(0,str[0].length()+1,black);
+		        			ts.applyFont(str[0].length()+1,index,red);
+		        			
+		        			valueCell.setCellValue(ts);
+		        			valueCell.setCellStyle(redCellStyle);
+		        		}else{
+		        			valueCell.setCellValue(lstObj.get(n));
+		        			valueCell.setCellStyle(blackCellStyle);
+		        		}
+		        	}	
+				}
+			});
         }
         
         for(int i=0;i<10;i++){
@@ -351,4 +362,89 @@ public class ExcelPoiUtils {
 		return valueStyle;
 	}
 	
+	public static Workbook getWorkbook(String filePath) {
+		Workbook wb = null;
+		String ext = filePath.substring(filePath.lastIndexOf("."));
+		try {
+			InputStream is = new FileInputStream(filePath);
+			if (".xls".equals(ext)) {
+				wb = new HSSFWorkbook(is);
+			} else if (".xlsx".equals(ext)) {
+				wb = new XSSFWorkbook(is);
+			} 
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return wb;
+	}
+	
+	public static Map<String,List<String>> getExcelContent(String filePath) {
+		Map<String,List<String>> resultMap = new HashMap<String,List<String>>();
+		Workbook wb = getWorkbook(filePath);
+		Sheet sheet = wb.getSheetAt(2);
+		int rowNum = sheet.getLastRowNum();
+		List<String> lstConcatenation = new ArrayList<String>();
+		List<String> lstCamelCase = new ArrayList<String>();
+		List<String> lstDateTimeFormat = new ArrayList<String>();
+		List<String> lstCapital = new ArrayList<String>();
+		List<String> lstSpelling = new ArrayList<String>();
+		List<String> lstCount= new ArrayList<String>();
+		for(int n=1;n<=rowNum;n++){
+			Row row = sheet.getRow(n);
+			int colNum = row.getPhysicalNumberOfCells();
+			String details="";
+			String errorType="";
+			String sourceString="";
+			for(int i=colNum-1;i>=0;i--){
+				Object obj = row.getCell(i);
+				if(i==6){
+					if(obj.toString().equals("")){
+						break;
+					}
+					if(!obj.toString().equals("") && !Constant.INVALID.equals(obj.toString().toLowerCase())){
+						lstCount.add(String.valueOf(i));
+						break;
+					}
+					lstCount.add(String.valueOf(i));
+				}
+				if(i==colNum-2){
+					details = StringUtil.getNewString(obj.toString());
+				}
+				if(i==colNum-3){
+					errorType = obj.toString();
+				}
+				if(i==colNum-4){
+					sourceString = obj.toString();
+				}
+				if(i==3){
+					break;
+				}
+			}
+			if(errorType.equals(Constant.CAMELCASE)){
+				lstCamelCase.add(sourceString);
+			}
+			if(errorType.equals(Constant.CONCATENATION)){
+				lstConcatenation.add(sourceString);
+			}
+			if(errorType.equals(Constant.DATETIMEFORMAT)){
+				lstDateTimeFormat.add(sourceString);
+			}
+			if(errorType.equals(Constant.CAPITAL)){
+				lstCapital.add(sourceString);
+			}
+			if(errorType.equals(Constant.SPELLING) && !details.contains(";")){
+				lstSpelling.add(details);
+			}
+			
+		}
+		resultMap.put("lstCamelCase", lstCamelCase);
+		resultMap.put("lstConcatenation", lstConcatenation);
+		resultMap.put("lstDateTimeFormat", lstDateTimeFormat);
+		resultMap.put("lstCapital", lstCapital);
+		resultMap.put("lstSpelling", lstSpelling);
+		resultMap.put("lstCount", lstCount);
+		return resultMap;
+	}
 }

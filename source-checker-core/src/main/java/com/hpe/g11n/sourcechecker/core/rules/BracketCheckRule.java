@@ -19,6 +19,7 @@ import com.hpe.g11n.sourcechecker.pojo.ReportDataCount;
 import com.hpe.g11n.sourcechecker.utils.ReportDataUtil;
 import com.hpe.g11n.sourcechecker.utils.StringUtil;
 import com.hpe.g11n.sourcechecker.utils.constant.Constant;
+import com.hpe.g11n.sourcechecker.utils.constant.MessageConstant;
 import com.hpe.g11n.sourcechecker.utils.constant.RulePatternConstant;
 import com.typesafe.config.Config;
 
@@ -51,7 +52,7 @@ public class BracketCheckRule implements IRule{
 		whitelist=this.config.getStringList(BRACKET_WHITELIST);
 	}
 	@Override
-	public boolean check(List<InputData> lstIdo) {
+	public boolean check(List<InputData> lstIdo,String projectName) {
 		Preconditions.checkNotNull(lstIdo);
 		report = new ArrayList<ReportData>();
 		HashSet<String> hashSet = new HashSet<String>();
@@ -102,7 +103,8 @@ public class BracketCheckRule implements IRule{
 									}
 									hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
 									report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-											Constant.BRACKET,"Warning:"+info+".",ido.getFileVersion(),null));
+											Constant.BRACKET,MessageConstant.BRACKET_MSG1_START + info + MessageConstant.BRACKET_MSG1_END,
+											ido.getFileVersion(),null));
 									flag = true;
 								}
 							}
@@ -139,7 +141,8 @@ public class BracketCheckRule implements IRule{
 								}
 								hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
 								report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-										Constant.BRACKET,"Warning:"+info+".",ido.getFileVersion(),null));
+										Constant.BRACKET,MessageConstant.BRACKET_MSG1_START + info + MessageConstant.BRACKET_MSG1_END,
+										ido.getFileVersion(),null));
 								flag = true;
 							}
 						}

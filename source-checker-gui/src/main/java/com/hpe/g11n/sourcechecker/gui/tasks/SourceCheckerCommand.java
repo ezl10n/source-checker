@@ -23,6 +23,7 @@ import com.hpe.g11n.sourcechecker.pojo.Summary;
 import com.hpe.g11n.sourcechecker.utils.DateUtil;
 import com.hpe.g11n.sourcechecker.utils.ExcelPoiUtils;
 import com.hpe.g11n.sourcechecker.utils.constant.Constant;
+import com.hpe.g11n.sourcechecker.utils.constant.MessageConstant;
 import com.hpe.g11n.sourcechecker.xml.XMLHandler;
 
 /**
@@ -74,7 +75,7 @@ public class SourceCheckerCommand{
 		for (String sourcePath : sourcePaths) {
             lstIdo.addAll(fileParser.parser(sourcePath,state));
 		}
-		checkReport.check(lstIdo,null);
+		checkReport.check(lstIdo,projectName,null);
 		Date startEndTime = new Date();
 		// report
 		List<ReportData> lstReport = checkReport.report();
@@ -194,6 +195,7 @@ public class SourceCheckerCommand{
 		lstDetailsHeader.add("ERROR TYPE");
 		lstDetailsHeader.add("DETAILS");
 		detail.setHeader(lstDetailsHeader);
+		lstDetailsHeader.add("COMMENT");
 		uniqueDetail.setHeader(lstDetailsHeader);
 		
 		List<List<String>> lstDetailsValue = new ArrayList<List<String>>();
@@ -250,6 +252,6 @@ public class SourceCheckerCommand{
 		lstExcel.add(uniqueDetail);
 		
 		ExcelPoiUtils.exportExcel(lstExcel,excelPath.toString());
-		log.info("All files are finished!");
+		log.info(MessageConstant.FINISH_MSG);
 	}
 }

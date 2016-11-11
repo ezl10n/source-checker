@@ -14,8 +14,16 @@ public class Constant {
    
    	// keywords configuring file path
    public static final String CONCATENATION_KEYWORDS_KEY="psl.psl-generate-sourcechecker-report.concatenation.key-words";
-   public static final String CONCATENATION_KEYWORDS_VARIABLES="psl.psl-generate-sourcechecker-report.concatenation.variables";
+   public static final String CONCATENATION_KEYWORDS_VARIABLES="psl.psl-generate-sourcechecker-report.many-variables";
    public static final String CAMELCASE_FORMAT="psl.psl-generate-sourcechecker-report.camel-case";
+   
+   
+   // project configuring file path
+   public static final String CONCATENATION_PATH="psl.source-checker-white-list.Concatenation";
+   public static final String CAMELCASE_PATH="psl.source-checker-white-list.CamelCase";
+   public static final String DATETIMEFORMAT_PATH="psl.source-checker-white-list.DateTimeFormat";
+   public static final String CAPITAL_PATH="psl.source-checker-white-list.Capital";
+   public static final String SPELLING_PATH="psl.source-checker-white-list.Spelling";
   
    // check rule name
    public static final String CAMELCASE ="CamelCase";
@@ -35,4 +43,5 @@ public class Constant {
    
    public static final String STATE_ALL="All";
    public static final String STATE_NEW_CHANGED="New & Changed";
+   public static final String INVALID="invalid";
 }

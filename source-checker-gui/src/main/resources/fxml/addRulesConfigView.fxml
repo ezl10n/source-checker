@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+   	  <Label layoutX="18.0" layoutY="61.0" text="*" textFill="#ff0303"/>
+      <Label layoutX="28.0" layoutY="61.0"  text="Project:" />
+      <Label layoutX="18.0" layoutY="142.0" text="Concatenation:" />
+      <Label layoutX="18.0" layoutY="222.0" text="CamelCase:" />
+      <Label layoutX="18.0" layoutY="310.0" text="DateTimeFormat:" />
+      <Label layoutX="18.0" layoutY="399.0" text="Capital:" />
+      <Label layoutX="18.0" layoutY="515.0" text="Spelling:" />
+      <TextField fx:id="project" layoutX="150.0" layoutY="57.0" prefHeight="23.0" prefWidth="293.0" />
+      <TextArea fx:id="concatenation" layoutX="150.0" layoutY="115.0" prefHeight="72.0" prefWidth="850.0" />
+      <TextArea fx:id="camelCase" layoutX="150.0" layoutY="199.0" prefHeight="72.0" prefWidth="850.0" />
+      <TextArea fx:id="dateTimeFormat" layoutX="150.0" layoutY="284.0" prefHeight="72.0" prefWidth="850.0" />
+      <TextArea fx:id="capital" layoutX="150.0" layoutY="371.0" prefHeight="72.0" prefWidth="850.0" />
+      <TextArea fx:id="spelling" layoutX="150.0" layoutY="480.0" prefHeight="72.0" prefWidth="850.0" />
+      <Button layoutX="342.0" layoutY="588.0" mnemonicParsing="false" onAction="#saveConfig" text="Save" />
+      <Button layoutX="463.0" layoutY="588.0" mnemonicParsing="false" onAction="#close" text="Cancel" />
+   </children>
+</Pane>

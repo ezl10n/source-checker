@@ -1,8 +1,17 @@
 package com.hpe.g11n.sourcechecker.utils;
 
+import java.io.File;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.hpe.g11n.sourcechecker.utils.constant.MessageConstant;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 
 /**
  * 
@@ -14,11 +23,6 @@ import java.util.regex.Pattern;
  */
 public class StringUtil {
 	public static int getCountWords(String string) {
-//		string = string.replaceAll("[^A-Za-z]", " ");
-//		string = string.replaceAll("\\s+", " ");
-//		String[] words;
-//		words = string.trim().split("\\s+");
-//		return words.length;
 		String[] words;
 		words = string.trim().split(" ");
 		return words.length;
@@ -101,5 +105,49 @@ public class StringUtil {
 		}else{
 			return true;
 		}
+	}
+	
+	public static String getChangedString(String string){
+		 string =string.replaceAll("\\[","").replaceAll("\\]","");
+		 if(string !=null && !"".equals(string)){
+			 String[] arrayStr = string.split(",");
+			 String newStr="";
+			 for(String temp:arrayStr){
+				 newStr = newStr +temp.trim() +",";
+			 }
+			 return newStr.trim().substring(0, newStr.length()-1);
+		 }else{
+			 return "";
+		 }
+	}
+	
+	public static Config loadConfig(String projectName){
+		String configName = "%1$s"+projectName+".conf";
+        String preFix=String.format(MessageConstant.PROJECT_CONFIG_PATH,File.separator);
+        String fileName=String.format(configName,File.separator);
+        String passInDir=System.getProperty(MessageConstant.PROJECT_CONFIG_DIR);
+        if(passInDir == null){
+            passInDir = System.getProperty(MessageConstant.USER_DIR);
+            fileName = preFix + fileName;
+        }
+        return ConfigFactory.parseFileAnySyntax(Paths.get(passInDir, fileName).toFile());
+    }
+	
+	public static String getNewString(String details){
+		if(details.contains("\"")){
+			String[] arrayStr = details.split("\"");
+			return arrayStr[1];
+		}else{
+			return "";
+		}
+		
+	}
+	
+	public static List<String> getUniqueList(List<String> list){
+	    Set<String> set=new HashSet<String>();         
+	    set.addAll(list);    
+	    List<String> lst = new ArrayList<String>();
+	    lst.addAll(set);
+	    return lst;
 	}
 }

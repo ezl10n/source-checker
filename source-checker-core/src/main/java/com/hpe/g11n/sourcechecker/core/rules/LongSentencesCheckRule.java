@@ -17,6 +17,7 @@ import com.hpe.g11n.sourcechecker.pojo.ReportDataCount;
 import com.hpe.g11n.sourcechecker.utils.ReportDataUtil;
 import com.hpe.g11n.sourcechecker.utils.StringUtil;
 import com.hpe.g11n.sourcechecker.utils.constant.Constant;
+import com.hpe.g11n.sourcechecker.utils.constant.MessageConstant;
 import com.hpe.g11n.sourcechecker.utils.constant.RulePatternConstant;
 import com.typesafe.config.Config;
 
@@ -48,7 +49,7 @@ public class LongSentencesCheckRule implements IRule{
 	}
 	
 	@Override
-	public boolean check(List<InputData> lstIdo) {
+	public boolean check(List<InputData> lstIdo,String projectName) {
 		Preconditions.checkNotNull(lstIdo);
 		boolean flag = false;
 		report = new ArrayList<ReportData>();
@@ -79,7 +80,7 @@ public class LongSentencesCheckRule implements IRule{
 				}
 				hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
 				report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-						Constant.LONGSENTENCES,"Warning:words number of \"" + ido.getSourceString() + "\" exceed a threshold.",ido.getFileVersion(),null));
+						Constant.LONGSENTENCES,MessageConstant.LONG_SENTENCES_MSG1,ido.getFileVersion(),null));
 				flag = true;
 			}
 			

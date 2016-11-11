@@ -43,7 +43,7 @@ public class StringsMixedCheckRule implements IRule{
 	}
 	
 	@Override
-	public boolean check(List<InputData> lstIdo) {
+	public boolean check(List<InputData> lstIdo,String projectName) {
 		Preconditions.checkNotNull(lstIdo);
 		boolean flag = false;
 		report = new ArrayList<ReportData>();

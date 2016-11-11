@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="185.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TextField fx:id="filePath" layoutX="40.0" layoutY="60.0" prefHeight="20.0" prefWidth="200.0" />
+	  <Button layoutX="400.0" layoutY="60.0" mnemonicParsing="false" onAction="#chooseExcel" text="Browse" />
+      <Button layoutX="110.0" layoutY="130.0" mnemonicParsing="false" onAction="#update" text="Import" />
+      <Button layoutX="230.0" layoutY="130.0" mnemonicParsing="false" onAction="#close" text="Cancel" />
+      
+   </children>
+</Pane>

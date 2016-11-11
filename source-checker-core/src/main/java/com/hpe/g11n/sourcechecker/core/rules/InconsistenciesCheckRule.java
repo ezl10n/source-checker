@@ -13,7 +13,7 @@ import com.typesafe.config.Config;
 public class InconsistenciesCheckRule implements IRule{
 
 	@Override
-	public boolean check(List<InputData> lstIdo) {
+	public boolean check(List<InputData> lstIdo,String projectName) {
 		// TODO Auto-generated method stub
 		return false;
 	}

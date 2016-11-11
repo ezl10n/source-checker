@@ -17,6 +17,7 @@ import com.hpe.g11n.sourcechecker.pojo.ReportDataCount;
 import com.hpe.g11n.sourcechecker.utils.ReportDataUtil;
 import com.hpe.g11n.sourcechecker.utils.StringUtil;
 import com.hpe.g11n.sourcechecker.utils.constant.Constant;
+import com.hpe.g11n.sourcechecker.utils.constant.MessageConstant;
 import com.typesafe.config.Config;
 
 /**
@@ -37,6 +38,8 @@ public class DateTimeFormatCheckRule implements IRule {
 	private List<ReportData> report = null;
 	private List<String> whitelist;
 	private Config config;
+	private Config projectConfig;
+	private List<String> projectWhitelist;
 
 	public DateTimeFormatCheckRule() {
 
@@ -55,10 +58,14 @@ public class DateTimeFormatCheckRule implements IRule {
 	}
 
 	@Override
-	public boolean check(List<InputData> lstIdo) {
-
+	public boolean check(List<InputData> lstIdo,String projectName) {
+		projectConfig = StringUtil.loadConfig(projectName);
+		projectWhitelist = projectConfig.getStringList(Constant.DATETIMEFORMAT_PATH);
+		whitelist.addAll(projectWhitelist);
+		whitelist = StringUtil.getUniqueList(whitelist);
 		Preconditions.checkNotNull(keywords);
 		Preconditions.checkNotNull(lstIdo);
+		Preconditions.checkNotNull(whitelist);
 		boolean flag = false;
 		report = new ArrayList<ReportData>();
 		HashSet<String> hashSet = new HashSet<String>();
@@ -88,7 +95,8 @@ public class DateTimeFormatCheckRule implements IRule {
 							}
 							hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
 							report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-									Constant.DATETIMEFORMAT,"Warning:date & time format keyword \""+k.trim()+"\" detected.",ido.getFileVersion(),null));
+									Constant.DATETIMEFORMAT,MessageConstant.DATE_TIME_FORMAT_MSG1_START + k.trim() + MessageConstant.DATE_TIME_FORMAT_MSG1_END,
+									ido.getFileVersion(),null));
 							if(log.isDebugEnabled()){
 								log.debug("ConcatenationCheckRule, value:"+ ido.getSourceString() +"detected.");
 							}
@@ -111,7 +119,8 @@ public class DateTimeFormatCheckRule implements IRule {
 						}
 						hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
 						report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-								Constant.DATETIMEFORMAT,"Warning:date & time format keyword \""+k.trim()+"\" detected.",ido.getFileVersion(),null));
+								Constant.DATETIMEFORMAT,MessageConstant.DATE_TIME_FORMAT_MSG1_START + k.trim() + MessageConstant.DATE_TIME_FORMAT_MSG1_END,
+								ido.getFileVersion(),null));
 						if(log.isDebugEnabled()){
 							log.debug("ConcatenationCheckRule, value:"+ ido.getSourceString() +"detected.");
 						}

@@ -114,9 +114,8 @@ public class CommandOptions {
 
 	public boolean validate() {
 		try {
-			// String s ="-i ddd;-o ddd;-r d,d,d";
 			System.out
-					.println("Please input the parameters (right format e.g. -p LR>-v V1.0>-s All>-i C:\\test.lpu>-o C:\\tmp>-r 0,1,2,3):");
+					.println("Please input the parameters (right format e.g. LR>V1.0>All>C:\\test.lpu>C:\\tmp>0,1,2,3):");
 			boolean flag = true;
 			while(flag){
 				BufferedReader in = new BufferedReader(new InputStreamReader(
@@ -135,49 +134,34 @@ public class CommandOptions {
 						continue;
 					}
 					
-					if(param[0].split(" ").length !=2 
-							|| param[0].split(" ")[1].equals("")
-							|| param[0].split(" ")[1] == null){
+					if(param[0].equals("") || param[0]== null){
 						logger.debug("project name is not empty!");
 						continue;
 					}
-					if(!StringUtil.formatRight(param[0].split(" ")[1])){
-						logger.debug("Product's format is not correct, it is not be contains \"\\\",\"/\",\"<\" and \">\"!");
+					if(!StringUtil.formatRight(param[0])){
+						logger.debug("Product's format is not correct, it is not be contains \"\\\",\"/\",\"<\",\">");
 						continue;
 					}
 					
-					if(param[1].split(" ").length !=2 
-							|| param[1].split(" ")[1].equals("")
-							|| param[1].split(" ")[1] == null){
+					if(param[1].equals("") || param[1]== null){
 						logger.debug("project version is not empty!");
 						continue;
 					}
 					
-					if(!StringUtil.formatRight(param[1].split(" ")[1])){
-						logger.debug("Version's format is not correct, it is not be contains \"\\\",\"/\",\"<\" and \">\"!");
+					if(!StringUtil.formatRight(param[1])){
+						logger.debug("Version's format is not correct, it is not be contains \"\\\",\"/\",\"<\",\">");
 						continue;
 					}
-					if(param[2].split(" ").length !=2 
-							|| param[2].split(" ")[1].equals("")
-							|| param[2].split(" ")[1] == null){
+					if(param[2].equals("") || param[2] == null){
 						logger.debug("State is not empty!");
 						continue;
 					}
-					if(!param[2].split(" ")[1].equals(Constant.STATE_ALL)
-							&& !param[2].split(" ")[1].equals(Constant.STATE_NEW_CHANGED)){
+					if(!param[2].equals(Constant.STATE_ALL)
+							&& !param[2].equals(Constant.STATE_NEW_CHANGED)){
 						logger.debug("The state right key words is \""+Constant.STATE_ALL +"\" or \"" + Constant.STATE_NEW_CHANGED + "\"");
 						continue;
 					}
-					if(param[3].split(" ").length !=2){
-						logger.debug("The path of source file is not right!");
-						continue;
-					}
-					
-					if(param[4].split(" ").length !=2){
-						logger.debug("The path of output folder is not right!");
-						continue;
-					}
-					String inPath = param[3].split(" ")[1];
+					String inPath = param[3];
 					File file_input = new File(inPath);
 					if (!file_input.isFile() || !file_input.exists()) {
 						logger.debug("'" + inPath + "' is not a file or is not exist!");
@@ -185,7 +169,7 @@ public class CommandOptions {
 					}
 					setSourceUrl(inPath);
 
-					String outPath = param[4].split(" ")[1];
+					String outPath = param[4];
 					File file_output = new File(outPath);
 					if (!file_output.isDirectory() || !file_output.exists()) {
 						logger.debug("'" + outPath
@@ -194,7 +178,7 @@ public class CommandOptions {
 					}
 					setOutputUrl(outPath);
 
-					String selectRule = param[5].split(" ")[1];
+					String selectRule = param[5];
 					String[] rule = selectRule.split(",");
 					List<Integer> list = new ArrayList<Integer>();
 					for (String r : rule) {
@@ -202,11 +186,11 @@ public class CommandOptions {
 					}
 					setSelectRules(list);
 					
-					String projectName = param[0].split(" ")[1];
+					String projectName = param[0];
 					setProjectName(projectName);
-					String projectVersion = param[1].split(" ")[1];
+					String projectVersion = param[1];
 					setProjectVersion(projectVersion);
-					String state = param[2].split(" ")[1];
+					String state = param[2];
 					setState(state);
 					
 					if (Strings.isNullOrEmpty(sourceUrl)) {

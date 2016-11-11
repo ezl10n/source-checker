@@ -52,7 +52,9 @@
                         <artifactId>appassembler-maven-plugin</artifactId>
                         <configuration>
                             <configurationSourceDirectory>src/main/config</configurationSourceDirectory>
-                            <extraJvmArguments>-Djava.library.path=@BASEDIR@\lib -Dsource.checker.config.basedir=@BASEDIR@\config -Dsource.checker.spellingcheck.dict.basedir=@BASEDIR@\dict -Dcom.jacob.debug=${jacob.debug} -Dconsole.log-level=${console.logging}</extraJvmArguments>
+                            <extraJvmArguments>-Djava.library.path=@BASEDIR@\lib -Dsource.checker.config.basedir=@BASEDIR@\config -Dsource.checker.spellingcheck.dict.basedir=@BASEDIR@\dict -Dsource.checker.projectConfig.basedir=@BASEDIR@\projectConfig 
+							-Dcom.jacob.debug=${jacob.debug} 
+							-Dconsole.log-level=${console.logging}</extraJvmArguments>
                             <programs>
                                 <program>
                                     <id>sourceChecker-cli</id>
@@ -72,6 +74,7 @@
                                         <extraArguments>
                                             <extraArgument>-Djava.library.path=@BASEDIR@\lib</extraArgument>
                                             <extraArgument>-Dsource.checker.config.basedir=@BASEDIR@\config</extraArgument>
+                                            <extraArgument>-Dsource.checker.projectConfig.basedir=@BASEDIR@\projectConfig</extraArgument>
                                             <extraArgument>-Dsource.checker.spellingcheck.dict.basedir=@BASEDIR@\dict</extraArgument>
                                             <extraArgument>-Dconsole.log-level=${console.logging}</extraArgument>
                                             <extraArgument>-Dcom.jacob.debug=${jacob.debug}</extraArgument>
@@ -93,6 +96,7 @@
                                         <extraArguments>
                                             <extraArgument>-Djava.library.path=@BASEDIR@\lib</extraArgument>
                                             <extraArgument>-Dsource.checker.config.basedir=@BASEDIR@\config</extraArgument>
+                                            <extraArgument>-Dsource.checker.projectConfig.basedir=@BASEDIR@\projectConfig</extraArgument>
                                             <extraArgument>-Dsource.checker.spellingcheck.dict.basedir=@BASEDIR@\dict</extraArgument>
                                             <extraArgument>-Dconsole.log-level=${console.logging}</extraArgument>
                                             <extraArgument>-Dcom.jacob.debug=${jacob.debug}</extraArgument>
@@ -121,6 +125,25 @@
                                     <resources>
                                         <resource>
                                             <directory>../src/main/config</directory>
+                                            <includes>
+                                                <include>*.conf</include>
+                                            </includes>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+							 <execution>
+                                <id>copy-projectConfig-resources</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <overwrite>true</overwrite>
+                                    <outputDirectory>${dist.directory}/projectConfig</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>../src/main/projectConfig</directory>
                                             <includes>
                                                 <include>*.conf</include>
                                             </includes>

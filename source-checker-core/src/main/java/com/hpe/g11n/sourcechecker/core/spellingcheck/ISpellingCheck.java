@@ -3,6 +3,8 @@ package com.hpe.g11n.sourcechecker.core.spellingcheck;
 import java.io.File;
 import java.util.List;
 
+import com.hpe.g11n.sourcechecker.utils.constant.MessageConstant;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Foy Lian
@@ -48,11 +50,10 @@ public interface ISpellingCheck {
 	}
 
     default String getDictBasePath(){
-        String baseDir=System.getProperty("source.checker.spellingcheck.dict.basedir");
+        String baseDir=System.getProperty(MessageConstant.SPELLING_DICT_DIR);
         if(baseDir == null || baseDir.isEmpty()){
-            //"src/main/dict";
-            String subDir=String.format("%1$s..%1$s%1$ssrc%1$smain%1$sdict", File.separator);
-            baseDir=System.getProperty("user.dir")+subDir;
+            String subDir=String.format(MessageConstant.SPELLING_DICT_DIR1, File.separator);
+            baseDir=System.getProperty(MessageConstant.USER_DIR)+subDir;
         }
         return baseDir;
     }

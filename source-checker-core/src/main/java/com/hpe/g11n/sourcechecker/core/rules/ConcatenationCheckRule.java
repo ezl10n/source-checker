@@ -18,6 +18,7 @@ import com.hpe.g11n.sourcechecker.pojo.ReportDataCount;
 import com.hpe.g11n.sourcechecker.utils.ReportDataUtil;
 import com.hpe.g11n.sourcechecker.utils.StringUtil;
 import com.hpe.g11n.sourcechecker.utils.constant.Constant;
+import com.hpe.g11n.sourcechecker.utils.constant.MessageConstant;
 import com.hpe.g11n.sourcechecker.utils.constant.RulePatternConstant;
 import com.typesafe.config.Config;
 
@@ -41,6 +42,8 @@ public class ConcatenationCheckRule implements IRule{
 	private List<String> whitelist;
 	private List<ReportData> report =null;
 	private Config config;
+	private Config projectConfig;
+	private List<String> projectWhitelist;
 
 	public ConcatenationCheckRule(){
 
@@ -60,10 +63,15 @@ public class ConcatenationCheckRule implements IRule{
 	}
 
 	@Override
-	public boolean check(List<InputData> lstIdo) {
+	public boolean check(List<InputData> lstIdo,String projectName) {
+		projectConfig = StringUtil.loadConfig(projectName);
+		projectWhitelist = projectConfig.getStringList(Constant.CONCATENATION_PATH);
+		whitelist.addAll(projectWhitelist);
+		whitelist = StringUtil.getUniqueList(whitelist);
 		Preconditions.checkNotNull(keywords);
 		Preconditions.checkNotNull(dateFormatKeywords);
 		Preconditions.checkNotNull(lstIdo);
+		Preconditions.checkNotNull(whitelist);
 		boolean flag = false;
 		report = new ArrayList<ReportData>();
 		HashSet<String> hashSet = new HashSet<String>();
@@ -91,12 +99,8 @@ public class ConcatenationCheckRule implements IRule{
 							validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
 						}
 						hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
-						String message =".";
-						if(ido.getSourceString().endsWith(",")){
-							message =",";
-						}
 						report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-								Constant.CONCATENATION,"Warning: ending with \"" + message + "\". Possible concatenated strings.",ido.getFileVersion(),null));
+								Constant.CONCATENATION,MessageConstant.CONCATENATION_MSG3,ido.getFileVersion(),null));
 						flag = true;
 						continue;
 					}
@@ -117,7 +121,8 @@ public class ConcatenationCheckRule implements IRule{
 							}
 							hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
 							report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-									Constant.CONCATENATION,"Warning: starting or ending with keyword \""+k.trim()+"\". Possible concatenated strings.",ido.getFileVersion(),null));
+									Constant.CONCATENATION,MessageConstant.CONCATENATION_MSG1_START + k.trim() + MessageConstant.CONCATENATION_MSG1_END,
+									ido.getFileVersion(),null));
 							if(log.isDebugEnabled()){
 								log.debug("ConcatenationCheckRule, value:"+ ido.getSourceString() +" start or end with:+"+k);
 							}
@@ -137,7 +142,8 @@ public class ConcatenationCheckRule implements IRule{
 							}
 							hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
 							report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-									Constant.CONCATENATION,"Warning: with the first letter in capital \""+ido.getSourceString()+"\". Possible concatenated strings.",ido.getFileVersion(),null));
+									Constant.CONCATENATION,MessageConstant.CONCATENATION_MSG2_START + ido.getSourceString() + MessageConstant.CONCATENATION_MSG2_END,
+									ido.getFileVersion(),null));
 							flag = true;
 							break;
 						}
@@ -155,12 +161,8 @@ public class ConcatenationCheckRule implements IRule{
 						validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
 					}
 					hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
-					String message =".";
-					if(ido.getSourceString().endsWith(",")){
-						message =",";
-					}
 					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-							Constant.CONCATENATION,"Warning: ending with \"" + message + "\". Possible concatenated strings.",ido.getFileVersion(),null));
+							Constant.CONCATENATION,MessageConstant.CONCATENATION_MSG3,ido.getFileVersion(),null));
 					flag = true;
 					break;
 				}
@@ -184,7 +186,8 @@ public class ConcatenationCheckRule implements IRule{
 						}
 						hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
 						report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-								Constant.CONCATENATION,"Warning: starting or ending with keyword \""+k.trim()+"\". Possible concatenated strings.",ido.getFileVersion(),null));
+								Constant.CONCATENATION,MessageConstant.CONCATENATION_MSG1_START + k.trim() + MessageConstant.CONCATENATION_MSG1_END,
+								ido.getFileVersion(),null));
 						flag = true;
 						break;
 					}
@@ -201,7 +204,8 @@ public class ConcatenationCheckRule implements IRule{
 						}
 						hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
 						report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-								Constant.CONCATENATION,"Warning: with the first letter in capital \""+ido.getSourceString()+"\". Possible concatenated strings.",ido.getFileVersion(),null));
+								Constant.CONCATENATION,MessageConstant.CONCATENATION_MSG2_START + ido.getSourceString() + MessageConstant.CONCATENATION_MSG2_END,
+								ido.getFileVersion(),null));
 						flag = true;
 						break;
 					}

@@ -27,6 +27,7 @@ import com.hpe.g11n.sourcechecker.pojo.Summary;
 import com.hpe.g11n.sourcechecker.utils.DateUtil;
 import com.hpe.g11n.sourcechecker.utils.ExcelPoiUtils;
 import com.hpe.g11n.sourcechecker.utils.constant.Constant;
+import com.hpe.g11n.sourcechecker.utils.constant.MessageConstant;
 import com.hpe.g11n.sourcechecker.xml.XMLHandler;
 
 /**
@@ -79,7 +80,7 @@ public class SourceCheckerTask extends Task<Void> {
 		for (String sourcePath : sourcePaths) {
             lstIdo.addAll(fileParser.parser(sourcePath,state));
 		}
-		checkReport.check(lstIdo,(now,total) ->{this.updateProgress(now, total);});
+		checkReport.check(lstIdo,projectName,(now,total) ->{this.updateProgress(now, total);});
 		Date startEndTime = new Date();
 		// report
 		List<ReportData> lstReport = checkReport.report();
@@ -199,6 +200,7 @@ public class SourceCheckerTask extends Task<Void> {
 		lstDetailsHeader.add("ERROR TYPE");
 		lstDetailsHeader.add("DETAILS");
 		detail.setHeader(lstDetailsHeader);
+		lstDetailsHeader.add("COMMENT");
 		uniqueDetail.setHeader(lstDetailsHeader);
 		
 		List<List<String>> lstDetailsValue = new ArrayList<List<String>>();
@@ -261,9 +263,8 @@ public class SourceCheckerTask extends Task<Void> {
 	@Override
 	protected void succeeded() {
 		super.succeeded();
-		Alert alert = new Alert(Alert.AlertType.INFORMATION,
-				"All files are finished!");
-		alert.setHeaderText("Note:");
+		Alert alert = new Alert(Alert.AlertType.INFORMATION,MessageConstant.FINISH_MSG);
+		alert.setHeaderText(MessageConstant.INFORMATION);
 		alert.showAndWait().filter(response -> response == ButtonType.OK)
 				.ifPresent(response -> {});
 	}

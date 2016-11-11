@@ -18,6 +18,7 @@ import com.hpe.g11n.sourcechecker.pojo.ReportDataCount;
 import com.hpe.g11n.sourcechecker.utils.ReportDataUtil;
 import com.hpe.g11n.sourcechecker.utils.StringUtil;
 import com.hpe.g11n.sourcechecker.utils.constant.Constant;
+import com.hpe.g11n.sourcechecker.utils.constant.MessageConstant;
 import com.hpe.g11n.sourcechecker.utils.constant.RulePatternConstant;
 import com.typesafe.config.Config;
 
@@ -39,6 +40,8 @@ public class SpellingCheckRule implements IRule{
 	private List<String> spelling;
 	private List<String> whitelist;
 	private Config config;
+	private Config projectConfig;
+	private List<String> projectWhitelist;
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -63,10 +66,15 @@ public class SpellingCheckRule implements IRule{
 		return report;
 	}
 	@Override
-	public boolean check(List<InputData> lstIdo) {
+	public boolean check(List<InputData> lstIdo,String projectName) {
+		projectConfig = StringUtil.loadConfig(projectName);
+		projectWhitelist = projectConfig.getStringList(Constant.SPELLING_PATH);
+		whitelist.addAll(projectWhitelist);
+		whitelist = StringUtil.getUniqueList(whitelist);
 		Preconditions.checkNotNull(lstIdo);
 		Preconditions.checkNotNull(spelling);
 		Preconditions.checkNotNull(keywords);
+		Preconditions.checkNotNull(whitelist);
 		boolean flag = false;
 		report = new ArrayList<ReportData>();
 		HashSet<String> hashSet = new HashSet<String>();
@@ -85,13 +93,13 @@ public class SpellingCheckRule implements IRule{
 				    && !StringUtil.haveTag(ido.getSourceString())
 				    && !checkDateFormat(ido.getSourceString())){
 				if(whitelist !=null && whitelist.size()>0){
-					if(!StringUtil.isWhiteList(whitelist,ido.getSourceString())){
-						String sourceString = getNoDateFormatString(ido.getSourceString());
-						String[] words = StringUtil.getWordsFromString(sourceString);
-						String wrongWords="";
-						String suggestion="";
-						for(String word:words){
-							word = StringUtil.getStringWithChar(word);
+					String sourceString = getNoDateFormatString(ido.getSourceString());
+					String[] words = StringUtil.getWordsFromString(sourceString);
+					String wrongWords="";
+					String suggestion="";
+					for(String word:words){
+						word = StringUtil.getStringWithChar(word);
+						if(!StringUtil.isWhiteList(whitelist,word)){
 							if(!isPass(word) && StringUtil.isRightWord(word) && !spellingCheck.isCorrect(word)){
 								if(!isSpecialWord(word)){
 									if(!word.contains("-")){
@@ -131,22 +139,22 @@ public class SpellingCheckRule implements IRule{
 								}
 							}
 						}
-						if (wrongWords !=null && !"".equals(wrongWords)) {
-							hitStrCount++;
-							int hs = hashSet.size();
-							hashSet.add(ido.getSourceString());
-							if(hs == hashSet.size()){
-								duplicatedStringCount++;
-								duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-							}else{
-								validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-							}
-							hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
-							report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-									Constant.SPELLING,"Warning:unknown strings \"" + wrongWords.trim().substring(0,wrongWords.length()-1) 
-									+ "\".\n Suggestion:"+suggestion.trim().substring(0,suggestion.length()-1) ,ido.getFileVersion(),null));
-							flag = true;
+					}
+					if (wrongWords !=null && !"".equals(wrongWords)) {
+						hitStrCount++;
+						int hs = hashSet.size();
+						hashSet.add(ido.getSourceString());
+						if(hs == hashSet.size()){
+							duplicatedStringCount++;
+							duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+						}else{
+							validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
 						}
+						hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
+						report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+								Constant.SPELLING,MessageConstant.SPELLING_MSG1_START + wrongWords.trim().substring(0,wrongWords.length()-1) 
+								+ MessageConstant.SPELLING_MSG1_END + suggestion.trim().substring(0,suggestion.length()-1) ,ido.getFileVersion(),null));
+						flag = true;
 					}
 				}else{
 					String sourceString = getNoDateFormatString(ido.getSourceString());
@@ -206,8 +214,8 @@ public class SpellingCheckRule implements IRule{
 						}
 						hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
 						report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-								Constant.SPELLING,"Warning:unknown strings \"" + wrongWords.trim().substring(0,wrongWords.length()-1) 
-								+ "\".\n Suggestion:"+suggestion.trim().substring(0,suggestion.length()-1) ,ido.getFileVersion(),null));
+								Constant.SPELLING,MessageConstant.SPELLING_MSG1_START + wrongWords.trim().substring(0,wrongWords.length()-1) 
+								+ MessageConstant.SPELLING_MSG1_END + suggestion.trim().substring(0,suggestion.length()-1) ,ido.getFileVersion(),null));
 						flag = true;
 					}
 				}
