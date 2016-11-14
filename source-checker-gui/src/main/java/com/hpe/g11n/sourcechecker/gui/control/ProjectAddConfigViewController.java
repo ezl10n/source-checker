@@ -143,7 +143,7 @@ public class ProjectAddConfigViewController extends BaseController implements
 		
 		String capital_words = StringUtil.getChangedString(
 				capital.getText());
-		if (!dateFormat_words.equals("")) {
+		if (!capital_words.equals("")) {
 			config = config.withValue(Constant.CAPITAL_PATH,
 					ConfigValueFactory.fromAnyRef(StringUtil.getUniqueList(
 							Arrays.asList(capital_words.split(",")))));

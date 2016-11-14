@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -150,31 +148,25 @@ public class ExcelPoiUtils {
             headCell.setCellStyle(getHeaderStyle(wb));
         }
         //write detail value
-        ExecutorService service = Executors.newFixedThreadPool(detail.getValue().size());
         for(int i=0;i<detail.getValue().size();i++){
         	List<String> lstObj = (List<String>)detail.getValue().get(i);
         	Row valueRow= detailSheet.createRow(i+1);
-        	service.execute(new Runnable() {
-				public void run() {
-					for(int n =0;n<lstObj.size();n++){
-		        		Cell valueCell = valueRow.createCell(n);
-		        		if(n==lstObj.size()-1 && lstObj.get(n).contains("\"")){
-		        			//设置红色高亮
-		        			HSSFRichTextString ts= new HSSFRichTextString(lstObj.get(n));
-		        			String[] str =lstObj.get(n).split("\"");
-		        			int index = lstObj.get(n).lastIndexOf("\"");
-		         		    ts.applyFont(0,str[0].length()+1,black);
-		         		    ts.applyFont(str[0].length()+1,index,red);
-		         		    
-		         		    valueCell.setCellValue(ts);
-		       			    valueCell.setCellStyle(redCellStyle);
-		        		}else{
-		        			valueCell.setCellValue(lstObj.get(n));
-		        			valueCell.setCellStyle(blackCellStyle);
-		        		}
-		        	}
-				}
-			});
+			for(int n =0;n<lstObj.size();n++){
+        		Cell valueCell = valueRow.createCell(n);
+        		if(n==lstObj.size()-1 && lstObj.get(n).contains("\"")){
+        			//设置红色高亮
+        			HSSFRichTextString ts= new HSSFRichTextString(lstObj.get(n));
+        			String[] str =lstObj.get(n).split("\"");
+        			int index = lstObj.get(n).lastIndexOf("\"");
+         		    ts.applyFont(0,str[0].length()+1,black);
+    				ts.applyFont(str[0].length()+1,index,red);
+         		    valueCell.setCellValue(ts);
+       			    valueCell.setCellStyle(redCellStyle);
+        		}else{
+        			valueCell.setCellValue(lstObj.get(n));
+        			valueCell.setCellStyle(blackCellStyle);
+        		}
+        	}
         }
         //write duplicated detail
         Sheet duplicatedDetailSheet = wb.createSheet(duplicatedDetail.getName());
@@ -186,31 +178,25 @@ public class ExcelPoiUtils {
         	headCell.setCellStyle(getHeaderStyle(wb));
         }
         //write duplicated value
-        ExecutorService service1 = Executors.newFixedThreadPool(duplicatedDetail.getValue().size());
         for(int i=0;i<duplicatedDetail.getValue().size();i++){
         	List<String> lstObj = (List<String>)duplicatedDetail.getValue().get(i);
         	Row valueRow= duplicatedDetailSheet.createRow(i+1);
-        	service1.execute(new Runnable() {
-				public void run() {
-					for(int n =0;n<lstObj.size();n++){
-		        		Cell valueCell = valueRow.createCell(n);
-		        		if(n==lstObj.size()-1 && lstObj.get(n).contains("\"")){
-		        			//设置红色高亮
-		        			HSSFRichTextString ts= new HSSFRichTextString(lstObj.get(n));
-		        			String[] str =lstObj.get(n).split("\"");
-		        			int index = lstObj.get(n).lastIndexOf("\"");
-		        			ts.applyFont(0,str[0].length()+1,black);
-		        			ts.applyFont(str[0].length()+1,index,red);
-		        			
-		        			valueCell.setCellValue(ts);
-		        			valueCell.setCellStyle(redCellStyle);
-		        		}else{
-		        			valueCell.setCellValue(lstObj.get(n));
-		        			valueCell.setCellStyle(blackCellStyle);
-		        		}
-		        	}	
-				}
-			});
+			for(int n =0;n<lstObj.size();n++){
+        		Cell valueCell = valueRow.createCell(n);
+        		if(n==lstObj.size()-1 && lstObj.get(n).contains("\"")){
+        			//设置红色高亮
+        			HSSFRichTextString ts= new HSSFRichTextString(lstObj.get(n));
+        			String[] str =lstObj.get(n).split("\"");
+        			int index = lstObj.get(n).lastIndexOf("\"");
+        			ts.applyFont(0,str[0].length()+1,black);
+    				ts.applyFont(str[0].length()+1,index,red);
+        			valueCell.setCellValue(ts);
+        			valueCell.setCellStyle(redCellStyle);
+        		}else{
+        			valueCell.setCellValue(lstObj.get(n));
+        			valueCell.setCellStyle(blackCellStyle);
+        		}
+        	}	
         }
         
         for(int i=0;i<10;i++){

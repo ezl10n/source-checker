@@ -31,7 +31,7 @@ public class MessageConstant {
 	 public static final String SPELLING_MSG1_START = "Warning: Unknown strings detected - \"";
 	 public static final String SPELLING_MSG1_END = "\".\nSuggestion: ";
 	 
-	 public static final String BRACKET_MSG1_START = "Warning: Bracket integrity - ";
+	 public static final String BRACKET_MSG1_START = "Warning: Bracket integrity - \"";
 	 public static final String BRACKET_MSG1_END = "\".";
 	 
 	 public static final String LONG_SENTENCES_MSG1= "Warning: The string(s) or sentence(s) are too long.";
