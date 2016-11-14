@@ -58,7 +58,24 @@
                             <programs>
                                 <program>
                                     <id>sourceChecker-cli</id>
-                                    <mainClass>com.hpe.g11n.sourcechecker.cli.CommandLineApplication</mainClass>
+                                    <mainClass>
+                                    	com.hpe.g11n.sourcechecker.cli.CommandLineApplication
+                                    </mainClass>
+                                    <jvmSettings>
+                                        <initialMemorySize>512m</initialMemorySize>
+                                        <maxMemorySize>2048m</maxMemorySize>
+                                        <systemProperties>
+
+                                        </systemProperties>
+                                        <extraArguments>
+                                            <extraArgument>-Djava.library.path=@BASEDIR@\lib</extraArgument>
+                                            <extraArgument>-Dsource.checker.config.basedir=@BASEDIR@\config</extraArgument>
+                                            <extraArgument>-Dsource.checker.projectConfig.basedir=@BASEDIR@\projectConfig</extraArgument>
+                                            <extraArgument>-Dsource.checker.spellingcheck.dict.basedir=@BASEDIR@\dict</extraArgument>
+                                            <extraArgument>-Dconsole.log-level=${console.logging}</extraArgument>
+                                            <extraArgument>-Dcom.jacob.debug=${jacob.debug}</extraArgument>
+                                        </extraArguments>
+                                    </jvmSettings>
                                 </program>
                                 <program>
                                     <id>sourceChecker-Standalone-GUI</id>
@@ -66,8 +83,8 @@
                                         com.hpe.g11n.sourcechecker.gui.Application
                                     </mainClass>
                                     <jvmSettings>
-                                        <initialMemorySize>256m</initialMemorySize>
-                                        <maxMemorySize>1024m</maxMemorySize>
+                                        <initialMemorySize>512m</initialMemorySize>
+                                        <maxMemorySize>2048m</maxMemorySize>
                                         <systemProperties>
 
                                         </systemProperties>
@@ -87,8 +104,8 @@
                                         com.hpe.g11n.sourcechecker.gui.Application
                                     </mainClass>
                                     <jvmSettings>
-                                        <initialMemorySize>256m</initialMemorySize>
-                                        <maxMemorySize>1024m</maxMemorySize>
+                                        <initialMemorySize>512m</initialMemorySize>
+                                        <maxMemorySize>2048m</maxMemorySize>
                                         <systemProperties>
                                             <systemProperty>prism.order=sw</systemProperty>
                                             <systemProperty>prism.verbose=true</systemProperty>
