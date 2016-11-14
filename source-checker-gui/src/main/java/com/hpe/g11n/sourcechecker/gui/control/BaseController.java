@@ -1,6 +1,5 @@
 package com.hpe.g11n.sourcechecker.gui.control;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -15,7 +14,6 @@ import com.google.inject.Injector;
 import com.hpe.g11n.sourcechecker.config.guice.ConfigModule;
 import com.hpe.g11n.sourcechecker.core.guice.CoreModule;
 import com.hpe.g11n.sourcechecker.gui.guice.GUIModule;
-import com.hpe.g11n.sourcechecker.utils.constant.MessageConstant;
 
 /**
  *
