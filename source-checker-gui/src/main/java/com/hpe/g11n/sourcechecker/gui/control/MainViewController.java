@@ -483,7 +483,6 @@ public class MainViewController extends BaseController  implements Initializable
 	}
 	
 	public void initialize(Menu menu,ChoiceBox<String> choiceBox){
-		menu.getItems().clear();
 //		String preFix = String.format(MessageConstant.PROJECT_CONFIG_PATH,File.separator);
 //		String passInDir=System.getProperty(MessageConstant.SOURCE_CONFIG_DIR);
 //        if(passInDir == null){
@@ -493,6 +492,7 @@ public class MainViewController extends BaseController  implements Initializable
 		File file = new File(getProjectConfigPath());
 		File[] files = file.listFiles();
 		if(files.length>0){
+			menu.getItems().clear();
 			List<String> lstName = new ArrayList<String>();
 			for(File f:files){
 				String fileName = f.getName().substring(0,f.getName().length()-5);

@@ -200,15 +200,6 @@ public class ProjectAddConfigViewController extends BaseController implements
 	}
 
 	public String getTempletConfigPath() {
-//		String preFix = String.format(MessageConstant.SOURCE_CONFIG_PATH,File.separator);
-//		String fileName = String.format(MessageConstant.TEMPLET_CONFIG_NAME,File.separator);
-//		String passInDir = System.getProperty(MessageConstant.SOURCE_CONFIG_DIR);
-//		if (passInDir == null) {
-//			passInDir = System.getProperty(MessageConstant.USER_DIR);
-//			fileName = preFix + fileName;
-//		}
-//		return fileName;
-		
 		String baseDir=System.getProperty(MessageConstant.SOURCE_CONFIG_DIR);
 		String fileName = String.format(MessageConstant.TEMPLET_CONFIG_NAME,File.separator);
 	        if(baseDir == null || baseDir.isEmpty()){
@@ -219,16 +210,6 @@ public class ProjectAddConfigViewController extends BaseController implements
 	}
 
 	public String getProjectConfigPath(String projectName) {
-//		String preFix = String.format(MessageConstant.PROJECT_CONFIG_PATH,File.separator);
-//		String path = "%1$s" + projectName + ".conf";
-//		String fileName = String.format(path, File.separator);
-//		String passInDir = System.getProperty(MessageConstant.SOURCE_CONFIG_DIR);
-//		if (passInDir == null) {
-//			passInDir = System.getProperty(MessageConstant.USER_DIR);
-//			fileName = preFix + fileName;
-//		}
-//		return fileName;
-		
 		 String baseDir=System.getProperty(MessageConstant.PROJECT_CONFIG_DIR);
 		 String path = "%1$s" + projectName + ".conf";
 			String fileName = String.format(path, File.separator);
