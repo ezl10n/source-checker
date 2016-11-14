@@ -12,7 +12,7 @@
     <properties>
         <source.checker.version>1.0.0-SNAPSHOT</source.checker.version>
         <console.logging>DEBUG</console.logging>
-        <dist.directory>${project.build.directory}/dist</dist.directory>
+        <dist.directory>${project.build.directory}/SourceChecker</dist.directory>
         <dist.lib.directory>${dist.directory}/lib</dist.lib.directory>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
