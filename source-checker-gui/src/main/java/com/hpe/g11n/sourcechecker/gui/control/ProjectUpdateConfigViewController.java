@@ -13,9 +13,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -43,6 +46,9 @@ public class ProjectUpdateConfigViewController extends BaseController implements
 
 	@FXML
 	private Label project;
+	
+	@FXML
+	private Button refresh;
 
 	@FXML
 	private TextArea concatenation;
@@ -69,6 +75,7 @@ public class ProjectUpdateConfigViewController extends BaseController implements
 
 	@FXML
 	public void initialize(URL location, ResourceBundle resources) {
+		refresh.setGraphic(new ImageView("styles/themes/default/images/refresh.png"));  
 		concatenation.setWrapText(true);
 		camelCase.setWrapText(true);
 		dateTimeFormat.setWrapText(true);
@@ -207,5 +214,21 @@ public class ProjectUpdateConfigViewController extends BaseController implements
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.initOwner(root.getScene().getWindow());
 		stage.show();
+	}
+	
+	@FXML
+	public void refresh(ActionEvent event) throws IOException {
+		config = ProjectConfigModule.loadConfig(projectName);
+		project.setText(projectName);
+		concatenation.setText(config.getStringList(Constant.CONCATENATION_PATH)
+				.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+		camelCase.setText(config.getStringList(Constant.CAMELCASE_PATH)
+				.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+		dateTimeFormat.setText(config.getStringList(Constant.DATETIMEFORMAT_PATH)
+				.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+		capital.setText(config.getStringList(Constant.CAPITAL_PATH)
+				.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+		spelling.setText(config.getStringList(Constant.SPELLING_PATH)
+				.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
 	}
 }
