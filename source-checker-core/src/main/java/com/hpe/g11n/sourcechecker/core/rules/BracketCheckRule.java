@@ -28,7 +28,6 @@ public class BracketCheckRule implements IRule{
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	private static final String BRACKET_WHITELIST="psl.source-checker-white-list.Bracket";
 	private List<ReportData> report =null;
-	private List<String> whitelist;
 	private Config config;
 	
 	int hitStrCount=0;
@@ -49,10 +48,10 @@ public class BracketCheckRule implements IRule{
 	@Override
 	public void setConfig(Config config) {
 		this.config=config;
-		whitelist=this.config.getStringList(BRACKET_WHITELIST);
 	}
 	@Override
 	public boolean check(List<InputData> lstIdo,String projectName) {
+		List<String> whitelist = config.getStringList(BRACKET_WHITELIST);
 		Preconditions.checkNotNull(lstIdo);
 		report = new ArrayList<ReportData>();
 		HashSet<String> hashSet = new HashSet<String>();

@@ -34,7 +34,6 @@ public class CapitalCheckRule implements IRule{
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	private static final String CAPITAL_WHITELIST="psl.source-checker-white-list.Capital";
 	private List<ReportData> report =null;
-	private List<String> whitelist;
 	private Config config;
 	private Config projectConfig;
 	private List<String> projectWhitelist;
@@ -51,11 +50,11 @@ public class CapitalCheckRule implements IRule{
 	@Override
 	public void setConfig(Config config) {
 		this.config=config;
-		whitelist=this.config.getStringList(CAPITAL_WHITELIST);
 	}
 	
 	@Override
 	public boolean check(List<InputData> lstIdo,String projectName) {
+		List<String> whitelist=this.config.getStringList(CAPITAL_WHITELIST);
 		projectConfig = StringUtil.loadConfig(projectName);
 		projectWhitelist = projectConfig.getStringList(Constant.CAPITAL_PATH);
 		whitelist.addAll(projectWhitelist);

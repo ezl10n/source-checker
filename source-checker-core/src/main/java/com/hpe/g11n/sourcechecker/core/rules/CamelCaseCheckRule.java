@@ -35,7 +35,6 @@ public class CamelCaseCheckRule implements IRule{
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	private static final String CAMELCASE_WHITELIST="psl.source-checker-white-list.CamelCase";
 	private List<ReportData> report =null;
-	private List<String> whitelist;
 	private Config config;
 	private Config projectConfig;
 	private List<String> projectWhitelist;
@@ -51,11 +50,11 @@ public class CamelCaseCheckRule implements IRule{
 	@Override
 	public void setConfig(Config config) {
 		this.config=config;
-		whitelist=this.config.getStringList(CAMELCASE_WHITELIST);
 	}
 
 	@Override
 	public boolean check(List<InputData> lstIdo,String projectName) {
+		List<String> whitelist=this.config.getStringList(CAMELCASE_WHITELIST);
 		projectConfig = StringUtil.loadConfig(projectName);
 		projectWhitelist = projectConfig.getStringList(Constant.CAMELCASE_PATH);
 		whitelist.addAll(projectWhitelist);

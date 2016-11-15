@@ -37,7 +37,6 @@ public class VariablesCheckRule implements IRule{
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	private List<String> variables;
-	private List<String> whitelist;
 	private List<ReportData> report =null;
 	private Config config;
 
@@ -54,11 +53,11 @@ public class VariablesCheckRule implements IRule{
 	public void setConfig(Config config) {
 		this.config=config;
 		variables=this.config.getStringList(VARIABLES);
-		whitelist=this.config.getStringList(VARIABLES_WHITELIST);
 	}
 
 	@Override
 	public boolean check(List<InputData> lstIdo,String projectName) {
+		List<String> whitelist = config.getStringList(VARIABLES_WHITELIST);
 		Preconditions.checkNotNull(variables);
 		Preconditions.checkNotNull(lstIdo);
 		boolean flag = false;

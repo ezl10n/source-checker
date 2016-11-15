@@ -39,7 +39,6 @@ public class ConcatenationCheckRule implements IRule{
 
 	private List<String> keywords;
 	private List<String> dateFormatKeywords;
-	private List<String> whitelist;
 	private List<ReportData> report =null;
 	private Config config;
 	private Config projectConfig;
@@ -59,11 +58,11 @@ public class ConcatenationCheckRule implements IRule{
 		this.config=config;
 		keywords=this.config.getStringList(KEY_WORDS);
 		dateFormatKeywords = this.config.getStringList(DATE_FORMAT_KEY_WORDS);
-		whitelist=this.config.getStringList(CONCATENATION_WHITELIST);
 	}
 
 	@Override
 	public boolean check(List<InputData> lstIdo,String projectName) {
+		List<String> whitelist=config.getStringList(CONCATENATION_WHITELIST);
 		projectConfig = StringUtil.loadConfig(projectName);
 		projectWhitelist = projectConfig.getStringList(Constant.CONCATENATION_PATH);
 		whitelist.addAll(projectWhitelist);

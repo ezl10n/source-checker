@@ -36,7 +36,6 @@ public class DateTimeFormatCheckRule implements IRule {
 
 	private List<String> keywords;
 	private List<ReportData> report = null;
-	private List<String> whitelist;
 	private Config config;
 	private Config projectConfig;
 	private List<String> projectWhitelist;
@@ -54,11 +53,11 @@ public class DateTimeFormatCheckRule implements IRule {
 	public void setConfig(Config config) {
 		this.config = config;
 		keywords = this.config.getStringList(KEY_WORDS);
-		whitelist = this.config.getStringList(DATETIMEFORMAT_WHITELIST);
 	}
 
 	@Override
 	public boolean check(List<InputData> lstIdo,String projectName) {
+		List<String> whitelist = config.getStringList(DATETIMEFORMAT_WHITELIST);
 		projectConfig = StringUtil.loadConfig(projectName);
 		projectWhitelist = projectConfig.getStringList(Constant.DATETIMEFORMAT_PATH);
 		whitelist.addAll(projectWhitelist);

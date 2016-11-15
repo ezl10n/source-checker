@@ -38,10 +38,8 @@ public class SpellingCheckRule implements IRule{
 	private static final String SPELLING_WHITELIST="psl.source-checker-white-list.Spelling";
 	private List<String> keywords;
 	private List<String> spelling;
-	private List<String> whitelist;
 	private Config config;
 	private Config projectConfig;
-	private List<String> projectWhitelist;
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -58,7 +56,6 @@ public class SpellingCheckRule implements IRule{
 		this.config = config;
 		keywords = this.config.getStringList(KEY_WORDS);
 		spelling = this.config.getStringList(SPELLING);
-		whitelist = this.config.getStringList(SPELLING_WHITELIST);
 	}
 	
 	@Override
@@ -67,8 +64,9 @@ public class SpellingCheckRule implements IRule{
 	}
 	@Override
 	public boolean check(List<InputData> lstIdo,String projectName) {
+		List<String> whitelist = config.getStringList(SPELLING_WHITELIST);
 		projectConfig = StringUtil.loadConfig(projectName);
-		projectWhitelist = projectConfig.getStringList(Constant.SPELLING_PATH);
+		List<String> projectWhitelist = projectConfig.getStringList(Constant.SPELLING_PATH);
 		whitelist.addAll(projectWhitelist);
 		whitelist = StringUtil.getUniqueList(whitelist);
 		Preconditions.checkNotNull(lstIdo);
