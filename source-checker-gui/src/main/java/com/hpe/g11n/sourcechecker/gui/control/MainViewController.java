@@ -79,6 +79,9 @@ public class MainViewController extends BaseController  implements Initializable
 	
 	@FXML
 	private Menu subMenu;
+	
+	@FXML
+	private CheckBox selectAll;
 
 	private DirectoryChooser chooser;
 
@@ -523,18 +526,31 @@ public class MainViewController extends BaseController  implements Initializable
 		int j = 0;
 		Object[] cb = checkRules.getChildren().toArray();
 		checkRules.getChildren().clear();
-		for(Object obj:cb){
-			CheckBox checkBox = (CheckBox)obj;
-			if(checkBox.isSelected()){
-				checkBox.setSelected(false);
-			}else{
-				checkBox.setSelected(true);
+		if(selectAll.isSelected()){
+			for(Object obj:cb){
+				CheckBox checkBox = (CheckBox)obj;
+				if(!checkBox.isSelected()){
+					checkBox.setSelected(true);
+				}
+				checkRules.add(checkBox, j, k);
+				j++;
+				if(j==4){
+					k++;
+					j=0;
+				}
 			}
-			checkRules.add(checkBox, j, k);
-			j++;
-			if(j==4){
-				k++;
-				j=0;
+		}else{
+			for(Object obj:cb){
+				CheckBox checkBox = (CheckBox)obj;
+				if(checkBox.isSelected()){
+					checkBox.setSelected(false);
+				}
+				checkRules.add(checkBox, j, k);
+				j++;
+				if(j==4){
+					k++;
+					j=0;
+				}
 			}
 		}
 	}
