@@ -43,8 +43,8 @@ public class LPUFileParser extends BaseParser {
 		log.debug("PassoloApp to read file start at:" + startTime);
 		try {
 			IPslSourceLists sourceLists = project.getSourceLists();
-			ExecutorService service;
-			if(sourceLists.toList().size()<100){
+//			ExecutorService service;
+//			if(sourceLists.toList().size()<100){
 				for (int i = 0; i < sourceLists.toList().size(); i++) {
 					List<IPslSourceString> lstSourceString = sourceLists.toList()
 							.get(i).getSourceStrings();
@@ -54,25 +54,25 @@ public class LPUFileParser extends BaseParser {
 					lstIdo = getInputData(filePath, state, sourceFileName,
 							lstSourceString);
 				}
-			}else{
-				service = Executors.newFixedThreadPool(sourceLists.toList().size());
-				for (int i = 0; i < sourceLists.toList().size(); i++) {
-					List<IPslSourceString> lstSourceString = sourceLists.toList()
-							.get(i).getSourceStrings();
-					String sourceFileName = sourceLists.toList().get(i)
-							.getSourceFile();
-
-					service.execute(new Runnable() {
-						public void run() {
-							lstIdo = getInputData(filePath, state, sourceFileName,
-									lstSourceString);
-						}
-					});
-				}
-				if(service.isTerminated()){
-					service.shutdown();
-				}
-			}
+//			}else{
+//				service = Executors.newFixedThreadPool(sourceLists.toList().size());
+//				for (int i = 0; i < sourceLists.toList().size(); i++) {
+//					List<IPslSourceString> lstSourceString = sourceLists.toList()
+//							.get(i).getSourceStrings();
+//					String sourceFileName = sourceLists.toList().get(i)
+//							.getSourceFile();
+//
+//					service.execute(new Runnable() {
+//						public void run() {
+//							lstIdo = getInputData(filePath, state, sourceFileName,
+//									lstSourceString);
+//						}
+//					});
+//				}
+//				if(service.isTerminated()){
+//					service.shutdown();
+//				}
+//			}
 			
 			
 		} catch (Exception ex) {
