@@ -52,7 +52,7 @@ public class MessageConstant {
 	 public static final String NO_PROJECT_MSG1="Go to Menu -> New to create a new project";
 	 public static final String CLOSE_CLICK="Files ware processing,Do you want to cancle?";
 	 public static final String NOT_FILE="It is not file!";
-	 public static final String REFRESH_MSG1="The project config is created! Please click the \" Refresh\" of Tool to refreshing";
+	 public static final String REFRESH_MSG1="The project config is created! Please click the \" Refresh\" of Menu to refreshing";
 	 public static final String UPDATE_MSG1="Update project config is success!";
 	 public static final String IMPORT_MSG1="Please choose a excel file!";
 	 public static final String IMPORT_MSG2_START=", Success for imported whitelist strings ";
