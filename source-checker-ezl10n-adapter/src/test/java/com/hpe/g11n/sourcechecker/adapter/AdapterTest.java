@@ -16,7 +16,7 @@ public class AdapterTest {
 		String projectName = "LR";
 		String projectVersion ="V1.0";
 		String state ="All";
-		String sourcePath ="C:\\tmp\\psl-generate-sorucechecker-report\\ALI.lpu";
+		String sourcePath ="C:\\tmp\\psl generate sorucechecker report\\ALI.lpu";
 		String targetPath ="C:\\tmp";
 		String rules ="0,1,2";
 		Map<String,String> paramMap = new HashMap<String,String>();

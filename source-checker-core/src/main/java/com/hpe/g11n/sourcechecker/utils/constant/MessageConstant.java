@@ -52,13 +52,14 @@ public class MessageConstant {
 	 public static final String NO_PROJECT_MSG1="Go to Menu -> New to create a new project";
 	 public static final String CLOSE_CLICK="Files ware processing,Do you want to cancle?";
 	 public static final String NOT_FILE="It is not file!";
-	 public static final String REFRESH_MSG1="The project config is created! Please click the \" Refresh\" of Menu to refreshing";
+	 public static final String REFRESH_MSG1="New project configuration created, please click \"Refresh\" to load it.";
 	 public static final String UPDATE_MSG1="Update project config is success!";
 	 public static final String IMPORT_MSG1="Please choose a excel file!";
-	 public static final String IMPORT_MSG2_START=", Success for imported whitelist strings ";
-	 public static final String IMPORT_MSG2_END=", Duplicated whitelist strings found: ";
-	 public static final String IMPORT_MSG3="Comment is not blank count: ";
+	 public static final String IMPORT_MSG2_START="Totally ";
+	 public static final String IMPORT_MSG2_MIND=" comments are found, of which ";
+	 public static final String IMPORT_MSG2_END=" are marked “Invalid” and have been successfully imported to whitelist. Duplicated whitelist strings found after importing:";
 	 public static final String FINISH_MSG="All files are finished!";
+	 public static final String DELETE_MSG="Are you sure you want to delete this Whitelist? All contents will be removed!";
 	 
 	 public static final String SOURCE_CONFIG_PATH="..%1$s%1$ssrc%1$smain%1$sconfig";
 	 public static final String SOURCE_CONFIG_NAME="%1$ssource-checker-standalone-config.conf";

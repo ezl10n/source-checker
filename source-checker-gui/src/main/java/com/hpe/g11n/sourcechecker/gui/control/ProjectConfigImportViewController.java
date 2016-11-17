@@ -148,8 +148,8 @@ public class ProjectConfigImportViewController extends BaseController implements
 		int success = lstUnionUniqueTotal.size() - sourceTotal;
 		int duplicated = lstUnionTotal.size() - lstUnionUniqueTotal.size();
 		int commentCount = lstCount.size();
-		Alert alert=new Alert(Alert.AlertType.INFORMATION,MessageConstant.IMPORT_MSG3 + commentCount 
-				+ MessageConstant.IMPORT_MSG2_START + success + MessageConstant.IMPORT_MSG2_END + duplicated);
+		Alert alert=new Alert(Alert.AlertType.INFORMATION,MessageConstant.IMPORT_MSG2_START + commentCount 
+				+ MessageConstant.IMPORT_MSG2_MIND + (success + duplicated) + MessageConstant.IMPORT_MSG2_END + success);
 		alert.setHeaderText(MessageConstant.INFORMATION);
 		alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 			close(event);

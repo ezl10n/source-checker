@@ -41,6 +41,7 @@ import com.hp.g11n.jassolo.utils.PslUtils;
 import com.hp.g11n.sdl.psl.interop.core.IPassoloApp;
 import com.hp.g11n.sdl.psl.interop.core.IPslProject;
 import com.hp.g11n.sdl.psl.interop.core.impl.impl.PassoloApp;
+import com.hpe.g11n.sourcechecker.config.guice.ProjectConfigModule;
 import com.hpe.g11n.sourcechecker.gui.tasks.SourceCheckerTask;
 import com.hpe.g11n.sourcechecker.utils.StringUtil;
 import com.hpe.g11n.sourcechecker.utils.constant.Constant;
@@ -78,7 +79,10 @@ public class MainViewController extends BaseController  implements Initializable
 	private ProgressBar progressBar;
 	
 	@FXML
-	private Menu subMenu;
+	private Menu editMenu;
+	
+	@FXML
+	private Menu deleteMenu;
 	
 	@FXML
 	private CheckBox selectAll;
@@ -118,15 +122,24 @@ public class MainViewController extends BaseController  implements Initializable
 			List<String> lstName = new ArrayList<String>();
 			for(File f:files){
 				String fileName = f.getName().substring(0,f.getName().length()-5);
-				MenuItem item= new MenuItem(fileName);
-				item.setOnAction((ActionEvent t) -> {
+				MenuItem editItem= new MenuItem(fileName);
+				editItem.setOnAction((ActionEvent t) -> {
 					try {
 						updateConfigPage(t,fileName);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				});
-				subMenu.getItems().add(item);
+				editMenu.getItems().add(editItem);
+				MenuItem deleteItem= new MenuItem(fileName);
+				deleteItem.setOnAction((ActionEvent t) -> {
+					try {
+						deleteConfig(t,fileName);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				});
+				deleteMenu.getItems().add(deleteItem);
 				lstName.add(fileName);
 			}
 			projectName.setItems(FXCollections.observableArrayList(lstName));
@@ -274,6 +287,15 @@ public class MainViewController extends BaseController  implements Initializable
 	@FXML
 	public void updateConfigPage(ActionEvent event,String projectName) throws IOException {
 		openPage(getUpdateRulesConfigView(projectName),MessageConstant.EDIT);
+	}
+	
+	@FXML
+	public void deleteConfig(ActionEvent event,String projectName) throws IOException {
+		Alert alert=new Alert(Alert.AlertType.CONFIRMATION,MessageConstant.DELETE_MSG);
+		alert.setHeaderText(MessageConstant.CONFIRMATION);
+		alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
+			ProjectConfigModule.deleteConfig(projectName);
+		});
 	}
 
 	/**
@@ -485,7 +507,7 @@ public class MainViewController extends BaseController  implements Initializable
 		closeCount = 0;
 	}
 	
-	public void initialize(Menu menu,ChoiceBox<String> choiceBox){
+	public void initialize(Menu e_menu,Menu d_menu,ChoiceBox<String> choiceBox){
 //		String preFix = String.format(MessageConstant.PROJECT_CONFIG_PATH,File.separator);
 //		String passInDir=System.getProperty(MessageConstant.SOURCE_CONFIG_DIR);
 //        if(passInDir == null){
@@ -495,19 +517,29 @@ public class MainViewController extends BaseController  implements Initializable
 		File file = new File(getProjectConfigPath());
 		File[] files = file.listFiles();
 		if(files.length>0){
-			menu.getItems().clear();
+			e_menu.getItems().clear();
+			d_menu.getItems().clear();
 			List<String> lstName = new ArrayList<String>();
 			for(File f:files){
 				String fileName = f.getName().substring(0,f.getName().length()-5);
-				MenuItem item= new MenuItem(fileName);
-				item.setOnAction((ActionEvent t) -> {
+				MenuItem editItem= new MenuItem(fileName);
+				editItem.setOnAction((ActionEvent t) -> {
 					try {
 						updateConfigPage(t,fileName);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				});
-				menu.getItems().add(item);
+				e_menu.getItems().add(editItem);
+				MenuItem deleteItem= new MenuItem(fileName);
+				deleteItem.setOnAction((ActionEvent t) -> {
+					try {
+						deleteConfig(t,fileName);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				});
+				d_menu.getItems().add(deleteItem);
 				lstName.add(fileName);
 			}
 			choiceBox.setItems(FXCollections.observableArrayList(lstName));
@@ -521,7 +553,7 @@ public class MainViewController extends BaseController  implements Initializable
 	
 	@FXML
 	public void refresh(){
-		initialize(subMenu,projectName);
+		initialize(editMenu,deleteMenu,projectName);
 	}
 	
 	@FXML

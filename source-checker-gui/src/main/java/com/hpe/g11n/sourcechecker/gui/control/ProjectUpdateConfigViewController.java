@@ -172,7 +172,7 @@ public class ProjectUpdateConfigViewController extends BaseController implements
 		if(!"".equals(newProjectName)){
 			ProjectConfigModule.saveConfig(config,newProjectName);
 		}
-		if(!newProjectName.equals(projectName) || "".equals(newProjectName)){
+		if(!newProjectName.equals(projectName)){
 			ProjectConfigModule.deleteConfig(projectName);
 		}
 		

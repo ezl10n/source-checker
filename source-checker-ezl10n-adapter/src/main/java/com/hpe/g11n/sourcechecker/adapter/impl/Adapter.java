@@ -23,7 +23,7 @@ public class Adapter implements IAdapter {
     }
 
     @Override
-	public void execute(Map<String,String> paramMap) {
+	public Map<String,String> execute(Map<String,String> paramMap) {
     	
     	String projectName=paramMap.get("-p");
     	String projectVersion=paramMap.get("-v");
@@ -37,11 +37,13 @@ public class Adapter implements IAdapter {
 			lst.add(Integer.valueOf(r));
 		}
 		sourceChecker.setUp(projectName,projectVersion,state,sourcePath,targetPath,lst);
-	    	try {
-	    		sourceChecker.call();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		Map<String,String> result = null;
+		try {
+			result = sourceChecker.call();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	    return result;
 	}
 
     @Override

@@ -59,7 +59,8 @@
             <items>
               <MenuItem fx:id="rulesConfig" mnemonicParsing="false" onAction="#addConfigPage" text="New" />
             </items>
-            <Menu fx:id="subMenu" mnemonicParsing="false" text="Edit" />
+            <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit" />
+            <Menu fx:id="deleteMenu" mnemonicParsing="false" text="Delete" />
             <items>
               <MenuItem fx:id="refresh" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
             </items>

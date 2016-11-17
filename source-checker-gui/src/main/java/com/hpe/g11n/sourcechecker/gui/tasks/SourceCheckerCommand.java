@@ -3,9 +3,11 @@ package com.hpe.g11n.sourcechecker.gui.tasks;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -63,7 +65,7 @@ public class SourceCheckerCommand{
 		checkReport.build(rulesCheckedIdx);
 	}
 
-	public void call() throws Exception {
+	public Map<String,String> call() throws Exception {
 		// output
 		SourceChecker sourceChecker = new SourceChecker();
 		sourceChecker.setProductVersion(Constant.PRODUCT_VERSION);
@@ -96,6 +98,9 @@ public class SourceCheckerCommand{
 			}
 
 		}
+		Map<String,String> resultMap = new HashMap<String,String>();
+		resultMap.put("project", projectName);
+		resultMap.put("score", String.valueOf(totalScore));
 		
 		Summary summary = new Summary();
 		summary.setProjectName(projectName);
@@ -253,5 +258,6 @@ public class SourceCheckerCommand{
 		
 		ExcelPoiUtils.exportExcel(lstExcel,excelPath.toString());
 		log.info(MessageConstant.FINISH_MSG);
+		return resultMap;
 	}
 }

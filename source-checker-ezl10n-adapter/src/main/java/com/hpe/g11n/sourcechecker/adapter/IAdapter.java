@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface IAdapter {
-	public void execute(Map<String,String> paramMap);
+	public Map<String,String> execute(Map<String,String> paramMap);
 	
 	public List<String> getProjectName();
 }
