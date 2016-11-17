@@ -9,13 +9,13 @@
    <children>
       <Label layoutX="18.0" layoutY="61.0" text="*" textFill="#ff0303"/>
       <Label layoutX="28.0" layoutY="61.0"  text="Project:" />
-      <Button fx:id="refresh" layoutX="500.0" layoutY="55.0" mnemonicParsing="false" onAction="#refresh"/>
+      <TextField fx:id="project" layoutX="150.0" layoutY="57.0" prefHeight="23.0" prefWidth="293.0" />
+      <Button fx:id="refresh" layoutX="600.0" layoutY="55.0" mnemonicParsing="false" onAction="#refresh"/>
       <Label layoutX="18.0" layoutY="142.0" text="Concatenation:" />
       <Label layoutX="18.0" layoutY="222.0" text="CamelCase:" />
       <Label layoutX="18.0" layoutY="310.0" text="DateTimeFormat:" />
       <Label layoutX="18.0" layoutY="399.0" text="Capital:" />
       <Label layoutX="18.0" layoutY="515.0" text="Spelling:" />
-      <Label fx:id="project" layoutX="150.0" layoutY="57.0" text=""/>
       <TextArea fx:id="concatenation" layoutX="150.0" layoutY="115.0" prefHeight="72.0" prefWidth="850.0" />
       <TextArea fx:id="camelCase" layoutX="150.0" layoutY="199.0" prefHeight="72.0" prefWidth="850.0" />
       <TextArea fx:id="dateTimeFormat" layoutX="150.0" layoutY="284.0" prefHeight="72.0" prefWidth="850.0" />

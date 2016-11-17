@@ -55,4 +55,23 @@ public class ProjectConfigModule extends AbstractModule{
             logger.error("update config file failure:"+passInDir+fileName,e);
         }
     }
+    
+    public static void deleteConfig(String projectName){
+    	String configName = "%1$s"+projectName+".conf";
+    	String preFix=String.format("..%1$s%1$ssrc%1$smain%1$sprojectConfig",File.separator);
+    	String fileName=String.format(configName,File.separator);
+    	String passInDir=System.getProperty("source.checker.projectConfig.basedir");
+    	if(passInDir == null){
+    		passInDir = System.getProperty("user.dir");
+    		fileName=preFix+fileName;
+    	}
+    	try {
+    		File file =Paths.get(passInDir, fileName).toFile();
+    		if(file.exists()){
+    			file.delete();
+    		}
+    	} catch (Exception e) {
+    		logger.error("delete config file failure:"+passInDir+fileName,e);
+    	}
+    }
 }

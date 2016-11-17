@@ -511,7 +511,11 @@ public class MainViewController extends BaseController  implements Initializable
 				lstName.add(fileName);
 			}
 			choiceBox.setItems(FXCollections.observableArrayList(lstName));
-			choiceBox.setTooltip(null);
+			Tooltip tooltip = choiceBox.getTooltip();
+			if(tooltip != null){
+				choiceBox.setTooltip(null);
+			}
+
 		}
 	}
 	

@@ -10,7 +10,7 @@
          <children>
             <Label prefHeight="15.0" prefWidth="10.0" text="*" textFill="#ff0303"/>
             <Label prefHeight="15.0" prefWidth="300.0" text="Product: " />
-            <ChoiceBox fx:id="projectName" prefHeight="25.0" prefWidth="150.0" />
+            <ChoiceBox fx:id="projectName" prefHeight="25.0" prefWidth="100.0" />
             <Label prefHeight="15.0" prefWidth="10.0" text="*" textFill="#ff0303"/>
 			<Label prefHeight="15.0" prefWidth="300.0" text="Version: " />
             <TextField fx:id="projectVersion" prefHeight="25.0" text="" />

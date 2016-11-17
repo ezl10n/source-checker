@@ -15,9 +15,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -45,7 +44,7 @@ public class ProjectUpdateConfigViewController extends BaseController implements
 	private Parent root;
 
 	@FXML
-	private Label project;
+	private TextField project;
 	
 	@FXML
 	private Button refresh;
@@ -105,8 +104,8 @@ public class ProjectUpdateConfigViewController extends BaseController implements
 			logger.debug(capital.getText());
 			logger.debug(spelling.getText());
 		}
-        String projectName = project.getText();
-        if(projectName == null || "".equals(projectName)){
+        String newProjectName = project.getText();
+        if(newProjectName == null || "".equals(newProjectName)){
         	Alert alert=new Alert(Alert.AlertType.ERROR,MessageConstant.PRODUCT_NAME_MSG1);
 			alert.setHeaderText(MessageConstant.ERROR);
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
@@ -170,7 +169,12 @@ public class ProjectUpdateConfigViewController extends BaseController implements
 					ConfigValueFactory.fromAnyRef(new ArrayList<String>()));
 		}
 
-		ProjectConfigModule.saveConfig(config,projectName);
+		if(!"".equals(newProjectName)){
+			ProjectConfigModule.saveConfig(config,newProjectName);
+		}
+		if(!newProjectName.equals(projectName) || "".equals(newProjectName)){
+			ProjectConfigModule.deleteConfig(projectName);
+		}
 		
 		Alert alert=new Alert(Alert.AlertType.INFORMATION,MessageConstant.UPDATE_MSG1);
 		alert.setHeaderText(MessageConstant.INFORMATION);
