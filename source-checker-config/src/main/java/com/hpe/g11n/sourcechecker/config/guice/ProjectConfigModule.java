@@ -10,8 +10,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
-import com.google.inject.name.Names;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigRenderOptions;
@@ -21,7 +19,6 @@ public class ProjectConfigModule extends AbstractModule{
 
 	@Override
 	protected void configure() {
-//		bind(Config.class).annotatedWith(Names.named("projectConfig")).toInstance(loadConfig());
 		
 	}
 //	@Provides

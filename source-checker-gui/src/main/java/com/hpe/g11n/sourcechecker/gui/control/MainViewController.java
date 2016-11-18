@@ -118,8 +118,8 @@ public class MainViewController extends BaseController  implements Initializable
 		File file = new File(getProjectConfigPath());
 		
 		File[] files = file.listFiles();
+		List<String> lstName = new ArrayList<String>();
 		if(files.length>0){
-			List<String> lstName = new ArrayList<String>();
 			for(File f:files){
 				String fileName = f.getName().substring(0,f.getName().length()-5);
 				MenuItem editItem= new MenuItem(fileName);
@@ -144,6 +144,7 @@ public class MainViewController extends BaseController  implements Initializable
 			}
 			projectName.setItems(FXCollections.observableArrayList(lstName));
 		}else{
+			projectName.setItems(FXCollections.observableArrayList(lstName));
 			projectName.setTooltip(new Tooltip(MessageConstant.NO_PROJECT_MSG1));
 			Alert alert=new Alert(Alert.AlertType.WARNING,MessageConstant.NO_PROJECT_MSG1);
 				alert.setHeaderText(MessageConstant.WARNING);
@@ -296,6 +297,7 @@ public class MainViewController extends BaseController  implements Initializable
 		alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 			ProjectConfigModule.deleteConfig(projectName);
 		});
+		refresh();
 	}
 
 	/**
@@ -516,10 +518,10 @@ public class MainViewController extends BaseController  implements Initializable
 //		File file = Paths.get(passInDir, preFix).toFile();
 		File file = new File(getProjectConfigPath());
 		File[] files = file.listFiles();
+		e_menu.getItems().clear();
+		d_menu.getItems().clear();
+		List<String> lstName = new ArrayList<String>();
 		if(files.length>0){
-			e_menu.getItems().clear();
-			d_menu.getItems().clear();
-			List<String> lstName = new ArrayList<String>();
 			for(File f:files){
 				String fileName = f.getName().substring(0,f.getName().length()-5);
 				MenuItem editItem= new MenuItem(fileName);
@@ -542,12 +544,11 @@ public class MainViewController extends BaseController  implements Initializable
 				d_menu.getItems().add(deleteItem);
 				lstName.add(fileName);
 			}
-			choiceBox.setItems(FXCollections.observableArrayList(lstName));
-			Tooltip tooltip = choiceBox.getTooltip();
-			if(tooltip != null){
-				choiceBox.setTooltip(null);
-			}
-
+		}
+		choiceBox.setItems(FXCollections.observableArrayList(lstName));
+		Tooltip tooltip = choiceBox.getTooltip();
+		if(tooltip != null){
+			choiceBox.setTooltip(null);
 		}
 	}
 	
