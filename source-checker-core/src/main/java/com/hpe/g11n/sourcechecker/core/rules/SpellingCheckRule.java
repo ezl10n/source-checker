@@ -66,8 +66,10 @@ public class SpellingCheckRule implements IRule{
 	public boolean check(List<InputData> lstIdo,String projectName) {
 		List<String> whitelist = config.getStringList(SPELLING_WHITELIST);
 		projectConfig = StringUtil.loadConfig(projectName);
-		List<String> projectWhitelist = projectConfig.getStringList(Constant.SPELLING_PATH);
-		whitelist.addAll(projectWhitelist);
+		if(!projectConfig.isEmpty()){
+			List<String> projectWhitelist = projectConfig.getStringList(Constant.SPELLING_PATH);
+			whitelist.addAll(projectWhitelist);
+		}
 		whitelist = StringUtil.getUniqueList(whitelist);
 		Preconditions.checkNotNull(lstIdo);
 		Preconditions.checkNotNull(spelling);

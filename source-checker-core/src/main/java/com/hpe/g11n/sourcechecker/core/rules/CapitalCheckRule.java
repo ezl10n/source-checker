@@ -36,7 +36,6 @@ public class CapitalCheckRule implements IRule{
 	private List<ReportData> report =null;
 	private Config config;
 	private Config projectConfig;
-	private List<String> projectWhitelist;
 	
 	public CapitalCheckRule(){
 
@@ -56,8 +55,10 @@ public class CapitalCheckRule implements IRule{
 	public boolean check(List<InputData> lstIdo,String projectName) {
 		List<String> whitelist=this.config.getStringList(CAPITAL_WHITELIST);
 		projectConfig = StringUtil.loadConfig(projectName);
-		projectWhitelist = projectConfig.getStringList(Constant.CAPITAL_PATH);
-		whitelist.addAll(projectWhitelist);
+		if(!projectConfig.isEmpty()){
+			List<String> projectWhitelist = projectConfig.getStringList(Constant.CAPITAL_PATH);
+			whitelist.addAll(projectWhitelist);
+		}
 		whitelist = StringUtil.getUniqueList(whitelist);
 		Preconditions.checkNotNull(lstIdo);
 		Preconditions.checkNotNull(whitelist);

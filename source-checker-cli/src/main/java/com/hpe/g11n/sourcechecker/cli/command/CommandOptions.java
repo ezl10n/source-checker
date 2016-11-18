@@ -1,5 +1,6 @@
 package com.hpe.g11n.sourcechecker.cli.command;
 
+import java.io.File;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -108,25 +109,46 @@ public class CommandOptions {
 		boolean flag = true;
 		try {
 			if (Strings.isNullOrEmpty(projectName)) {
-				logger.debug("-i or --input is need to set projectName!");
+				logger.debug("-p or --input is need to set projectName!");
 				flag = false;
 			}
 			if (Strings.isNullOrEmpty(projectVersion)) {
-				logger.debug("-i or --input is need to set projectVersion!");
+				logger.debug("-v or --input is need to set projectVersion!");
 				flag = false;
 			}
 			if (Strings.isNullOrEmpty(state)) {
-				logger.debug("-i or --input is need to set state!");
+				logger.debug("-s or --input is need to set state!");
 				flag = false;
 			}
+			File file;
 			if (Strings.isNullOrEmpty(sourceUrl)) {
 				logger.debug("-i or --input is need to set source url!");
 				flag = false;
+			}
+			String[] paths = sourceUrl.split(";");
+			for(String path:paths){
+				file = new File(path);
+				if(!file.exists()){
+					logger.debug("The \"" + path + "\" is not esists!");
+					flag = false;
+					break;
+				}
+				if(!file.isFile()){
+					logger.debug("The \"" + path + "\" is not a file!");
+					flag = false;
+					break;
+				}
 			}
 			if (Strings.isNullOrEmpty(outputUrl)) {
 				logger.debug("-o or --output is need to set output url!");
 				flag = false;
 			}
+			file = new File(outputUrl);
+			if(!file.isDirectory()){
+				logger.debug("The \"" + outputUrl + "\" is not directory!");
+				flag = false;
+			}
+			
 			if (selectRules == null || selectRules.size() == 0) {
 				logger.debug("-r or --rules is need to set rules index to be select !");
 				flag = false;
