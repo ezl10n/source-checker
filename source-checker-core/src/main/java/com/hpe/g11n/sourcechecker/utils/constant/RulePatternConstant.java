@@ -15,12 +15,16 @@ public class RulePatternConstant {
 	 public static final String CONCATENATION_CHECK_RULE_0 ="^(log|Log)\\s(\\<|\\(|\\{|\\[)?[A-Za-z]+(\\>|\\)|\\}|\\])?\\s(in)$";
 	 public static final String CONCATENATION_CHECK_RULE_1 ="^[A-Z][a-z]*$";
 	 public static final String CONCATENATION_CHECK_RULE_2 ="^[A-Za-z|\\d]+[\\.|,]$";
+	 public static final String CONCATENATION_CHECK_RULE_3 ="^[A-Z].*\\sto(\\.|,|!|:|\\?)?$";
+	 public static final String CONCATENATION_CHECK_RULE_4 ="^[a-z].*\\snavigate to(\\.|,|!|:|\\?)?$";
 	 public static final String LONG_SENTENCES_CHECK_RULE ="[\\s\\S]+[\\?|\\!|\\;|\\,|\\.|\\:]+[\\s\\S]+$";
-	 public static final String VARIABLES_CHECK_RULE_1 =".*one\\s?\\{.*\\}\\s?other\\s?\\{.*\\}.*$";
+	 public static final String VARIABLES_CHECK_RULE_1 =".*(\\{\\s?(\\d+)\\s?.?).*|.*(.?\\s?(\\d+)\\s?\\}).*|.*(\\[\\s?(\\d+)\\s?.?).*|.*(.?\\s?(\\d+)\\s?\\]).*";
 	 public static final String VARIABLES_CHECK_RULE_2 =".*\\{0\\,.*\\,.*\\}.*$";
 	 public static final String STRINGMIXED_1 ="^[A-Za-z]+[\\.|\\,|\\:|\\'|\\\"|\\?|\\/|\\$|\\*|\\@|\\#|\\!]+[A-Za-z]+.?$";
 	 public static final String STRINGMIXED_2 ="[\\.|\\,|\\:|\\'|\\\"|\\?|\\/|\\$|\\*|\\@|\\#|\\!]+[A-Za-z]+[[\\.|\\,|\\:|\\'|\\\"|\\?|\\/|\\$|\\*|\\@|\\#|\\!]+[A-Za-z]+]*.?$";
 	 public static final String NUMBER ="[0-9]+$|^-[0-9]+[\\.][0-9]+$|[0-9]+[\\.][0-9]+$";
-	 public static final String BRACKET_CHECK_RULE=".*(\\{\\s?(\\d+)\\s?.?).*|.*(.?\\s?(\\d+)\\s?\\}).*|.*(\\[\\s?(\\d+)\\s?.?).*|.*(.?\\s?(\\d+)\\s?\\]).*";
+	 public static final String SPECIAL_PATTERNS_CHECK_RULE_0=".*\\{.*\\}.*$";
+	 public static final String SPECIAL_PATTERNS_CHECK_RULE_1=".*\\d,choice,.*$";
+	 public static final String SPECIAL_PATTERNS_CHECK_RULE_2=".*\\{count, plural,.*";
 	 
 }

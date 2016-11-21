@@ -36,6 +36,11 @@
         <version>${source.checker.version}</version>
     </dependency>
     <dependency>
+        <groupId>com.hpe.g11n.sourcechecker</groupId>
+        <artifactId>source-checker-ezl10n-adapter</artifactId>
+        <version>${source.checker.version}</version>
+    </dependency>
+    <dependency>
         <groupId>com.beust</groupId>
         <artifactId>jcommander</artifactId>
     </dependency>

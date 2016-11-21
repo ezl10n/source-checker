@@ -16,9 +16,9 @@ public class MessageConstant {
 	 public static final String CONCATENATION_MSG3 = "Warning: The string contains only a single word with punctuation. Possible concatenation.";
 	 
 	 public static final String VARIABLES_MSG1 = "Warning: Too many variables.";
-	 public static final String VARIABLES_MSG2_START = "Warning: Special variable pattern detected - \"";
-	 public static final String VARIABLES_MSG2_END = "\". Please describe how to localize it.";
-	 
+	 public static final String VARIABLES_MSG2_START = "Warning: Variables integrity - \"";
+	 public static final String VARIABLES_MSG2_END = "\".";
+
 	 public static final String CAMELCASE_MSG1_START = "Warning: CamelCase string(s) detected - \"";
 	 public static final String CAMELCASE_MSG1_END = "\".";
 	 
@@ -31,10 +31,10 @@ public class MessageConstant {
 	 public static final String SPELLING_MSG1_START = "Warning: Unknown strings detected - \"";
 	 public static final String SPELLING_MSG1_END = "\".\nSuggestion: ";
 	 
-	 public static final String BRACKET_MSG1_START = "Warning: Bracket integrity - \"";
-	 public static final String BRACKET_MSG1_END = "\".";
-	 
 	 public static final String LONG_SENTENCES_MSG1= "Warning: The string(s) or sentence(s) are too long.";
+	 
+	 public static final String SPECIAL_PATTERNS_MSG1= "Warning: Special pattern \"x,choice,\" detected. Please check how to handle the translation.";
+	 public static final String SPECIAL_PATTERNS_MSG2= "Warning: Special pattern \"{count, plural,\" detected. Please check how to handle the translation.";
 	 
 	 public static final String PRODUCT_NAME_MSG1="Product is a mandatory field.";
 	 public static final String PRODUCT_NAME_MSG2="Product field must not contain special characters of \"\\\",\"/\",\"<\",\">\"";
