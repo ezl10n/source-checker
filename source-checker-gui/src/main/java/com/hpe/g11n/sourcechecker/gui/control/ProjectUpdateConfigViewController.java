@@ -96,15 +96,18 @@ public class ProjectUpdateConfigViewController extends BaseController implements
 
 	@FXML
 	public void updateConfig(ActionEvent event) {
+		String newProjectName = product.getText();
+        if(newProjectName.contains("_")){
+        	newProjectName = newProjectName.replaceAll("_", "-");
+        }
 		if (logger.isDebugEnabled()) {
-			logger.debug(product.getText());
+			logger.debug(newProjectName);
 			logger.debug(concatenation.getText());
 			logger.debug(camelCase.getText());
 			logger.debug(dateTimeFormat.getText());
 			logger.debug(capital.getText());
 			logger.debug(spelling.getText());
 		}
-        String newProjectName = product.getText();
         if(newProjectName == null || "".equals(newProjectName)){
         	Alert alert=new Alert(Alert.AlertType.ERROR,MessageConstant.PRODUCT_NAME_MSG1);
 			alert.setHeaderText(MessageConstant.ERROR);

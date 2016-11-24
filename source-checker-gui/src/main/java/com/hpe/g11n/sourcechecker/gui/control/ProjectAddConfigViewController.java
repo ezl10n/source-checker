@@ -96,15 +96,18 @@ public class ProjectAddConfigViewController extends BaseController implements
 
 	@FXML
 	public void saveConfig(ActionEvent event) {
+		String projectName = product.getText();
+        if(projectName.contains("_")){
+        	projectName = projectName.replaceAll("_", "-");
+        }
 		if (logger.isDebugEnabled()) {
-			logger.debug(product.getText());
+			logger.debug(projectName);
 			logger.debug(concatenation.getText());
 			logger.debug(camelCase.getText());
 			logger.debug(dateTimeFormat.getText());
 			logger.debug(capital.getText());
 			logger.debug(spelling.getText());
 		}
-        String projectName = product.getText();
         if(projectName == null || "".equals(projectName)){
         	Alert alert=new Alert(Alert.AlertType.ERROR,MessageConstant.PRODUCT_NAME_MSG1);
 			alert.setHeaderText(MessageConstant.ERROR);
