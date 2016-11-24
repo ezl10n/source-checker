@@ -57,8 +57,9 @@ public class MessageConstant {
 	 public static final String UPDATE_MSG1="Update project config is success!";
 	 public static final String IMPORT_MSG1="Please choose a excel file!";
 	 public static final String IMPORT_MSG2_START="Totally ";
-	 public static final String IMPORT_MSG2_MIND=" comments are found, of which ";
-	 public static final String IMPORT_MSG2_END=" are marked “Invalid” and have been successfully imported to whitelist. Duplicated whitelist strings found after importing:";
+	 public static final String IMPORT_MSG2_MIND1=" comments are found, of which ";
+	 public static final String IMPORT_MSG2_MIND2=" are marked \"invalid\" and ";
+	 public static final String IMPORT_MSG2_END=" of which have been successfully imported to whitelist. Duplicated whitelist strings found after importing:";
 	 public static final String FINISH_MSG="All files are finished!";
 	 public static final String DELETE_MSG="Are you sure you want to delete this Whitelist? All contents will be removed!";
 	 

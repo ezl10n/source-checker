@@ -98,6 +98,8 @@ public class ProjectConfigImportViewController extends BaseController implements
 			return;
 		}
 		Map<String,List<String>> map = ExcelPoiUtils.getExcelContent(path);
+		
+		//from excel
 		List<String> lstTempConcatenation = map.get("lstConcatenation");
 		List<String> lstTempCamelCase = map.get("lstCamelCase");
 		List<String> lstTempDateTimeFormat = map.get("lstDateTimeFormat");
@@ -105,13 +107,20 @@ public class ProjectConfigImportViewController extends BaseController implements
 		List<String> lstTempSpelling = map.get("lstSpelling");
 		List<String> lstCount = map.get("lstCount");
 		
+		List<String> lstInvalid = new ArrayList<String>();
+		lstInvalid.addAll(lstTempConcatenation);
+		lstInvalid.addAll(lstTempCamelCase);
+		lstInvalid.addAll(lstTempDateTimeFormat);
+		lstInvalid.addAll(lstTempCapital);
+		lstInvalid.addAll(lstTempSpelling);
+		
+		//from white list
 		List<String> lstTotal = new ArrayList<String>();
 		lstTotal.addAll(lstConcatenation);
 		lstTotal.addAll(lstCamelCase);
 		lstTotal.addAll(lstDateTimeFormat);
 		lstTotal.addAll(lstCapital);
 		lstTotal.addAll(lstSpelling);
-		int sourceTotal = lstTotal.size();
 		
 		lstConcatenation.addAll(lstTempConcatenation);
 		lstCamelCase.addAll(lstTempCamelCase);
@@ -119,6 +128,7 @@ public class ProjectConfigImportViewController extends BaseController implements
 		lstCapital.addAll(lstTempCapital);
 		lstSpelling.addAll(lstTempSpelling);
 		
+		// union total
 		List<String> lstUnionTotal = new ArrayList<String>();
 		lstUnionTotal.addAll(lstConcatenation);
 		lstUnionTotal.addAll(lstCamelCase);
@@ -145,11 +155,13 @@ public class ProjectConfigImportViewController extends BaseController implements
 				ConfigValueFactory.fromAnyRef(StringUtil.getUniqueList(lstSpelling)));
 		ProjectConfigModule.saveConfig(config,projectName);
 		
+		int sourceTotal = lstTotal.size();
 		int success = lstUnionUniqueTotal.size() - sourceTotal;
 		int duplicated = lstUnionTotal.size() - lstUnionUniqueTotal.size();
 		int commentCount = lstCount.size();
 		Alert alert=new Alert(Alert.AlertType.INFORMATION,MessageConstant.IMPORT_MSG2_START + commentCount 
-				+ MessageConstant.IMPORT_MSG2_MIND + (success + duplicated) + MessageConstant.IMPORT_MSG2_END + success);
+				+ MessageConstant.IMPORT_MSG2_MIND1 + lstInvalid.size() + MessageConstant.IMPORT_MSG2_MIND2 + success 
+				+ MessageConstant.IMPORT_MSG2_END + duplicated);
 		alert.setHeaderText(MessageConstant.INFORMATION);
 		alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 			close(event);
