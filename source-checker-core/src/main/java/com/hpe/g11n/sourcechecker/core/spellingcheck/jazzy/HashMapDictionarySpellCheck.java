@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.hpe.g11n.sourcechecker.core.spellingcheck.ISpellingCheck;
+import com.swabunga.spell.engine.SpellDictionary;
 import com.swabunga.spell.engine.SpellDictionaryHashMap;
 import com.swabunga.spell.event.SpellChecker;
 import com.typesafe.config.Config;
@@ -11,7 +12,10 @@ import com.typesafe.config.Config;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,6 +30,8 @@ public class HashMapDictionarySpellCheck implements ISpellingCheck {
     private SpellChecker spellCheck = null;
 
     private int threshold = 0;
+    
+    Vector dictionaries = new Vector();
 
     @Inject
     @Named("sourceCheckerConfig")
@@ -39,7 +45,9 @@ public class HashMapDictionarySpellCheck implements ISpellingCheck {
             File[] wordDicts = Paths.get(getDictBasePath(), dict).toFile().listFiles();
             for (File f : wordDicts) {
                 if (f.isFile()) {
-                    spellCheck.addDictionary(new SpellDictionaryHashMap(f));
+                	SpellDictionaryHashMap spellDictionary = new SpellDictionaryHashMap(f);
+                	dictionaries.add(spellDictionary);
+                    spellCheck.addDictionary(spellDictionary);
                 }
             }
         } catch (IOException e) {
@@ -59,5 +67,15 @@ public class HashMapDictionarySpellCheck implements ISpellingCheck {
         Preconditions.checkNotNull(spellCheck);
         Preconditions.checkNotNull(word);
         return spellCheck.getSuggestions(word, threshold);
+    }
+    
+    @Override
+    public boolean isInDictionary(String word){
+    	 Preconditions.checkNotNull(dictionaries);
+    	 for (Enumeration e = dictionaries.elements(); e.hasMoreElements();) {
+    	      SpellDictionary dictionary = (SpellDictionary) e.nextElement();
+    	      if (dictionary.isCorrect(word)) return true;
+    	    }
+    	 return false;
     }
 }

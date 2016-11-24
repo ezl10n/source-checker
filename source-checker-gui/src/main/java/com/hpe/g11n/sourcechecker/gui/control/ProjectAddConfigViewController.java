@@ -16,6 +16,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.WindowEvent;
@@ -26,6 +27,7 @@ import com.hpe.g11n.sourcechecker.config.guice.TempletConfigModule;
 import com.hpe.g11n.sourcechecker.utils.StringUtil;
 import com.hpe.g11n.sourcechecker.utils.constant.Constant;
 import com.hpe.g11n.sourcechecker.utils.constant.MessageConstant;
+import com.hpe.g11n.sourcechecker.utils.constant.RulePatternConstant;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigValueFactory;
 
@@ -42,9 +44,12 @@ public class ProjectAddConfigViewController extends BaseController implements
 		Initializable {
 	@FXML
 	private Parent root;
-
+	
 	@FXML
-	private TextField project;
+	private Label lab_DateTimeFormat;
+	
+	@FXML
+	private TextField product;
 
 	@FXML
 	private TextArea concatenation;
@@ -71,6 +76,7 @@ public class ProjectAddConfigViewController extends BaseController implements
 
 	@FXML
 	public void initialize(URL location, ResourceBundle resources) {
+		lab_DateTimeFormat.setText("Date&Time Format:");
 		concatenation.setWrapText(true);
 		camelCase.setWrapText(true);
 		dateTimeFormat.setWrapText(true);
@@ -91,16 +97,25 @@ public class ProjectAddConfigViewController extends BaseController implements
 	@FXML
 	public void saveConfig(ActionEvent event) {
 		if (logger.isDebugEnabled()) {
-			logger.debug(project.getText());
+			logger.debug(product.getText());
 			logger.debug(concatenation.getText());
 			logger.debug(camelCase.getText());
 			logger.debug(dateTimeFormat.getText());
 			logger.debug(capital.getText());
 			logger.debug(spelling.getText());
 		}
-        String projectName = project.getText();
+        String projectName = product.getText();
         if(projectName == null || "".equals(projectName)){
         	Alert alert=new Alert(Alert.AlertType.ERROR,MessageConstant.PRODUCT_NAME_MSG1);
+			alert.setHeaderText(MessageConstant.ERROR);
+			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
+				return;
+			});
+			return;
+        }
+        
+        if(StringUtil.pattern(projectName, RulePatternConstant.PRODUCT_FORMAT)){
+        	Alert alert=new Alert(Alert.AlertType.ERROR,MessageConstant.PRODUCT_FORMAT_MSG);
 			alert.setHeaderText(MessageConstant.ERROR);
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 				return;

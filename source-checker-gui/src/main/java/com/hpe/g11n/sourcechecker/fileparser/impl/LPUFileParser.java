@@ -17,6 +17,7 @@ import com.hp.g11n.sdl.psl.interop.core.impl.impl.PassoloApp;
 import com.hpe.g11n.sourcechecker.fileparser.BaseParser;
 import com.hpe.g11n.sourcechecker.pojo.InputData;
 import com.hpe.g11n.sourcechecker.utils.constant.Constant;
+import com.hpe.g11n.sourcechecker.utils.constant.MessageConstant;
 
 /**
  * 
@@ -38,6 +39,10 @@ public class LPUFileParser extends BaseParser {
 		long start = System.currentTimeMillis();
 		lstIdo = new ArrayList<InputData>();
 		app = PassoloApp.getInstance();
+		if(app.getLicense()==0){
+			log.debug(MessageConstant.PASSOLO_NO_LICENSE_MSG1);
+			return null;
+		}
 		project = app.open(filePath);
 		long startTime = System.currentTimeMillis();
 		log.debug("PassoloApp to read file start at:" + startTime);

@@ -264,10 +264,10 @@ public class MainViewController extends BaseController  implements Initializable
 				PslUtils.killPassolo();
 				closeCount++;
 			}
-			System.exit(WindowConstants.DO_NOTHING_ON_CLOSE);
 			if(!PslUtils.isPassoloStarted()){
 				closeCount = 0;
 			}
+			System.exit(WindowConstants.DO_NOTHING_ON_CLOSE);
 		}
 		
 	}
@@ -325,7 +325,7 @@ public class MainViewController extends BaseController  implements Initializable
 		    Alert alert=new Alert(Alert.AlertType.INFORMATION,MessageConstant.PASSOLO_RUN_MSG1);
 			alert.setHeaderText(MessageConstant.INFORMATION);
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
-				 logger.debug("MainViewController: about to shutdown passolo [{}]");
+				 logger.debug(MessageConstant.PASSOLO_RUN_MSG1);
 			});
 			return;
 		}

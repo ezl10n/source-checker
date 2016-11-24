@@ -57,4 +57,6 @@ public interface ISpellingCheck {
         }
         return baseDir;
     }
+    
+    boolean isInDictionary(String word);
 }

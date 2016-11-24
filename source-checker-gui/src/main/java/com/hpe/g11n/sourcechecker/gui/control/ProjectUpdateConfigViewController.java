@@ -13,11 +13,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -26,6 +25,7 @@ import com.hpe.g11n.sourcechecker.config.guice.ProjectConfigModule;
 import com.hpe.g11n.sourcechecker.utils.StringUtil;
 import com.hpe.g11n.sourcechecker.utils.constant.Constant;
 import com.hpe.g11n.sourcechecker.utils.constant.MessageConstant;
+import com.hpe.g11n.sourcechecker.utils.constant.RulePatternConstant;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigValueFactory;
 
@@ -42,13 +42,13 @@ public class ProjectUpdateConfigViewController extends BaseController implements
 		Initializable {
 	@FXML
 	private Parent root;
-
-	@FXML
-	private TextField project;
 	
 	@FXML
-	private Button refresh;
-
+	private Label lab_DateTimeFormat;
+	
+	@FXML
+	private TextField product;
+	
 	@FXML
 	private TextArea concatenation;
 
@@ -74,14 +74,14 @@ public class ProjectUpdateConfigViewController extends BaseController implements
 
 	@FXML
 	public void initialize(URL location, ResourceBundle resources) {
-		refresh.setGraphic(new ImageView("styles/themes/default/images/refresh.png"));  
+		lab_DateTimeFormat.setText("Date&Time Format:");
 		concatenation.setWrapText(true);
 		camelCase.setWrapText(true);
 		dateTimeFormat.setWrapText(true);
 		capital.setWrapText(true);
 		spelling.setWrapText(true);
 		config = ProjectConfigModule.loadConfig(projectName);
-		project.setText(projectName);
+		product.setText(projectName);
 		concatenation.setText(config.getStringList(Constant.CONCATENATION_PATH)
 				.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
 		camelCase.setText(config.getStringList(Constant.CAMELCASE_PATH)
@@ -97,14 +97,14 @@ public class ProjectUpdateConfigViewController extends BaseController implements
 	@FXML
 	public void updateConfig(ActionEvent event) {
 		if (logger.isDebugEnabled()) {
-			logger.debug(project.getText());
+			logger.debug(product.getText());
 			logger.debug(concatenation.getText());
 			logger.debug(camelCase.getText());
 			logger.debug(dateTimeFormat.getText());
 			logger.debug(capital.getText());
 			logger.debug(spelling.getText());
 		}
-        String newProjectName = project.getText();
+        String newProjectName = product.getText();
         if(newProjectName == null || "".equals(newProjectName)){
         	Alert alert=new Alert(Alert.AlertType.ERROR,MessageConstant.PRODUCT_NAME_MSG1);
 			alert.setHeaderText(MessageConstant.ERROR);
@@ -113,7 +113,16 @@ public class ProjectUpdateConfigViewController extends BaseController implements
 			});
 			return;
         }
-		
+        if(StringUtil.pattern(newProjectName, RulePatternConstant.PRODUCT_FORMAT)){
+        	Alert alert=new Alert(Alert.AlertType.ERROR,MessageConstant.PRODUCT_FORMAT_MSG);
+			alert.setHeaderText(MessageConstant.ERROR);
+			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
+				return;
+			});
+			return;
+        }
+        
+        
 		String concatenation_words = StringUtil.getChangedString(concatenation
 				.getText());
 		if (!concatenation_words.equals("")) {
@@ -223,7 +232,7 @@ public class ProjectUpdateConfigViewController extends BaseController implements
 	@FXML
 	public void refresh(ActionEvent event) throws IOException {
 		config = ProjectConfigModule.loadConfig(projectName);
-		project.setText(projectName);
+		product.setText(projectName);
 		concatenation.setText(config.getStringList(Constant.CONCATENATION_PATH)
 				.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
 		camelCase.setText(config.getStringList(Constant.CAMELCASE_PATH)

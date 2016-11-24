@@ -26,5 +26,6 @@ public class RulePatternConstant {
 	 public static final String SPECIAL_PATTERNS_CHECK_RULE_0=".*\\{.*\\}.*$";
 	 public static final String SPECIAL_PATTERNS_CHECK_RULE_1=".*\\d,choice,.*$";
 	 public static final String SPECIAL_PATTERNS_CHECK_RULE_2=".*\\{count, plural,.*";
+	 public static final String PRODUCT_FORMAT=".*[\\[|/|\\\\|:|\\*|\\?|\\<|\\>|\\||\\]]{1,}.*$";
 	 
 }

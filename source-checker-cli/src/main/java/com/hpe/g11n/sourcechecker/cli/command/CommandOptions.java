@@ -10,6 +10,8 @@ import com.beust.jcommander.Parameter;
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.hpe.g11n.sourcechecker.utils.StringUtil;
+import com.hpe.g11n.sourcechecker.utils.constant.RulePatternConstant;
 
 /**
  * Created with IntelliJ IDEA. 
@@ -21,12 +23,12 @@ public class CommandOptions {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 	@Parameter(names = { "-h", "-help", "--help" }, help = true, description = "Lists available commands.")
 	private boolean help;
-	@Parameter(names = { "-p", "--name" }, description = "Project name.")
-	private String projectName;
-	@Parameter(names = { "-v", "--version" }, description = "Project version.")
-	private String projectVersion;
-	@Parameter(names = { "-s", "--state" }, description = "State")
-	private String state;
+	@Parameter(names = { "-p", "--product" }, description = "Product.")
+	private String product;
+	@Parameter(names = { "-v", "--version" }, description = "Version.")
+	private String version;
+	@Parameter(names = { "-s", "--scope" }, description = "Scope")
+	private String scope;
 	@Parameter(names = { "-i", "--input" }, description = "File to be processed.")
 	private String sourceUrl;
 	@Parameter(names = { "-o", "--output" }, description = "Write Output to the folder.")
@@ -54,28 +56,28 @@ public class CommandOptions {
 		this.outputUrl = outputUrl;
 	}
 
-	public String getProjectName() {
-		return projectName;
+	public String getProduct() {
+		return product;
 	}
 
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
+	public void setProduct(String product) {
+		this.product = product;
 	}
 
-	public String getProjectVersion() {
-		return projectVersion;
+	public String getVersion() {
+		return version;
 	}
 
-	public void setProjectVersion(String projectVersion) {
-		this.projectVersion = projectVersion;
+	public void setVersion(String version) {
+		this.version = version;
 	}
 
-	public String getState() {
-		return state;
+	public String getScope() {
+		return scope;
 	}
 
-	public void setState(String state) {
-		this.state = state;
+	public void setScope(String scope) {
+		this.scope = scope;
 	}
 
 	public List<Integer> getSelectRules() {
@@ -108,16 +110,20 @@ public class CommandOptions {
 	public boolean validate() {
 		boolean flag = true;
 		try {
-			if (Strings.isNullOrEmpty(projectName)) {
-				logger.debug("-p or --input is need to set projectName!");
+			if (Strings.isNullOrEmpty(product)) {
+				logger.debug("-p or --input is need to set product!");
 				flag = false;
 			}
-			if (Strings.isNullOrEmpty(projectVersion)) {
-				logger.debug("-v or --input is need to set projectVersion!");
+			if(StringUtil.pattern(product, RulePatternConstant.PRODUCT_FORMAT)){
+				logger.debug("product can not contains \"[\",\"]\",\"/\",\"\\\",\":\",\"*\",\"?\",\"<\",\">\" and \"|\"");
+				flag = false; 
+		     }
+			if (Strings.isNullOrEmpty(version)) {
+				logger.debug("-v or --input is need to set version!");
 				flag = false;
 			}
-			if (Strings.isNullOrEmpty(state)) {
-				logger.debug("-s or --input is need to set state!");
+			if (Strings.isNullOrEmpty(scope)) {
+				logger.debug("-s or --input is need to set scope!");
 				flag = false;
 			}
 			File file;

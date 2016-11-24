@@ -48,7 +48,8 @@ public class MessageConstant {
 	 public static final String FILE_FOLDER_MSG1="No output folder selected or entered. Please select or enter an output folder and try again.";
 	 public static final String FILE_FOLDER_MSG2="The folder entered does not exist. Do you want to create it?";
 	 public static final String CHECKPOINT_MSG1="At least one checkpoint must be selected. Please check and try again.";
-	 public static final String PASSOLO_RUN_MSG1="Passolo must be shut down to proceed. Shutting down Passolo…";
+	 public static final String PASSOLO_RUN_MSG1="Passolo is running. Please manually shut it down.";
+	 public static final String PASSOLO_NO_LICENSE_MSG1="No Passolo license available. Please check if Passolo is already in run.";
 	 public static final String NO_PROJECT_MSG1="Go to Menu -> New to create a new project";
 	 public static final String CLOSE_CLICK="Files ware processing,Do you want to cancle?";
 	 public static final String NOT_FILE="It is not file!";
@@ -75,4 +76,6 @@ public class MessageConstant {
 	 public static final String TEMPLET_INJECT_CONFIG_NAME="templetConfig";
 	 public static final String CHECKER_PARSER="sourceCheckerParsers";
 	 public static final String RULES_PACKAGE="com.hpe.g11n.sourcechecker.core.rules";
+	 
+	 public static final String PRODUCT_FORMAT_MSG="product can not contains \"[\",\"]\",\"/\",\"\\\",\":\",\"*\",\"?\",\"<\",\">\" and \"|\"";
 }

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.hpe.g11n.sourcechecker.core.IRule;
 import com.hpe.g11n.sourcechecker.core.annotation.RuleData;
+import com.hpe.g11n.sourcechecker.core.spellingcheck.jazzy.HashMapDictionarySpellCheck;
 import com.hpe.g11n.sourcechecker.pojo.InputData;
 import com.hpe.g11n.sourcechecker.pojo.ReportData;
 import com.hpe.g11n.sourcechecker.pojo.ReportDataCount;
@@ -36,6 +37,7 @@ public class CapitalCheckRule implements IRule{
 	private List<ReportData> report =null;
 	private Config config;
 	private Config projectConfig;
+	private HashMapDictionarySpellCheck spellingCheck = new HashMapDictionarySpellCheck();
 	
 	public CapitalCheckRule(){
 
@@ -80,6 +82,28 @@ public class CapitalCheckRule implements IRule{
 				if(!StringUtil.isWhiteList(whitelist,ido.getSourceString())){
 					if (StringUtil.pattern(ido.getSourceString(),RulePatternConstant.CAPITAL_CHECK_RULE)
 							&& ido.getSourceString().trim().length()>1) {
+//						if(!spellingCheck.isInDictionary(ido.getSourceString())){
+							hitStrCount++;
+							int hs = hashSet.size();
+							hashSet.add(ido.getSourceString());
+							if(hs == hashSet.size()){
+								duplicatedStringCount++;
+								duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+							}else{
+								validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
+							}
+							hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
+							report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
+									Constant.CAPITAL,MessageConstant.CAPITAL_MSG1_START + ido.getSourceString() + MessageConstant.CAPITAL_MSG1_END,
+									ido.getFileVersion(),null));
+							flag = true;
+//						}
+					}
+				}
+			}else{
+				if (StringUtil.pattern(ido.getSourceString(),RulePatternConstant.CAPITAL_CHECK_RULE)
+						&& ido.getSourceString().trim().length()>1) {
+//					if(!spellingCheck.isInDictionary(ido.getSourceString())){
 						hitStrCount++;
 						int hs = hashSet.size();
 						hashSet.add(ido.getSourceString());
@@ -94,25 +118,7 @@ public class CapitalCheckRule implements IRule{
 								Constant.CAPITAL,MessageConstant.CAPITAL_MSG1_START + ido.getSourceString() + MessageConstant.CAPITAL_MSG1_END,
 								ido.getFileVersion(),null));
 						flag = true;
-					}
-				}
-			}else{
-				if (StringUtil.pattern(ido.getSourceString(),RulePatternConstant.CAPITAL_CHECK_RULE)
-						&& ido.getSourceString().trim().length()>1) {
-					hitStrCount++;
-					int hs = hashSet.size();
-					hashSet.add(ido.getSourceString());
-					if(hs == hashSet.size()){
-						duplicatedStringCount++;
-						duplicatedWordCount = duplicatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-					}else{
-						validatedWordCount = validatedWordCount + StringUtil.getCountWords(ido.getSourceString());
-					}
-					hitNewChangeWordCount = hitNewChangeWordCount + StringUtil.getCountWords(ido.getSourceString());
-					report.add(new ReportData(ido.getLpuName(),ido.getFileName(),ido.getStringId(), ido.getSourceString(),
-							Constant.CAPITAL,MessageConstant.CAPITAL_MSG1_START + ido.getSourceString() + MessageConstant.CAPITAL_MSG1_END,
-							ido.getFileVersion(),null));
-					flag = true;
+//					}
 				}
 			}
 			if(log.isDebugEnabled()){

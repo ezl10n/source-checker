@@ -74,8 +74,17 @@ public class SourceCheckerCommand{
 		DateUtil dateUtil = new DateUtil();
 		Date startScanTime = new Date();
 		String[] sourcePaths = source.split(";");
+		boolean flag = false;
 		for (String sourcePath : sourcePaths) {
-            lstIdo.addAll(fileParser.parser(sourcePath,state));
+			List<InputData> lstInputDate = fileParser.parser(sourcePath,state);
+			if(lstInputDate == null){
+				flag = true;
+				break;
+			}
+            lstIdo.addAll(lstInputDate);
+		}
+		if(flag){
+			return null;
 		}
 		checkReport.check(lstIdo,projectName,null);
 		Date startEndTime = new Date();
