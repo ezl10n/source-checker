@@ -1,5 +1,12 @@
 package com.hpe.g11n.sourcechecker.core.spellingcheck.jazzy;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Vector;
+
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -8,14 +15,6 @@ import com.swabunga.spell.engine.SpellDictionary;
 import com.swabunga.spell.engine.SpellDictionaryHashMap;
 import com.swabunga.spell.event.SpellChecker;
 import com.typesafe.config.Config;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Vector;
 
 /**
  * Created with IntelliJ IDEA.
