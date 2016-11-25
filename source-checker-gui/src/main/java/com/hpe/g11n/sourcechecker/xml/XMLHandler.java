@@ -53,7 +53,7 @@ public class XMLHandler {
 			document.setXmlVersion("1.0");
 
 			Element root = document.createElement("SourceChecker");
-			root.setAttribute("version", sourceChecker.getProductVersion());
+			root.setAttribute("version", sourceChecker.getVersion());
 			Element resultData = document.createElement("ResultData");
 			Set<String> set = new HashSet<String>();
 			for(ReportData reportData:lstReportData){
@@ -168,12 +168,12 @@ public class XMLHandler {
 			duration.setTextContent(summary.getDuration());
 			summaryElement.appendChild(duration);
 			
-			Element projectName = document.createElement("ProjectName");
-			projectName.setTextContent(summary.getProjectName());
+			Element projectName = document.createElement("Product");
+			projectName.setTextContent(summary.getProduct());
 			summaryElement.appendChild(projectName);
 			
-			Element releaseVersion = document.createElement("ReleaseVersion");
-			releaseVersion.setTextContent(summary.getReleaseVersion());
+			Element releaseVersion = document.createElement("Version");
+			releaseVersion.setTextContent(summary.getVersion());
 			summaryElement.appendChild(releaseVersion);
 			root.appendChild(summaryElement);
 			

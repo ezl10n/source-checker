@@ -47,15 +47,15 @@ public class SourceCheckerRuleManager implements ISourceChecker{
         });
     }
 
-    public String check(List<InputData> lstIdo,String projectName){
-    	return check(lstIdo,projectName,null);
+    public String check(List<InputData> lstIdo,String product){
+    	return check(lstIdo,product,null);
     }
     @Override
-    public String check(List<InputData> lstIdo,String projectName,ITaskProgressCallback callBack) {
+    public String check(List<InputData> lstIdo,String product,ITaskProgressCallback callBack) {
         Preconditions.checkNotNull(checkRules);
         Preconditions.checkArgument(checkRules.size() > 0, "checkRules should not be empty");
         for(int i =0;i<checkRules.size();i++){
-        	checkRules.get(i).check(lstIdo,projectName);
+        	checkRules.get(i).check(lstIdo,product);
         	
         	if(callBack != null){
         		callBack.callBack(i+1,checkRules.size());

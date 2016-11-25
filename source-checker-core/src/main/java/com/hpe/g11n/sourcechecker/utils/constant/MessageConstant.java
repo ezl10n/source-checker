@@ -1,14 +1,6 @@
 package com.hpe.g11n.sourcechecker.utils.constant;
 
 public class MessageConstant {
-	 public static final String WARNING="Warning:";
-	 public static final String INFORMATION="Information:";
-	 public static final String ERROR="Error:";
-	 public static final String CONFIRMATION="Confirmation:";
-	 public static final String EDIT="Edit";
-	 public static final String NEW="New";
-	 public static final String IMPORT="Import";
-	 
 	 public static final String CONCATENATION_MSG1_START = "Warning: The string starts or ends with keyword \"";
 	 public static final String CONCATENATION_MSG1_END = "\". Possible concatenation.";
 	 public static final String CONCATENATION_MSG2_START = "Warning: Single word \"";
@@ -50,11 +42,11 @@ public class MessageConstant {
 	 public static final String CHECKPOINT_MSG1="At least one checkpoint must be selected. Please check and try again.";
 	 public static final String PASSOLO_RUN_MSG1="Passolo is running. Please manually shut it down.";
 	 public static final String PASSOLO_NO_LICENSE_MSG1="No Passolo license available. Please check if Passolo is already in run.";
-	 public static final String NO_PROJECT_MSG1="Go to Menu -> New to create a new project";
+	 public static final String NO_PRODUCT_MSG1="Go to Menu -> New to create a new PRODUCT";
 	 public static final String CLOSE_CLICK="Files ware processing,Do you want to cancle?";
 	 public static final String NOT_FILE="It is not file!";
-	 public static final String REFRESH_MSG1="New project configuration created, please click \"Refresh\" to load it.";
-	 public static final String UPDATE_MSG1="Update project config is success!";
+	 public static final String REFRESH_MSG1="New product configuration created, please click \"Refresh\" to load it.";
+	 public static final String UPDATE_MSG1="Update product config is success!";
 	 public static final String IMPORT_MSG1="Please choose a excel file!";
 	 public static final String IMPORT_MSG2_START="Totally ";
 	 public static final String IMPORT_MSG2_MIND1=" comments are found, of which ";
@@ -62,21 +54,5 @@ public class MessageConstant {
 	 public static final String IMPORT_MSG2_END=" of which have been successfully imported to whitelist. Duplicated whitelist strings found after importing:";
 	 public static final String FINISH_MSG="All files are finished!";
 	 public static final String DELETE_MSG="Are you sure you want to delete this Whitelist? All contents will be removed!";
-	 
-	 public static final String SOURCE_CONFIG_PATH="..%1$s%1$ssrc%1$smain%1$sconfig";
-	 public static final String SOURCE_CONFIG_NAME="%1$ssource-checker-standalone-config.conf";
-	 public static final String SOURCE_CONFIG_DIR="source.checker.config.basedir";
-	 public static final String USER_DIR="user.dir";
-	 public static final String TEMPLET_CONFIG_NAME="%1$sproject-templet-config.conf";
-	 public static final String PROJECT_CONFIG_PATH="..%1$s%1$ssrc%1$smain%1$sprojectConfig";
-	 public static final String SPELLING_DICT_DIR="source.checker.spellingcheck.dict.basedir";
-	 public static final String SPELLING_DICT_DIR1="%1$s..%1$s%1$ssrc%1$smain%1$sdict";
-	 
-	 public static final String PROJECT_CONFIG_DIR="source.checker.projectConfig.basedir";
-	 public static final String SOURCE_INJECT_CONFIG_NAME="sourceCheckerConfig";
-	 public static final String TEMPLET_INJECT_CONFIG_NAME="templetConfig";
-	 public static final String CHECKER_PARSER="sourceCheckerParsers";
-	 public static final String RULES_PACKAGE="com.hpe.g11n.sourcechecker.core.rules";
-	 
 	 public static final String PRODUCT_FORMAT_MSG="product can not contains \"[\",\"]\",\"/\",\"\\\",\":\",\"*\",\"?\",\"<\",\">\" and \"|\"";
 }

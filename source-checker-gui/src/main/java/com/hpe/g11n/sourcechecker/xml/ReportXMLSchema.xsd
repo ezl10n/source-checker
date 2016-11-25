@@ -57,7 +57,7 @@
     </complexType>
     </element>
   </sequence>
-  <attribute name="ProductVersion" type="string" use="required"/>
+  <attribute name="Version" type="string" use="required"/>
  </complexType>
 </element>
 </schema>

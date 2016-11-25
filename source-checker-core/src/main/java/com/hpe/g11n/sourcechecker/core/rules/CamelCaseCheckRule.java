@@ -36,7 +36,7 @@ public class CamelCaseCheckRule implements IRule{
 	private static final String CAMELCASE_WHITELIST="psl.source-checker-white-list.CamelCase";
 	private List<ReportData> report =null;
 	private Config config;
-	private Config projectConfig;
+	private Config productConfig;
 
 	public CamelCaseCheckRule(){
 
@@ -52,11 +52,11 @@ public class CamelCaseCheckRule implements IRule{
 	}
 
 	@Override
-	public boolean check(List<InputData> lstIdo,String projectName) {
+	public boolean check(List<InputData> lstIdo,String product) {
 		List<String> whitelist=this.config.getStringList(CAMELCASE_WHITELIST);
-		projectConfig = StringUtil.loadConfig(projectName);
-		if(!projectConfig.isEmpty()){
-			List<String> projectWhitelist = projectConfig.getStringList(Constant.CAMELCASE_PATH);
+		productConfig = StringUtil.loadConfig(product);
+		if(!productConfig.isEmpty()){
+			List<String> projectWhitelist = productConfig.getStringList(Constant.CAMELCASE_PATH);
 			whitelist.addAll(projectWhitelist);
 		}
 		whitelist = StringUtil.getUniqueList(whitelist);

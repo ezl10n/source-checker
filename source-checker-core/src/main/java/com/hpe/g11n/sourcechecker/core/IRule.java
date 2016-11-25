@@ -10,7 +10,7 @@ import com.typesafe.config.Config;
 import java.util.List;
 
 public interface IRule {
-	boolean check(List<InputData> lstIdo,String projectName);
+	boolean check(List<InputData> lstIdo,String product);
 	List<ReportData> gatherReport();
 	void setConfig(Config config);
 }

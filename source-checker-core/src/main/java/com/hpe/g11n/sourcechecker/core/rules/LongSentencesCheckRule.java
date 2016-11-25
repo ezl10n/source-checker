@@ -49,7 +49,7 @@ public class LongSentencesCheckRule implements IRule{
 	}
 	
 	@Override
-	public boolean check(List<InputData> lstIdo,String projectName) {
+	public boolean check(List<InputData> lstIdo,String product) {
 		Preconditions.checkNotNull(lstIdo);
 		boolean flag = false;
 		report = new ArrayList<ReportData>();

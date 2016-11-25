@@ -10,13 +10,13 @@
          <children>
             <Label prefHeight="15.0" prefWidth="10.0" text="*" textFill="#ff0303"/>
             <Label prefHeight="15.0" prefWidth="300.0" text="Product: " />
-            <ChoiceBox fx:id="projectName" prefHeight="25.0" prefWidth="100.0" />
+            <ChoiceBox fx:id="product" prefHeight="25.0" prefWidth="100.0" />
             <Label prefHeight="15.0" prefWidth="10.0" text="*" textFill="#ff0303"/>
 			<Label prefHeight="15.0" prefWidth="300.0" text="Version: " />
-            <TextField fx:id="projectVersion" prefHeight="25.0" text="" />
+            <TextField fx:id="version" prefHeight="25.0" text="" />
             <Label prefHeight="15.0" prefWidth="10.0" text="*" textFill="#ff0303"/>
 			<Label prefHeight="15.0" prefWidth="250.0" text="Scope: " />
-            <ChoiceBox fx:id="state" prefHeight="25.0" prefWidth="100.0" />
+            <ChoiceBox fx:id="scope" prefHeight="25.0" prefWidth="100.0" />
          </children>
       </HBox>
       <HBox layoutX="27.0" layoutY="138.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="974.0">

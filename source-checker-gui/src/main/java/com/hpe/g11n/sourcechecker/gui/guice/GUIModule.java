@@ -12,7 +12,7 @@ import com.hpe.g11n.sourcechecker.fileparser.IFileParser;
 import com.hpe.g11n.sourcechecker.fileparser.impl.DefaultParser;
 import com.hpe.g11n.sourcechecker.fileparser.impl.LPUFileParser;
 import com.hpe.g11n.sourcechecker.fileparser.impl.PropertyParser;
-import com.hpe.g11n.sourcechecker.utils.constant.MessageConstant;
+import com.hpe.g11n.sourcechecker.utils.constant.Constant;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,7 +23,7 @@ import com.hpe.g11n.sourcechecker.utils.constant.MessageConstant;
 public class GUIModule extends AbstractModule {
     @Override
     protected void configure() {
-    	 bind(new TypeLiteral<List<BaseParser>>(){}).annotatedWith(Names.named(MessageConstant.CHECKER_PARSER)).toInstance(getFileParsers());
+    	 bind(new TypeLiteral<List<BaseParser>>(){}).annotatedWith(Names.named(Constant.CHECKER_PARSER)).toInstance(getFileParsers());
     	 bind(IFileParser.class).to(FileParserManager.class);    
     }
     

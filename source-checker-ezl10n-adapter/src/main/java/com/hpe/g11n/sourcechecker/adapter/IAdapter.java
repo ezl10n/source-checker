@@ -6,5 +6,5 @@ import java.util.Map;
 public interface IAdapter {
 	public Map<String,String> execute(Map<String,String> paramMap);
 	
-	public List<String> getProjectName();
+	public List<String> getProduct();
 }

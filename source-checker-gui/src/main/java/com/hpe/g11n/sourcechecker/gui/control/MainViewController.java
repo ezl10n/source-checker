@@ -38,10 +38,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.hp.g11n.jassolo.utils.PslUtils;
-import com.hp.g11n.sdl.psl.interop.core.IPassoloApp;
-import com.hp.g11n.sdl.psl.interop.core.IPslProject;
-import com.hp.g11n.sdl.psl.interop.core.impl.impl.PassoloApp;
-import com.hpe.g11n.sourcechecker.config.guice.ProjectConfigModule;
+import com.hpe.g11n.sourcechecker.config.guice.ProductConfigModule;
 import com.hpe.g11n.sourcechecker.gui.tasks.SourceCheckerTask;
 import com.hpe.g11n.sourcechecker.utils.StringUtil;
 import com.hpe.g11n.sourcechecker.utils.constant.Constant;
@@ -58,13 +55,13 @@ public class MainViewController extends BaseController  implements Initializable
 	private Parent root;
 
 	@FXML
-	private ChoiceBox<String> projectName;
+	private ChoiceBox<String> product;
 	
 	@FXML
-	private TextField projectVersion;
+	private TextField version;
 	
 	@FXML
-	private ChoiceBox<String> state;
+	private ChoiceBox<String> scope;
 	
 	@FXML
 	private TextField sourceUrl;
@@ -108,14 +105,14 @@ public class MainViewController extends BaseController  implements Initializable
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-//		String preFix = String.format(MessageConstant.PROJECT_CONFIG_PATH,File.separator);
-//		String passInDir=System.getProperty(MessageConstant.SOURCE_CONFIG_DIR);
+//		String preFix = String.format(Constant.PRODUCT_CONFIG_PATH,File.separator);
+//		String passInDir=System.getProperty(Constant.SOURCE_CONFIG_DIR);
 //        if(passInDir == null || passInDir.isEmpty()){
-//            passInDir = System.getProperty(MessageConstant.USER_DIR);
+//            passInDir = System.getProperty(Constant.USER_DIR);
 //        }
 //		File file = Paths.get(passInDir, preFix).toFile();
 		
-		File file = new File(getProjectConfigPath());
+		File file = new File(getProductConfigPath());
 		
 		File[] files = file.listFiles();
 		List<String> lstName = new ArrayList<String>();
@@ -142,18 +139,18 @@ public class MainViewController extends BaseController  implements Initializable
 				deleteMenu.getItems().add(deleteItem);
 				lstName.add(fileName);
 			}
-			projectName.setItems(FXCollections.observableArrayList(lstName));
+			product.setItems(FXCollections.observableArrayList(lstName));
 		}else{
-			projectName.setItems(FXCollections.observableArrayList(lstName));
-			projectName.setTooltip(new Tooltip(MessageConstant.NO_PROJECT_MSG1));
-			Alert alert=new Alert(Alert.AlertType.WARNING,MessageConstant.NO_PROJECT_MSG1);
-				alert.setHeaderText(MessageConstant.WARNING);
+			product.setItems(FXCollections.observableArrayList(lstName));
+			product.setTooltip(new Tooltip(MessageConstant.NO_PRODUCT_MSG1));
+			Alert alert=new Alert(Alert.AlertType.WARNING,MessageConstant.NO_PRODUCT_MSG1);
+				alert.setHeaderText(Constant.WARNING);
 				alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 				});
 		}
 		
-		state.setItems(FXCollections.observableArrayList(Constant.STATE_ALL, Constant.STATE_NEW_CHANGED));
-		state.valueProperty().setValue(Constant.STATE_NEW_CHANGED);
+		scope.setItems(FXCollections.observableArrayList(Constant.STATE_ALL, Constant.STATE_NEW_CHANGED));
+		scope.valueProperty().setValue(Constant.STATE_NEW_CHANGED);
 		if (chooser == null) {
 			chooser = new DirectoryChooser();
 		}
@@ -247,7 +244,7 @@ public class MainViewController extends BaseController  implements Initializable
 	public void close(ActionEvent event) throws IOException, InterruptedException {
 		if(t != null && t.isAlive()){
 			Alert alert=new Alert(Alert.AlertType.CONFIRMATION,MessageConstant.CLOSE_CLICK);
-			alert.setHeaderText(MessageConstant.WARNING);
+			alert.setHeaderText(Constant.WARNING);
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 				progressBar.setVisible(false);
 				if(PslUtils.isPassoloStarted() && closeCount ==0){
@@ -273,29 +270,29 @@ public class MainViewController extends BaseController  implements Initializable
 	}
 
 	public Parent getAddRulesConfigView() throws IOException {
-		return loadView("fxml/addRulesConfigView.fxml", new ProjectAddConfigViewController());
+		return loadView("fxml/addRulesConfigView.fxml", new ProductAddConfigViewController());
 	}
 	
 	@FXML
 	public void addConfigPage(ActionEvent event) throws IOException {
-		openPage(getAddRulesConfigView(),MessageConstant.NEW);
+		openPage(getAddRulesConfigView(),Constant.NEW);
 	}
 	
-	public Parent getUpdateRulesConfigView(String projectName) throws IOException {
-		return loadView("fxml/updateRulesConfigView.fxml", new ProjectUpdateConfigViewController(projectName));
-	}
-	
-	@FXML
-	public void updateConfigPage(ActionEvent event,String projectName) throws IOException {
-		openPage(getUpdateRulesConfigView(projectName),MessageConstant.EDIT);
+	public Parent getUpdateRulesConfigView(String product) throws IOException {
+		return loadView("fxml/updateRulesConfigView.fxml", new ProductUpdateConfigViewController(product));
 	}
 	
 	@FXML
-	public void deleteConfig(ActionEvent event,String projectName) throws IOException {
+	public void updateConfigPage(ActionEvent event,String product) throws IOException {
+		openPage(getUpdateRulesConfigView(product),Constant.EDIT);
+	}
+	
+	@FXML
+	public void deleteConfig(ActionEvent event,String product) throws IOException {
 		Alert alert=new Alert(Alert.AlertType.CONFIRMATION,MessageConstant.DELETE_MSG);
-		alert.setHeaderText(MessageConstant.CONFIRMATION);
+		alert.setHeaderText(Constant.CONFIRMATION);
 		alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
-			ProjectConfigModule.deleteConfig(projectName);
+			ProductConfigModule.deleteConfig(product);
 		});
 		refresh();
 	}
@@ -323,47 +320,47 @@ public class MainViewController extends BaseController  implements Initializable
 	public void checker(ActionEvent event) {
 		if(PslUtils.isPassoloStarted()){ 
 		    Alert alert=new Alert(Alert.AlertType.INFORMATION,MessageConstant.PASSOLO_RUN_MSG1);
-			alert.setHeaderText(MessageConstant.INFORMATION);
+			alert.setHeaderText(Constant.INFORMATION);
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 				 logger.debug(MessageConstant.PASSOLO_RUN_MSG1);
 			});
 			return;
 		}
-		if(projectName.getSelectionModel().selectedItemProperty().getValue() == null){
+		if(product.getSelectionModel().selectedItemProperty().getValue() == null){
 			Alert alert=new Alert(Alert.AlertType.ERROR,MessageConstant.PRODUCT_NAME_MSG1);
-			alert.setHeaderText(MessageConstant.ERROR);
+			alert.setHeaderText(Constant.ERROR);
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 				return;
 			});
 			return;
 		}
-		if(!StringUtil.formatRight(projectName.getSelectionModel().selectedItemProperty().getValue().toString())){
+		if(!StringUtil.formatRight(product.getSelectionModel().selectedItemProperty().getValue().toString())){
 			Alert alert=new Alert(Alert.AlertType.ERROR,MessageConstant.PRODUCT_NAME_MSG2);
-			alert.setHeaderText(MessageConstant.ERROR);
+			alert.setHeaderText(Constant.ERROR);
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 				return;
 			});
 			return;
 		}
-		if(projectVersion.getText() == null || "".equals(projectVersion.getText())){
+		if(version.getText() == null || "".equals(version.getText())){
 			Alert alert=new Alert(Alert.AlertType.ERROR,MessageConstant.VERSION_MSG1);
-			alert.setHeaderText(MessageConstant.ERROR);
+			alert.setHeaderText(Constant.ERROR);
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 				return;
 			});
 			return;
 		}
-		if(!StringUtil.formatRight(projectVersion.getText())){
+		if(!StringUtil.formatRight(version.getText())){
 			Alert alert=new Alert(Alert.AlertType.ERROR,MessageConstant.VERSION_MSG2);
-			alert.setHeaderText(MessageConstant.ERROR);
+			alert.setHeaderText(Constant.ERROR);
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 				return;
 			});
 			return;
 		}
-		if(state.getSelectionModel().selectedItemProperty().getValue() == null){
+		if(scope.getSelectionModel().selectedItemProperty().getValue() == null){
 			Alert alert=new Alert(Alert.AlertType.ERROR,MessageConstant.SCOPE_MSG1);
-			alert.setHeaderText(MessageConstant.ERROR);
+			alert.setHeaderText(Constant.ERROR);
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 				return;
 			});
@@ -378,7 +375,7 @@ public class MainViewController extends BaseController  implements Initializable
 		}
 		if(sourceUrl.getText() ==null || "".equals(sourceUrl.getText())){
 			Alert alert=new Alert(Alert.AlertType.ERROR,MessageConstant.FILE_MSG1);
-			alert.setHeaderText(MessageConstant.ERROR);
+			alert.setHeaderText(Constant.ERROR);
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 				return;
 			});
@@ -392,7 +389,7 @@ public class MainViewController extends BaseController  implements Initializable
 					if(file.isFile() && !file.exists()){
 						int index =subPath.lastIndexOf("\\");
 						Alert alert=new Alert(Alert.AlertType.ERROR,"The file ‘"+subPath.substring(index+1,subPath.length())+"’ is not existed, please try again.");
-						alert.setHeaderText(MessageConstant.ERROR);
+						alert.setHeaderText(Constant.ERROR);
 						alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 							return;
 						});
@@ -400,7 +397,7 @@ public class MainViewController extends BaseController  implements Initializable
 					}
 					if(file.isDirectory()){
 						Alert alert=new Alert(Alert.AlertType.ERROR,MessageConstant.NOT_FILE);
-						alert.setHeaderText(MessageConstant.ERROR);
+						alert.setHeaderText(Constant.ERROR);
 						alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 							return;
 						});
@@ -413,7 +410,7 @@ public class MainViewController extends BaseController  implements Initializable
 					int index =path.lastIndexOf("\\");
 					Alert alert=new Alert(Alert.AlertType.ERROR,MessageConstant.FILE_MSG3_START 
 							+ path.substring(index+1,path.length()) + MessageConstant.FILE_MSG3_END);
-					alert.setHeaderText(MessageConstant.ERROR);
+					alert.setHeaderText(Constant.ERROR);
 					alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 						return;
 					});
@@ -421,7 +418,7 @@ public class MainViewController extends BaseController  implements Initializable
 				}
 				if(file.isDirectory()){
 					Alert alert=new Alert(Alert.AlertType.ERROR,MessageConstant.FILE_MSG2);
-					alert.setHeaderText(MessageConstant.ERROR);
+					alert.setHeaderText(Constant.ERROR);
 					alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 						return;
 					});
@@ -431,7 +428,7 @@ public class MainViewController extends BaseController  implements Initializable
 		}
 		if(outputUrl.getText() ==null || "".equals(outputUrl.getText())){
 			Alert alert=new Alert(Alert.AlertType.ERROR,MessageConstant.FILE_FOLDER_MSG1);
-			alert.setHeaderText(MessageConstant.ERROR);
+			alert.setHeaderText(Constant.ERROR);
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 				return;
 			});
@@ -440,7 +437,7 @@ public class MainViewController extends BaseController  implements Initializable
 			File file = new File(outputUrl.getText());
 			if(!file.exists()){
 				Alert alert=new Alert(Alert.AlertType.CONFIRMATION,MessageConstant.FILE_FOLDER_MSG2);
-				alert.setHeaderText(MessageConstant.CONFIRMATION);
+				alert.setHeaderText(Constant.CONFIRMATION);
 				Optional<ButtonType> result = alert.showAndWait();
 				if (result.isPresent() && result.get() == ButtonType.OK) {
 					try {
@@ -458,51 +455,19 @@ public class MainViewController extends BaseController  implements Initializable
 		}
 		if(rules.size()==0){
 			Alert alert=new Alert(Alert.AlertType.ERROR,MessageConstant.CHECKPOINT_MSG1);
-			alert.setHeaderText(MessageConstant.ERROR);
+			alert.setHeaderText(Constant.ERROR);
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 				return;
 			});
 			return;
 		}
-		
-//		String[] paths = sourceUrl.getText().split(";");
-//		IPslProject project = null;
-//		for(String filePath:paths){
-//			if(filePath.endsWith(".lpu")){
-//				try{
-//					IPassoloApp app = PassoloApp.getInstance();
-//					project = app.open(filePath);
-//					project.getSourceLists();
-//					} catch (Exception ex) {
-//						log.debug("Failed to check, the version of Passolo is not 2011");
-//						log.error("LPUFileParser exception:" + ex.getMessage());
-//						Alert alert=new Alert(Alert.AlertType.ERROR,"Failed to check, the version of Passolo is not 2011");
-//						alert.setHeaderText("Error:");
-//						alert.showAndWait();
-//						if(project != null){
-//							project = null;
-////							project.close();
-//						}
-//						IPassoloApp.quit();
-//						return;
-//					} finally {
-//						if(project != null){
-//							project.close();
-//						}
-//						if(PslUtils.isPassoloStarted()){
-//							IPassoloApp.quit();
-//						}
-//					}
-//				break;
-//			}
-//		}
-		String s = state.getSelectionModel().selectedItemProperty().getValue().toString();
+		String s = scope.getSelectionModel().selectedItemProperty().getValue().toString();
 		task = new SourceCheckerTask();
 		injector.injectMembers(task);
 		progressBar.setVisible(true);
 		progressBar.progressProperty().bind(task.progressProperty());
-		task.setUp(projectName.getSelectionModel().selectedItemProperty().getValue().toString()
-				,projectVersion.getText(),s,sourceUrl.getText(), outputUrl.getText() + "/", rules);
+		task.setUp(product.getSelectionModel().selectedItemProperty().getValue().toString()
+				,version.getText(),s,sourceUrl.getText(), outputUrl.getText() + "/", rules);
 		t = new Thread(task);
 		t.setDaemon(true);
 		t.start();
@@ -510,13 +475,13 @@ public class MainViewController extends BaseController  implements Initializable
 	}
 	
 	public void initialize(Menu e_menu,Menu d_menu,ChoiceBox<String> choiceBox){
-//		String preFix = String.format(MessageConstant.PROJECT_CONFIG_PATH,File.separator);
-//		String passInDir=System.getProperty(MessageConstant.SOURCE_CONFIG_DIR);
+//		String preFix = String.format(Constant.PRODUCT_CONFIG_PATH,File.separator);
+//		String passInDir=System.getProperty(Constant.SOURCE_CONFIG_DIR);
 //        if(passInDir == null){
-//            passInDir = System.getProperty(MessageConstant.USER_DIR);
+//            passInDir = System.getProperty(Constant.USER_DIR);
 //        }
 //		File file = Paths.get(passInDir, preFix).toFile();
-		File file = new File(getProjectConfigPath());
+		File file = new File(getProductConfigPath());
 		File[] files = file.listFiles();
 		e_menu.getItems().clear();
 		d_menu.getItems().clear();
@@ -554,7 +519,7 @@ public class MainViewController extends BaseController  implements Initializable
 	
 	@FXML
 	public void refresh(){
-		initialize(editMenu,deleteMenu,projectName);
+		initialize(editMenu,deleteMenu,product);
 	}
 	
 	@FXML
@@ -592,11 +557,11 @@ public class MainViewController extends BaseController  implements Initializable
 		}
 	}
 	
-	public String getProjectConfigPath(){
-        String baseDir= System.getProperty(MessageConstant.PROJECT_CONFIG_DIR);
+	public String getProductConfigPath(){
+        String baseDir= System.getProperty(Constant.PRODUCT_CONFIG_DIR);
         if(baseDir == null || baseDir.isEmpty()){
-            String subDir = String.format(MessageConstant.PROJECT_CONFIG_PATH, File.separator);
-            baseDir=System.getProperty(MessageConstant.USER_DIR) + subDir;
+            String subDir = String.format(Constant.PRODUCT_CONFIG_PATH, File.separator);
+            baseDir=System.getProperty(Constant.USER_DIR) + subDir;
         }
         return baseDir;
     }

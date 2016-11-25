@@ -14,7 +14,7 @@ import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigRenderOptions;
 
-public class ProjectConfigModule extends AbstractModule{
+public class ProductConfigModule extends AbstractModule{
 	 protected static final Logger logger = LoggerFactory.getLogger(TempletConfigModule.class);
 
 	@Override
@@ -22,11 +22,11 @@ public class ProjectConfigModule extends AbstractModule{
 		
 	}
 //	@Provides
-    public static Config loadConfig(String projectName){
-		String configName = "%1$s"+projectName+".conf";
-        String preFix=String.format("..%1$s%1$ssrc%1$smain%1$sprojectConfig",File.separator);
+    public static Config loadConfig(String product){
+		String configName = "%1$s"+product+".conf";
+        String preFix=String.format("..%1$s%1$ssrc%1$smain%1$sproductConfig",File.separator);
         String fileName=String.format(configName,File.separator);
-        String passInDir=System.getProperty("source.checker.projectConfig.basedir");
+        String passInDir=System.getProperty("source.checker.productConfig.basedir");
         if(passInDir == null){
             passInDir = System.getProperty("user.dir");
             fileName = preFix + fileName;
@@ -34,11 +34,11 @@ public class ProjectConfigModule extends AbstractModule{
         return ConfigFactory.parseFileAnySyntax(Paths.get(passInDir, fileName).toFile());
     }
     
-    public static void saveConfig(Config config,String projectName){
-    	String configName = "%1$s"+projectName+".conf";
-        String preFix=String.format("..%1$s%1$ssrc%1$smain%1$sprojectConfig",File.separator);
+    public static void saveConfig(Config config,String product){
+    	String configName = "%1$s"+product+".conf";
+        String preFix=String.format("..%1$s%1$ssrc%1$smain%1$sproductConfig",File.separator);
         String fileName=String.format(configName,File.separator);
-        String passInDir=System.getProperty("source.checker.projectConfig.basedir");
+        String passInDir=System.getProperty("source.checker.productConfig.basedir");
         if(passInDir == null){
             passInDir = System.getProperty("user.dir");
             fileName=preFix+fileName;
@@ -53,11 +53,11 @@ public class ProjectConfigModule extends AbstractModule{
         }
     }
     
-    public static void deleteConfig(String projectName){
-    	String configName = "%1$s"+projectName+".conf";
-    	String preFix=String.format("..%1$s%1$ssrc%1$smain%1$sprojectConfig",File.separator);
+    public static void deleteConfig(String product){
+    	String configName = "%1$s"+product+".conf";
+    	String preFix=String.format("..%1$s%1$ssrc%1$smain%1$sproductConfig",File.separator);
     	String fileName=String.format(configName,File.separator);
-    	String passInDir=System.getProperty("source.checker.projectConfig.basedir");
+    	String passInDir=System.getProperty("source.checker.productConfig.basedir");
     	if(passInDir == null){
     		passInDir = System.getProperty("user.dir");
     		fileName=preFix+fileName;

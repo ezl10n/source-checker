@@ -13,16 +13,16 @@ public class AdapterTest {
 	@Test
 	public void testExecute(){
 		
-		String projectName = "LR";
-		String projectVersion ="V1.0";
-		String state ="All";
+		String product = "LR";
+		String version ="V1.0";
+		String scope ="All";
 		String sourcePath ="C:\\tmp\\psl generate sorucechecker report\\ALI.lpu";
 		String targetPath ="C:\\tmp";
 		String rules ="0,1,2";
 		Map<String,String> paramMap = new HashMap<String,String>();
-		paramMap.put("-p", projectName);
-		paramMap.put("-v", projectVersion);
-		paramMap.put("-s", state);
+		paramMap.put("-p", product);
+		paramMap.put("-v", version);
+		paramMap.put("-s", scope);
 		paramMap.put("-i", sourcePath);
 		paramMap.put("-o", targetPath);
 		paramMap.put("-r", rules);
@@ -31,9 +31,9 @@ public class AdapterTest {
 	}
 	
 	@Test
-	public void testGetProjectName(){
-		List<String> lstProjectName = adapter.getProjectName();
-		for(String name:lstProjectName){
+	public void testGetProoduct(){
+		List<String> lstProduct = adapter.getProduct();
+		for(String name:lstProduct){
 			System.out.println(name);
 		}
 	}

@@ -12,7 +12,7 @@ import com.hpe.g11n.sourcechecker.config.guice.ConfigModule;
 import com.hpe.g11n.sourcechecker.core.guice.CoreModule;
 import com.hpe.g11n.sourcechecker.gui.guice.GUIModule;
 import com.hpe.g11n.sourcechecker.gui.tasks.SourceCheckerCommand;
-import com.hpe.g11n.sourcechecker.utils.constant.MessageConstant;
+import com.hpe.g11n.sourcechecker.utils.constant.Constant;
 
 public class Adapter implements IAdapter {
 	protected Injector injector = Guice.createInjector(new CoreModule(),
@@ -25,9 +25,9 @@ public class Adapter implements IAdapter {
     @Override
 	public Map<String,String> execute(Map<String,String> paramMap) {
     	
-    	String projectName=paramMap.get("-p");
-    	String projectVersion=paramMap.get("-v");
-    	String state=paramMap.get("-s");
+    	String product=paramMap.get("-p");
+    	String version=paramMap.get("-v");
+    	String scope=paramMap.get("-s");
     	String sourcePath=paramMap.get("-i");
     	String targetPath=paramMap.get("-o");
     	String rules=paramMap.get("-r");
@@ -36,7 +36,7 @@ public class Adapter implements IAdapter {
 		for(String r:rule){
 			lst.add(Integer.valueOf(r));
 		}
-		sourceChecker.setUp(projectName,projectVersion,state,sourcePath,targetPath,lst);
+		sourceChecker.setUp(product,version,scope,sourcePath,targetPath,lst);
 		Map<String,String> result = null;
 		try {
 			result = sourceChecker.call();
@@ -47,8 +47,8 @@ public class Adapter implements IAdapter {
 	}
 
     @Override
-    public List<String> getProjectName(){
-		String preFix = String.format(MessageConstant.PROJECT_CONFIG_PATH,
+    public List<String> getProduct(){
+		String preFix = String.format(Constant.PRODUCT_CONFIG_PATH,
 				File.separator);
 		File file = new File(preFix);
 		File[] files = file.listFiles();

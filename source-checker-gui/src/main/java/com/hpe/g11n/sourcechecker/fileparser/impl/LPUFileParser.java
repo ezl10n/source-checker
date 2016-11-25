@@ -35,7 +35,7 @@ public class LPUFileParser extends BaseParser {
 	private IPslProject project;
 	List<InputData> lstIdo;
 
-	private List<InputData> parser(String filePath,String state) {
+	private List<InputData> parser(String filePath,String scope) {
 		long start = System.currentTimeMillis();
 		lstIdo = new ArrayList<InputData>();
 		app = PassoloApp.getInstance();
@@ -56,7 +56,7 @@ public class LPUFileParser extends BaseParser {
 					String sourceFileName = sourceLists.toList().get(i)
 							.getSourceFile();
 
-					lstIdo = getInputData(filePath, state, sourceFileName,
+					lstIdo = getInputData(filePath, scope, sourceFileName,
 							lstSourceString);
 				}
 //			}else{

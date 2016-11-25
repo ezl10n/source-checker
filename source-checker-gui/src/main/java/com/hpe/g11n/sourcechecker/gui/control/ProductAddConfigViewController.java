@@ -40,7 +40,7 @@ import com.typesafe.config.ConfigValueFactory;
  * @Time: 上午10:31:08
  *
  */
-public class ProjectAddConfigViewController extends BaseController implements
+public class ProductAddConfigViewController extends BaseController implements
 		Initializable {
 	@FXML
 	private Parent root;
@@ -71,7 +71,7 @@ public class ProjectAddConfigViewController extends BaseController implements
 	Config config;
 	
 
-	public ProjectAddConfigViewController() {
+	public ProductAddConfigViewController() {
 	}
 
 	@FXML
@@ -96,30 +96,30 @@ public class ProjectAddConfigViewController extends BaseController implements
 
 	@FXML
 	public void saveConfig(ActionEvent event) {
-		String projectName = product.getText();
-        if(projectName.contains("_")){
-        	projectName = projectName.replaceAll("_", "-");
+		String productName = product.getText();
+        if(productName.contains("_")){
+        	productName = productName.replaceAll("_", "-");
         }
 		if (logger.isDebugEnabled()) {
-			logger.debug(projectName);
+			logger.debug(productName);
 			logger.debug(concatenation.getText());
 			logger.debug(camelCase.getText());
 			logger.debug(dateTimeFormat.getText());
 			logger.debug(capital.getText());
 			logger.debug(spelling.getText());
 		}
-        if(projectName == null || "".equals(projectName)){
+        if(productName == null || "".equals(productName)){
         	Alert alert=new Alert(Alert.AlertType.ERROR,MessageConstant.PRODUCT_NAME_MSG1);
-			alert.setHeaderText(MessageConstant.ERROR);
+			alert.setHeaderText(Constant.ERROR);
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 				return;
 			});
 			return;
         }
         
-        if(StringUtil.pattern(projectName, RulePatternConstant.PRODUCT_FORMAT)){
+        if(StringUtil.pattern(productName, RulePatternConstant.PRODUCT_FORMAT)){
         	Alert alert=new Alert(Alert.AlertType.ERROR,MessageConstant.PRODUCT_FORMAT_MSG);
-			alert.setHeaderText(MessageConstant.ERROR);
+			alert.setHeaderText(Constant.ERROR);
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 				return;
 			});
@@ -184,8 +184,8 @@ public class ProjectAddConfigViewController extends BaseController implements
 		TempletConfigModule.saveConfig(config);
 
 		String templetPath = getTempletConfigPath();
-		String projectPath = getProjectConfigPath(projectName);
-		copyFile(templetPath, projectPath);
+		String productPath = getProductConfigPath(productName);
+		copyFile(templetPath, productPath);
 		
 		//roll back the project templet config 
 		config = config.withValue(Constant.CONCATENATION_PATH,
@@ -202,7 +202,7 @@ public class ProjectAddConfigViewController extends BaseController implements
 		TempletConfigModule.saveConfig(config);
 		
 		Alert alert=new Alert(Alert.AlertType.INFORMATION,MessageConstant.REFRESH_MSG1);
-		alert.setHeaderText(MessageConstant.INFORMATION);
+		alert.setHeaderText(Constant.INFORMATION);
 		alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 			close(event);
 			return;
@@ -218,41 +218,41 @@ public class ProjectAddConfigViewController extends BaseController implements
 	}
 
 	public String getTempletConfigPath() {
-//		String preFix = String.format(MessageConstant.SOURCE_CONFIG_PATH,File.separator);
-//		String fileName = String.format(MessageConstant.TEMPLET_CONFIG_NAME,File.separator);
-//		String passInDir = System.getProperty(MessageConstant.SOURCE_CONFIG_DIR);
+//		String preFix = String.format(Constant.SOURCE_CONFIG_PATH,File.separator);
+//		String fileName = String.format(Constant.TEMPLET_CONFIG_NAME,File.separator);
+//		String passInDir = System.getProperty(Constant.SOURCE_CONFIG_DIR);
 //		if (passInDir == null) {
-//			passInDir = System.getProperty(MessageConstant.USER_DIR);
+//			passInDir = System.getProperty(Constant.USER_DIR);
 //			fileName = preFix + fileName;
 //		}
 //		return fileName;
 		
-		String baseDir=System.getProperty(MessageConstant.SOURCE_CONFIG_DIR);
-		String fileName = String.format(MessageConstant.TEMPLET_CONFIG_NAME,File.separator);
+		String baseDir=System.getProperty(Constant.SOURCE_CONFIG_DIR);
+		String fileName = String.format(Constant.TEMPLET_CONFIG_NAME,File.separator);
 	        if(baseDir == null || baseDir.isEmpty()){
-	            String subDir = String.format(MessageConstant.SOURCE_CONFIG_PATH, File.separator);
-	            baseDir=System.getProperty(MessageConstant.USER_DIR) + subDir;
+	            String subDir = String.format(Constant.SOURCE_CONFIG_PATH, File.separator);
+	            baseDir=System.getProperty(Constant.USER_DIR) + subDir;
 	        }
 	        return baseDir + fileName;
 	}
 
-	public String getProjectConfigPath(String projectName) {
-//		String preFix = String.format(MessageConstant.PROJECT_CONFIG_PATH,File.separator);
-//		String path = "%1$s" + projectName + ".conf";
+	public String getProductConfigPath(String productName) {
+//		String preFix = String.format(Constant.PRODUCT_CONFIG_PATH,File.separator);
+//		String path = "%1$s" + productName + ".conf";
 //		String fileName = String.format(path, File.separator);
-//		String passInDir = System.getProperty(MessageConstant.SOURCE_CONFIG_DIR);
+//		String passInDir = System.getProperty(Constant.SOURCE_CONFIG_DIR);
 //		if (passInDir == null) {
-//			passInDir = System.getProperty(MessageConstant.USER_DIR);
+//			passInDir = System.getProperty(Constant.USER_DIR);
 //			fileName = preFix + fileName;
 //		}
 //		return fileName;
 		
-		 String baseDir=System.getProperty(MessageConstant.PROJECT_CONFIG_DIR);
-		 String path = "%1$s" + projectName + ".conf";
+		 String baseDir=System.getProperty(Constant.PRODUCT_CONFIG_DIR);
+		 String path = "%1$s" + productName + ".conf";
 			String fileName = String.format(path, File.separator);
 	        if(baseDir == null || baseDir.isEmpty()){
-	            String subDir = String.format(MessageConstant.PROJECT_CONFIG_PATH, File.separator);
-	            baseDir=System.getProperty(MessageConstant.USER_DIR) + subDir;
+	            String subDir = String.format(Constant.PRODUCT_CONFIG_PATH, File.separator);
+	            baseDir=System.getProperty(Constant.USER_DIR) + subDir;
 	        }
 	        return baseDir + fileName;
 	}

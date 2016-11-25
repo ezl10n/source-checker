@@ -27,11 +27,11 @@ public class FileParserManager implements IFileParser {
 	Config config;
 
 	@Override
-	public List<InputData> parser(String filePath,String state) {
+	public List<InputData> parser(String filePath,String scope) {
 		for (BaseParser parser : parsers) {
 			parser.setConfig(config);
 			if (parser.isHandle(filePath)) {
-				return parser.getInputData(filePath,state);
+				return parser.getInputData(filePath,scope);
 			}
 		}
 		return null;

@@ -41,7 +41,7 @@ public class ConcatenationCheckRule implements IRule{
 	private List<String> dateFormatKeywords;
 	private List<ReportData> report =null;
 	private Config config;
-	private Config projectConfig;
+	private Config productConfig;
 
 	public ConcatenationCheckRule(){
 
@@ -60,11 +60,11 @@ public class ConcatenationCheckRule implements IRule{
 	}
 
 	@Override
-	public boolean check(List<InputData> lstIdo,String projectName) {
+	public boolean check(List<InputData> lstIdo,String product) {
 		List<String> whitelist=config.getStringList(CONCATENATION_WHITELIST);
-		projectConfig = StringUtil.loadConfig(projectName);
-		if(!projectConfig.isEmpty()){
-			List<String> projectWhitelist = projectConfig.getStringList(Constant.CONCATENATION_PATH);
+		productConfig = StringUtil.loadConfig(product);
+		if(!productConfig.isEmpty()){
+			List<String> projectWhitelist = productConfig.getStringList(Constant.CONCATENATION_PATH);
 			whitelist.addAll(projectWhitelist);
 		}
 		whitelist = StringUtil.getUniqueList(whitelist);

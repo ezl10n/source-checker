@@ -23,7 +23,7 @@ public class PropertyParser extends BaseParser{
 
 	InputData ido;
 	List<InputData> lstIdo;
-	private List<InputData> parser(String filePath,String state){
+	private List<InputData> parser(String filePath,String scope){
 		lstIdo = new ArrayList<InputData>();
 		try {
 			FileReader reader = new FileReader(filePath);

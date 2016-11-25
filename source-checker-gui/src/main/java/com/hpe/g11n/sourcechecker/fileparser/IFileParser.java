@@ -13,6 +13,6 @@ import com.hpe.g11n.sourcechecker.pojo.InputData;
  *
  */
 public interface IFileParser {
-	public List<InputData> parser(String filePath,String state);
+	public List<InputData> parser(String filePath,String scope);
 	
 }

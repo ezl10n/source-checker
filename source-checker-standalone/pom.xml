@@ -52,7 +52,10 @@
                         <artifactId>appassembler-maven-plugin</artifactId>
                         <configuration>
                             <configurationSourceDirectory>src/main/config</configurationSourceDirectory>
-                            <extraJvmArguments>-Djava.library.path=@BASEDIR@\lib -Dsource.checker.config.basedir=@BASEDIR@\config -Dsource.checker.spellingcheck.dict.basedir=@BASEDIR@\dict -Dsource.checker.projectConfig.basedir=@BASEDIR@\projectConfig 
+                            <extraJvmArguments>-Djava.library.path=@BASEDIR@\lib 
+                            -Dsource.checker.config.basedir=@BASEDIR@\config 
+                            -Dsource.checker.spellingcheck.dict.basedir=@BASEDIR@\dict 
+                            -Dsource.checker.productConfig.basedir=@BASEDIR@\productConfig 
 							-Dcom.jacob.debug=${jacob.debug} 
 							-Dconsole.log-level=${console.logging}</extraJvmArguments>
                             <programs>
@@ -70,7 +73,7 @@
                                         <extraArguments>
                                             <extraArgument>-Djava.library.path=@BASEDIR@\lib</extraArgument>
                                             <extraArgument>-Dsource.checker.config.basedir=@BASEDIR@\config</extraArgument>
-                                            <extraArgument>-Dsource.checker.projectConfig.basedir=@BASEDIR@\projectConfig</extraArgument>
+                                            <extraArgument>-Dsource.checker.productConfig.basedir=@BASEDIR@\productConfig</extraArgument>
                                             <extraArgument>-Dsource.checker.spellingcheck.dict.basedir=@BASEDIR@\dict</extraArgument>
                                             <extraArgument>-Dconsole.log-level=${console.logging}</extraArgument>
                                             <extraArgument>-Dcom.jacob.debug=${jacob.debug}</extraArgument>
@@ -91,7 +94,7 @@
                                         <extraArguments>
                                             <extraArgument>-Djava.library.path=@BASEDIR@\lib</extraArgument>
                                             <extraArgument>-Dsource.checker.config.basedir=@BASEDIR@\config</extraArgument>
-                                            <extraArgument>-Dsource.checker.projectConfig.basedir=@BASEDIR@\projectConfig</extraArgument>
+                                            <extraArgument>-Dsource.checker.productConfig.basedir=@BASEDIR@\productConfig</extraArgument>
                                             <extraArgument>-Dsource.checker.spellingcheck.dict.basedir=@BASEDIR@\dict</extraArgument>
                                             <extraArgument>-Dconsole.log-level=${console.logging}</extraArgument>
                                             <extraArgument>-Dcom.jacob.debug=${jacob.debug}</extraArgument>
@@ -113,7 +116,7 @@
                                         <extraArguments>
                                             <extraArgument>-Djava.library.path=@BASEDIR@\lib</extraArgument>
                                             <extraArgument>-Dsource.checker.config.basedir=@BASEDIR@\config</extraArgument>
-                                            <extraArgument>-Dsource.checker.projectConfig.basedir=@BASEDIR@\projectConfig</extraArgument>
+                                            <extraArgument>-Dsource.checker.productConfig.basedir=@BASEDIR@\productConfig</extraArgument>
                                             <extraArgument>-Dsource.checker.spellingcheck.dict.basedir=@BASEDIR@\dict</extraArgument>
                                             <extraArgument>-Dconsole.log-level=${console.logging}</extraArgument>
                                             <extraArgument>-Dcom.jacob.debug=${jacob.debug}</extraArgument>
@@ -157,10 +160,10 @@
                                 </goals>
                                 <configuration>
                                     <overwrite>true</overwrite>
-                                    <outputDirectory>${dist.directory}/projectConfig</outputDirectory>
+                                    <outputDirectory>${dist.directory}/productConfig</outputDirectory>
                                     <resources>
                                         <resource>
-                                            <directory>../src/main/projectConfig</directory>
+                                            <directory>../src/main/productConfig</directory>
                                             <includes>
                                                 <include>*.conf</include>
                                             </includes>

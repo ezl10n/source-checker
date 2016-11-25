@@ -36,7 +36,7 @@ public class CapitalCheckRule implements IRule{
 	private static final String CAPITAL_WHITELIST="psl.source-checker-white-list.Capital";
 	private List<ReportData> report =null;
 	private Config config;
-	private Config projectConfig;
+	private Config productConfig;
 	private HashMapDictionarySpellCheck spellingCheck = new HashMapDictionarySpellCheck();
 	
 	public CapitalCheckRule(){
@@ -54,11 +54,11 @@ public class CapitalCheckRule implements IRule{
 	}
 	
 	@Override
-	public boolean check(List<InputData> lstIdo,String projectName) {
+	public boolean check(List<InputData> lstIdo,String product) {
 		List<String> whitelist=this.config.getStringList(CAPITAL_WHITELIST);
-		projectConfig = StringUtil.loadConfig(projectName);
-		if(!projectConfig.isEmpty()){
-			List<String> projectWhitelist = projectConfig.getStringList(Constant.CAPITAL_PATH);
+		productConfig = StringUtil.loadConfig(product);
+		if(!productConfig.isEmpty()){
+			List<String> projectWhitelist = productConfig.getStringList(Constant.CAPITAL_PATH);
 			whitelist.addAll(projectWhitelist);
 		}
 		whitelist = StringUtil.getUniqueList(whitelist);

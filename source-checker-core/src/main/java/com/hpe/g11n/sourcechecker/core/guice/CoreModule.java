@@ -22,7 +22,7 @@ import com.hpe.g11n.sourcechecker.core.SourceCheckerRuleManager;
 import com.hpe.g11n.sourcechecker.core.annotation.RuleData;
 import com.hpe.g11n.sourcechecker.core.spellingcheck.ISpellingCheck;
 import com.hpe.g11n.sourcechecker.core.spellingcheck.jazzy.HashMapDictionarySpellCheck;
-import com.hpe.g11n.sourcechecker.utils.constant.MessageConstant;
+import com.hpe.g11n.sourcechecker.utils.constant.Constant;
 
 
 /**
@@ -35,7 +35,7 @@ public class CoreModule extends AbstractModule {
 
     private static List<String> checkboxNames = new ArrayList<>();
     private static List<Class> rules = new ArrayList<>();
-    private static final Reflections REFLECTIONS = buildReflections(MessageConstant.RULES_PACKAGE);
+    private static final Reflections REFLECTIONS = buildReflections(Constant.RULES_PACKAGE);
     static {
         REFLECTIONS
                 .getTypesAnnotatedWith(RuleData.class)

@@ -39,7 +39,7 @@ public class SpellingCheckRule implements IRule{
 	private List<String> keywords;
 	private List<String> spelling;
 	private Config config;
-	private Config projectConfig;
+	private Config productConfig;
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -63,11 +63,11 @@ public class SpellingCheckRule implements IRule{
 		return report;
 	}
 	@Override
-	public boolean check(List<InputData> lstIdo,String projectName) {
+	public boolean check(List<InputData> lstIdo,String product) {
 		List<String> whitelist = config.getStringList(SPELLING_WHITELIST);
-		projectConfig = StringUtil.loadConfig(projectName);
-		if(!projectConfig.isEmpty()){
-			List<String> projectWhitelist = projectConfig.getStringList(Constant.SPELLING_PATH);
+		productConfig = StringUtil.loadConfig(product);
+		if(!productConfig.isEmpty()){
+			List<String> projectWhitelist = productConfig.getStringList(Constant.SPELLING_PATH);
 			whitelist.addAll(projectWhitelist);
 		}
 		whitelist = StringUtil.getUniqueList(whitelist);

@@ -41,7 +41,7 @@ public class StringsMixedCheckRule implements IRule{
 	}
 	
 	@Override
-	public boolean check(List<InputData> lstIdo,String projectName) {
+	public boolean check(List<InputData> lstIdo,String product) {
 		List<String> whitelist = config.getStringList(STRINGMIXED_WHITELIST);
 		Preconditions.checkNotNull(lstIdo);
 		boolean flag = false;

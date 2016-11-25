@@ -12,9 +12,6 @@ import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.inject.Inject;
 import com.hpe.g11n.sourcechecker.core.ISourceChecker;
 import com.hpe.g11n.sourcechecker.fileparser.IFileParser;
@@ -40,10 +37,9 @@ import com.hpe.g11n.sourcechecker.xml.XMLHandler;
  *
  */
 public class SourceCheckerTask extends Task<Void> {
-	private final Logger log = LoggerFactory.getLogger(getClass());
-	private String projectName;
-	private String projectVersion;
-	private String state;
+	private String product;
+	private String version;
+	private String scope;
 	private String source;
 	private String report;
 	private List<Integer> rulesCheckedIdx;
@@ -56,11 +52,11 @@ public class SourceCheckerTask extends Task<Void> {
 	int totalProgress = 0;
 	int totalCount = 0;
 
-	public void setUp(String projectName, String projectVersion,String state,
+	public void setUp(String product, String version,String scope,
 			String sourceDir, String reportDir,List<Integer> rulesCheckedIdx) {
-		this.projectName = projectName;
-		this.projectVersion = projectVersion;
-		this.state = state;
+		this.product = product;
+		this.version = version;
+		this.scope = scope;
 		this.source = sourceDir;
 		this.report = reportDir;
 		this.rulesCheckedIdx = rulesCheckedIdx;
@@ -71,7 +67,7 @@ public class SourceCheckerTask extends Task<Void> {
 	protected Void call() throws Exception {
 		// output
 		SourceChecker sourceChecker = new SourceChecker();
-		sourceChecker.setProductVersion(Constant.PRODUCT_VERSION);
+		sourceChecker.setVersion(Constant.PRODUCT_VERSION);
 		
 		List<InputData> lstIdo = new ArrayList<InputData>();
 		DateUtil dateUtil = new DateUtil();
@@ -79,7 +75,7 @@ public class SourceCheckerTask extends Task<Void> {
 		String[] sourcePaths = source.split(";");
 		boolean flag = false;
 		for (String sourcePath : sourcePaths) {
-			List<InputData> lstInputDate = fileParser.parser(sourcePath,state);
+			List<InputData> lstInputDate = fileParser.parser(sourcePath,scope);
 			if(lstInputDate == null){
 				flag = true;
 				break;
@@ -89,7 +85,7 @@ public class SourceCheckerTask extends Task<Void> {
 		if(flag){
 			return null;
 		}
-		checkReport.check(lstIdo,projectName,(now,total) ->{this.updateProgress(now, total);});
+		checkReport.check(lstIdo,product,(now,total) ->{this.updateProgress(now, total);});
 		Date startEndTime = new Date();
 		// report
 		List<ReportData> lstReport = checkReport.report();
@@ -112,8 +108,8 @@ public class SourceCheckerTask extends Task<Void> {
 		}
 		
 		Summary summary = new Summary();
-		summary.setProjectName(projectName);
-		summary.setReleaseVersion(projectVersion);
+		summary.setProduct(product);
+		summary.setVersion(version);
 		summary.setScanStartTime(startScanTime);
 		summary.setScanEndTime(startEndTime);
 		summary.setTotalScore(totalScore);
@@ -122,11 +118,11 @@ public class SourceCheckerTask extends Task<Void> {
 		
 		//create xml 
 		XMLHandler handler = new XMLHandler();
-		handler.createXML(report + projectName + "_" + projectVersion + "_"
+		handler.createXML(report + product + "_" + version + "_"
 				+ dateFileName + ".xml", sourceChecker);
 		
 		//create excel 
-		String excelPath= report + projectName + "_" + projectVersion + "_"
+		String excelPath= report + product + "_" + version + "_"
 		        + dateFileName + ".xls";
 		List<Excel> lstExcel = new ArrayList<Excel>();
 
@@ -144,8 +140,8 @@ public class SourceCheckerTask extends Task<Void> {
 		
 		List<List<String>> lstSummaryExcelValue = new ArrayList<List<String>>();
 		List<String> lstSummary = new ArrayList<String>();
-		lstSummary.add(summary.getProjectName());
-		lstSummary.add(summary.getReleaseVersion());
+		lstSummary.add(summary.getProduct());
+		lstSummary.add(summary.getVersion());
 		lstSummary.add(String.valueOf(summary.getTotalScore()));
 		lstSummary.add(dateUtil.format("YYYY-MM-dd HH:mm:ss", summary.getScanStartTime()));
 		lstSummary.add(dateUtil.format("YYYY-MM-dd HH:mm:ss", summary.getScanEndTime()));
@@ -273,7 +269,7 @@ public class SourceCheckerTask extends Task<Void> {
 	protected void succeeded() {
 		super.succeeded();
 		Alert alert = new Alert(Alert.AlertType.INFORMATION,MessageConstant.FINISH_MSG);
-		alert.setHeaderText(MessageConstant.INFORMATION);
+		alert.setHeaderText(Constant.INFORMATION);
 		alert.showAndWait().filter(response -> response == ButtonType.OK)
 				.ifPresent(response -> {});
 	}

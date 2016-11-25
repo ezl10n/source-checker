@@ -21,7 +21,7 @@ public class DefaultParser extends BaseParser {
 	}
 
 	@Override
-	public List<InputData> getInputData(String source,String state) {
+	public List<InputData> getInputData(String source,String scope) {
 		throw new RuntimeException("Failue");
 	}
 }

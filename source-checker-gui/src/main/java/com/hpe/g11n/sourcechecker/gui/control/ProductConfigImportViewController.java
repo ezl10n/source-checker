@@ -18,7 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.WindowEvent;
 
-import com.hpe.g11n.sourcechecker.config.guice.ProjectConfigModule;
+import com.hpe.g11n.sourcechecker.config.guice.ProductConfigModule;
 import com.hpe.g11n.sourcechecker.utils.ExcelPoiUtils;
 import com.hpe.g11n.sourcechecker.utils.StringUtil;
 import com.hpe.g11n.sourcechecker.utils.constant.Constant;
@@ -26,7 +26,7 @@ import com.hpe.g11n.sourcechecker.utils.constant.MessageConstant;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigValueFactory;
 
-public class ProjectConfigImportViewController extends BaseController implements Initializable {
+public class ProductConfigImportViewController extends BaseController implements Initializable {
 
 	@FXML
 	private Parent root;
@@ -37,7 +37,7 @@ public class ProjectConfigImportViewController extends BaseController implements
 	private FileChooser fileChooser;
 	private String chooseSourcePath;
 	Config config;
-	String projectName;
+	String product;
 	
 	List<String> lstConcatenation;
 	List<String> lstCamelCase;
@@ -45,8 +45,8 @@ public class ProjectConfigImportViewController extends BaseController implements
 	List<String> lstCapital;
 	List<String> lstSpelling;
 	
-	public ProjectConfigImportViewController(String projectName){
-		this.projectName = projectName;
+	public ProductConfigImportViewController(String product){
+		this.product = product;
 	}
 	
 	@Override
@@ -54,7 +54,7 @@ public class ProjectConfigImportViewController extends BaseController implements
 		if (fileChooser == null) {
 			fileChooser = new FileChooser();
 		}
-		config = StringUtil.loadConfig(projectName);
+		config = StringUtil.loadConfig(product);
 		lstConcatenation = config.getStringList(Constant.CONCATENATION_PATH);
 		lstCamelCase = config.getStringList(Constant.CAMELCASE_PATH); 
 		lstDateTimeFormat = config.getStringList(Constant.DATETIMEFORMAT_PATH); 
@@ -91,7 +91,7 @@ public class ProjectConfigImportViewController extends BaseController implements
 		String path = filePath.getText();
 		if(path == null || "".equals(path)){
 			Alert alert=new Alert(Alert.AlertType.ERROR,MessageConstant.IMPORT_MSG1);
-			alert.setHeaderText(MessageConstant.ERROR);
+			alert.setHeaderText(Constant.ERROR);
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 				return;
 			});
@@ -153,7 +153,7 @@ public class ProjectConfigImportViewController extends BaseController implements
 				ConfigValueFactory.fromAnyRef(StringUtil.getUniqueList(lstCapital)));
 		config = config.withValue(Constant.SPELLING_PATH,
 				ConfigValueFactory.fromAnyRef(StringUtil.getUniqueList(lstSpelling)));
-		ProjectConfigModule.saveConfig(config,projectName);
+		ProductConfigModule.saveConfig(config,product);
 		
 		int sourceTotal = lstTotal.size();
 		int success = lstUnionUniqueTotal.size() - sourceTotal;
@@ -162,7 +162,7 @@ public class ProjectConfigImportViewController extends BaseController implements
 		Alert alert=new Alert(Alert.AlertType.INFORMATION,MessageConstant.IMPORT_MSG2_START + commentCount 
 				+ MessageConstant.IMPORT_MSG2_MIND1 + lstInvalid.size() + MessageConstant.IMPORT_MSG2_MIND2 + success 
 				+ MessageConstant.IMPORT_MSG2_END + duplicated);
-		alert.setHeaderText(MessageConstant.INFORMATION);
+		alert.setHeaderText(Constant.INFORMATION);
 		alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 			close(event);
 			return;

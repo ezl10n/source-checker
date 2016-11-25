@@ -21,7 +21,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-import com.hpe.g11n.sourcechecker.config.guice.ProjectConfigModule;
+import com.hpe.g11n.sourcechecker.config.guice.ProductConfigModule;
 import com.hpe.g11n.sourcechecker.utils.StringUtil;
 import com.hpe.g11n.sourcechecker.utils.constant.Constant;
 import com.hpe.g11n.sourcechecker.utils.constant.MessageConstant;
@@ -38,7 +38,7 @@ import com.typesafe.config.ConfigValueFactory;
  * @Time: 上午10:31:08
  *
  */
-public class ProjectUpdateConfigViewController extends BaseController implements
+public class ProductUpdateConfigViewController extends BaseController implements
 		Initializable {
 	@FXML
 	private Parent root;
@@ -66,10 +66,10 @@ public class ProjectUpdateConfigViewController extends BaseController implements
 
 	Config config;
 	
-	private String projectName;
+	private String productName;
 
-	public ProjectUpdateConfigViewController(String projectName) {
-		this.projectName = projectName;
+	public ProductUpdateConfigViewController(String productName) {
+		this.productName = productName;
 	}
 
 	@FXML
@@ -80,8 +80,8 @@ public class ProjectUpdateConfigViewController extends BaseController implements
 		dateTimeFormat.setWrapText(true);
 		capital.setWrapText(true);
 		spelling.setWrapText(true);
-		config = ProjectConfigModule.loadConfig(projectName);
-		product.setText(projectName);
+		config = ProductConfigModule.loadConfig(productName);
+		product.setText(productName);
 		concatenation.setText(config.getStringList(Constant.CONCATENATION_PATH)
 				.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
 		camelCase.setText(config.getStringList(Constant.CAMELCASE_PATH)
@@ -96,29 +96,29 @@ public class ProjectUpdateConfigViewController extends BaseController implements
 
 	@FXML
 	public void updateConfig(ActionEvent event) {
-		String newProjectName = product.getText();
-        if(newProjectName.contains("_")){
-        	newProjectName = newProjectName.replaceAll("_", "-");
+		String newProductName = product.getText();
+        if(newProductName.contains("_")){
+        	newProductName = newProductName.replaceAll("_", "-");
         }
 		if (logger.isDebugEnabled()) {
-			logger.debug(newProjectName);
+			logger.debug(newProductName);
 			logger.debug(concatenation.getText());
 			logger.debug(camelCase.getText());
 			logger.debug(dateTimeFormat.getText());
 			logger.debug(capital.getText());
 			logger.debug(spelling.getText());
 		}
-        if(newProjectName == null || "".equals(newProjectName)){
+        if(newProductName == null || "".equals(newProductName)){
         	Alert alert=new Alert(Alert.AlertType.ERROR,MessageConstant.PRODUCT_NAME_MSG1);
-			alert.setHeaderText(MessageConstant.ERROR);
+			alert.setHeaderText(Constant.ERROR);
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 				return;
 			});
 			return;
         }
-        if(StringUtil.pattern(newProjectName, RulePatternConstant.PRODUCT_FORMAT)){
+        if(StringUtil.pattern(newProductName, RulePatternConstant.PRODUCT_FORMAT)){
         	Alert alert=new Alert(Alert.AlertType.ERROR,MessageConstant.PRODUCT_FORMAT_MSG);
-			alert.setHeaderText(MessageConstant.ERROR);
+			alert.setHeaderText(Constant.ERROR);
 			alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 				return;
 			});
@@ -181,15 +181,15 @@ public class ProjectUpdateConfigViewController extends BaseController implements
 					ConfigValueFactory.fromAnyRef(new ArrayList<String>()));
 		}
 
-		if(!"".equals(newProjectName)){
-			ProjectConfigModule.saveConfig(config,newProjectName);
+		if(!"".equals(newProductName)){
+			ProductConfigModule.saveConfig(config,newProductName);
 		}
-		if(!newProjectName.equals(projectName)){
-			ProjectConfigModule.deleteConfig(projectName);
+		if(!newProductName.equals(productName)){
+			ProductConfigModule.deleteConfig(productName);
 		}
 		
 		Alert alert=new Alert(Alert.AlertType.INFORMATION,MessageConstant.UPDATE_MSG1);
-		alert.setHeaderText(MessageConstant.INFORMATION);
+		alert.setHeaderText(Constant.INFORMATION);
 		alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 			close(event);
 			return;
@@ -205,12 +205,12 @@ public class ProjectUpdateConfigViewController extends BaseController implements
 	}
 	
 	public Parent getImportView() throws IOException {
-		return loadView("fxml/importView.fxml", new ProjectConfigImportViewController(projectName));
+		return loadView("fxml/importView.fxml", new ProductConfigImportViewController(productName));
 	}
 	
 	@FXML
 	public void importView(ActionEvent event) throws IOException {
-		openPage(getImportView(),MessageConstant.IMPORT);
+		openPage(getImportView(),Constant.IMPORT);
 	}
 	
 	/**
@@ -234,8 +234,8 @@ public class ProjectUpdateConfigViewController extends BaseController implements
 	
 	@FXML
 	public void refresh(ActionEvent event) throws IOException {
-		config = ProjectConfigModule.loadConfig(projectName);
-		product.setText(projectName);
+		config = ProductConfigModule.loadConfig(productName);
+		product.setText(productName);
 		concatenation.setText(config.getStringList(Constant.CONCATENATION_PATH)
 				.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
 		camelCase.setText(config.getStringList(Constant.CAMELCASE_PATH)

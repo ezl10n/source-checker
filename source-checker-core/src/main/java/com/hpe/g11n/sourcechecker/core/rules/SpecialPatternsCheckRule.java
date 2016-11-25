@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +25,6 @@ import com.typesafe.config.Config;
 public class SpecialPatternsCheckRule implements IRule{
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	private List<ReportData> report =null;
-	private Config config;
 	
 	boolean flag = false;
 	
@@ -40,10 +37,9 @@ public class SpecialPatternsCheckRule implements IRule{
 	}
 	@Override
 	public void setConfig(Config config) {
-		this.config=config;
 	}
 	@Override
-	public boolean check(List<InputData> lstIdo,String projectName) {
+	public boolean check(List<InputData> lstIdo,String product) {
 		Preconditions.checkNotNull(lstIdo);
 		report = new ArrayList<ReportData>();
 		HashSet<String> hashSet = new HashSet<String>();

@@ -11,16 +11,16 @@ import java.util.List;
  *
  */
 public class SourceChecker {
-	private String productVersion;
+	private String version;
 	private List<ReportData> lstReportData;
 	private Summary summary;
 
-	public String getProductVersion() {
-		return productVersion;
+	public String getVersion() {
+		return version;
 	}
 
-	public void setProductVersion(String productVersion) {
-		this.productVersion = productVersion;
+	public void setVersion(String version) {
+		this.version = version;
 	}
 
 	public List<ReportData> getLstReportData() {

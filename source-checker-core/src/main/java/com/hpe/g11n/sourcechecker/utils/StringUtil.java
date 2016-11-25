@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.hpe.g11n.sourcechecker.utils.constant.MessageConstant;
+import com.hpe.g11n.sourcechecker.utils.constant.Constant;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
@@ -123,11 +123,11 @@ public class StringUtil {
 	
 	public static Config loadConfig(String projectName){
 		String configName = "%1$s"+projectName+".conf";
-        String preFix=String.format(MessageConstant.PROJECT_CONFIG_PATH,File.separator);
+        String preFix=String.format(Constant.PRODUCT_CONFIG_PATH,File.separator);
         String fileName=String.format(configName,File.separator);
-        String passInDir=System.getProperty(MessageConstant.PROJECT_CONFIG_DIR);
+        String passInDir=System.getProperty(Constant.PRODUCT_CONFIG_DIR);
         if(passInDir == null){
-            passInDir = System.getProperty(MessageConstant.USER_DIR);
+            passInDir = System.getProperty(Constant.USER_DIR);
             fileName = preFix + fileName;
         }
         return ConfigFactory.parseFileAnySyntax(Paths.get(passInDir, fileName).toFile());
