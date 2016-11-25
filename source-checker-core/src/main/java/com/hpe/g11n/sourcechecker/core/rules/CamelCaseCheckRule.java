@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.hpe.g11n.sourcechecker.core.IRule;
 import com.hpe.g11n.sourcechecker.core.annotation.RuleData;
+import com.hpe.g11n.sourcechecker.core.spellingcheck.jazzy.HashMapDictionarySpellCheck;
 import com.hpe.g11n.sourcechecker.pojo.InputData;
 import com.hpe.g11n.sourcechecker.pojo.ReportData;
 import com.hpe.g11n.sourcechecker.pojo.ReportDataCount;
@@ -37,6 +38,7 @@ public class CamelCaseCheckRule implements IRule{
 	private List<ReportData> report =null;
 	private Config config;
 	private Config productConfig;
+	private HashMapDictionarySpellCheck spellingCheck = new HashMapDictionarySpellCheck();
 
 	public CamelCaseCheckRule(){
 
@@ -79,7 +81,9 @@ public class CamelCaseCheckRule implements IRule{
 			if(whitelist !=null && whitelist.size()>0){
 				if(!StringUtil.isWhiteList(whitelist,ido.getSourceString())){
 					if (!StringUtil.getStringWithChar(ido.getSourceString().trim()).contains(" ")
-							&& (StringUtil.pattern(ido.getSourceString().trim(),RulePatternConstant.CAMEL_CASE_CHECK_RULE))) {
+							&& (StringUtil.pattern(ido.getSourceString().trim(),RulePatternConstant.CAMEL_CASE_CHECK_RULE))
+							&& !spellingCheck.isInDictionary(ido.getSourceString())
+							) {
 						hitStrCount++;
 						int hs = hashSet.size();
 						hashSet.add(ido.getSourceString());
@@ -98,7 +102,9 @@ public class CamelCaseCheckRule implements IRule{
 				}
 			}else{
 				if (!StringUtil.getStringWithChar(ido.getSourceString().trim()).contains(" ")
-						&& (StringUtil.pattern(ido.getSourceString().trim(),RulePatternConstant.CAMEL_CASE_CHECK_RULE))) {
+						&& (StringUtil.pattern(ido.getSourceString().trim(),RulePatternConstant.CAMEL_CASE_CHECK_RULE))
+						&& !spellingCheck.isInDictionary(ido.getSourceString())
+						) {
 					hitStrCount++;
 					int hs = hashSet.size();
 					hashSet.add(ido.getSourceString());

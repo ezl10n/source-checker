@@ -33,8 +33,10 @@ import com.typesafe.config.Config;
 @RuleData(id="CapitalCheckRule",name=Constant.CAPITAL,order=5,ruleClass = CapitalCheckRule.class)
 public class CapitalCheckRule implements IRule{
 	private final Logger log = LoggerFactory.getLogger(getClass());
+	private static final String KEY_WORDS = "psl.psl-generate-sourcechecker-report.date-time-format";
 	private static final String CAPITAL_WHITELIST="psl.source-checker-white-list.Capital";
 	private List<ReportData> report =null;
+	private List<String> keywords;
 	private Config config;
 	private Config productConfig;
 	private HashMapDictionarySpellCheck spellingCheck = new HashMapDictionarySpellCheck();
@@ -51,6 +53,7 @@ public class CapitalCheckRule implements IRule{
 	@Override
 	public void setConfig(Config config) {
 		this.config=config;
+		keywords = this.config.getStringList(KEY_WORDS);
 	}
 	
 	@Override
@@ -82,7 +85,17 @@ public class CapitalCheckRule implements IRule{
 				if(!StringUtil.isWhiteList(whitelist,ido.getSourceString())){
 					if (StringUtil.pattern(ido.getSourceString(),RulePatternConstant.CAPITAL_CHECK_RULE)
 							&& ido.getSourceString().trim().length()>1) {
-//						if(!spellingCheck.isInDictionary(ido.getSourceString())){
+						String sourceString = getNoDateFormatString(ido.getSourceString());
+						String[] words = StringUtil.getWordsFromString(sourceString);
+						boolean result = false;
+						for(String word:words){
+							word = StringUtil.getStringWithChar(word);
+							if(StringUtil.isRightWord(word) && !spellingCheck.isInDictionary(word)){
+								result = true;
+								break;
+							}
+						}
+						if(result){
 							hitStrCount++;
 							int hs = hashSet.size();
 							hashSet.add(ido.getSourceString());
@@ -97,13 +110,23 @@ public class CapitalCheckRule implements IRule{
 									Constant.CAPITAL,MessageConstant.CAPITAL_MSG1_START + ido.getSourceString() + MessageConstant.CAPITAL_MSG1_END,
 									ido.getFileVersion(),null));
 							flag = true;
-//						}
+						}
 					}
 				}
 			}else{
 				if (StringUtil.pattern(ido.getSourceString(),RulePatternConstant.CAPITAL_CHECK_RULE)
 						&& ido.getSourceString().trim().length()>1) {
-//					if(!spellingCheck.isInDictionary(ido.getSourceString())){
+					String sourceString = getNoDateFormatString(ido.getSourceString());
+					String[] words = StringUtil.getWordsFromString(sourceString);
+					boolean result = false;
+					for(String word:words){
+						word = StringUtil.getStringWithChar(word);
+						if(StringUtil.isRightWord(word) && !spellingCheck.isInDictionary(word)){
+							result = true;
+							break;
+						}
+					}
+					if(result){
 						hitStrCount++;
 						int hs = hashSet.size();
 						hashSet.add(ido.getSourceString());
@@ -118,7 +141,7 @@ public class CapitalCheckRule implements IRule{
 								Constant.CAPITAL,MessageConstant.CAPITAL_MSG1_START + ido.getSourceString() + MessageConstant.CAPITAL_MSG1_END,
 								ido.getFileVersion(),null));
 						flag = true;
-//					}
+					}
 				}
 			}
 			if(log.isDebugEnabled()){
@@ -130,5 +153,14 @@ public class CapitalCheckRule implements IRule{
 				duplicatedStringCount,duplicatedWordCount, hashSet.size(),validatedWordCount,lstIdo.size(), totalWordCount,new BigDecimal(0));
 		report.add(new ReportData(null,null,null,null,null,null,null,reportDataCount));
 		return flag;
+	}
+	
+	private String getNoDateFormatString(String string){
+		for(String k : keywords) {
+			if (string.contains(k.trim())){
+				string = string.replaceAll(k.trim(), "");
+			}
+		}
+		return string;
 	}
 }

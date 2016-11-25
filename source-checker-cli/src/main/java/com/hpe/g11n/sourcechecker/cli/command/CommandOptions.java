@@ -113,23 +113,28 @@ public class CommandOptions {
 			if (Strings.isNullOrEmpty(product)) {
 				logger.debug("-p or --input is need to set product!");
 				flag = false;
+				return flag;
 			}
 			if(StringUtil.pattern(product, RulePatternConstant.PRODUCT_FORMAT)){
 				logger.debug("product can not contains \"[\",\"]\",\"/\",\"\\\",\":\",\"*\",\"?\",\"<\",\">\" and \"|\"");
 				flag = false; 
+				return flag;
 		     }
 			if (Strings.isNullOrEmpty(version)) {
 				logger.debug("-v or --input is need to set version!");
 				flag = false;
+				return flag;
 			}
 			if (Strings.isNullOrEmpty(scope)) {
 				logger.debug("-s or --input is need to set scope!");
 				flag = false;
+				return flag;
 			}
 			File file;
 			if (Strings.isNullOrEmpty(sourceUrl)) {
 				logger.debug("-i or --input is need to set source url!");
 				flag = false;
+				return flag;
 			}
 			String[] paths = sourceUrl.split(";");
 			for(String path:paths){
@@ -137,27 +142,30 @@ public class CommandOptions {
 				if(!file.exists()){
 					logger.debug("The \"" + path + "\" is not esists!");
 					flag = false;
-					break;
+					return flag;
 				}
 				if(!file.isFile()){
 					logger.debug("The \"" + path + "\" is not a file!");
 					flag = false;
-					break;
+					return flag;
 				}
 			}
 			if (Strings.isNullOrEmpty(outputUrl)) {
 				logger.debug("-o or --output is need to set output url!");
 				flag = false;
+				return flag;
 			}
 			file = new File(outputUrl);
 			if(!file.isDirectory()){
 				logger.debug("The \"" + outputUrl + "\" is not directory!");
 				flag = false;
+				return flag;
 			}
 			
 			if (selectRules == null || selectRules.size() == 0) {
 				logger.debug("-r or --rules is need to set rules index to be select !");
 				flag = false;
+				return flag;
 			}
 
 		} catch (Exception e) {
