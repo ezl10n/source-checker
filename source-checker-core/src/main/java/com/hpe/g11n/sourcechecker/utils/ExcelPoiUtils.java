@@ -142,7 +142,7 @@ public class ExcelPoiUtils {
         Sheet detailSheet = wb.createSheet(detail.getName());
         //write detail header
         Row detailRow = detailSheet.createRow(0);
-        for(int k=0;k<detail.getHeader().size();k++){
+        for(int k=0;k<detail.getHeader().size()-1;k++){
         	Cell headCell = detailRow.createCell(k);
         	headCell.setCellValue(detail.getHeader().get(k));
             headCell.setCellStyle(getHeaderStyle(wb));
