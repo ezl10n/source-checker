@@ -9,16 +9,15 @@ import org.junit.Test;
 import com.hpe.g11n.sourcechecker.adapter.impl.Adapter;
 
 public class AdapterTest {
-	Adapter adapter =new Adapter();
+	Adapter adapter =new Adapter("C:\\configPath");
 	@Test
 	public void testExecute(){
-		
 		String product = "LR";
 		String version ="V1.0";
 		String scope ="All";
 		String sourcePath ="C:\\tmp\\psl generate sorucechecker report\\ALI.lpu";
 		String targetPath ="C:\\tmp";
-		String rules ="0,1,2";
+		String rules ="0,1,2,3,4,5,6,7";
 		Map<String,String> paramMap = new HashMap<String,String>();
 		paramMap.put("-p", product);
 		paramMap.put("-v", version);

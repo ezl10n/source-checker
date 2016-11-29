@@ -13,4 +13,5 @@ public interface IRule {
 	boolean check(List<InputData> lstIdo,String product);
 	List<ReportData> gatherReport();
 	void setConfig(Config config);
+	void setConfigPath(String configPath);
 }

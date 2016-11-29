@@ -25,12 +25,15 @@ import com.typesafe.config.Config;
 public class SpecialPatternsCheckRule implements IRule{
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	private List<ReportData> report =null;
-	
 	boolean flag = false;
 	
 	public SpecialPatternsCheckRule(){
-
+		
 	}
+	@Override
+	public void setConfigPath(String configPath) {
+	}
+	
 	@Override
 	public List<ReportData> gatherReport() {
 		return report;

@@ -15,16 +15,17 @@ import com.hpe.g11n.sourcechecker.gui.tasks.SourceCheckerCommand;
 import com.hpe.g11n.sourcechecker.utils.constant.Constant;
 
 public class Adapter implements IAdapter {
-	protected Injector injector = Guice.createInjector(new CoreModule(),
-            new ConfigModule(),new GUIModule());
-    SourceCheckerCommand sourceChecker = new SourceCheckerCommand();
-    public Adapter() {
-        injector.injectMembers(sourceChecker);
+    private String configPath;
+    public Adapter(String configPath){
+    	this.configPath = configPath;
     }
 
     @Override
 	public Map<String,String> execute(Map<String,String> paramMap) {
-    	
+    	Injector injector = Guice.createInjector(new CoreModule(),
+                new ConfigModule(configPath),new GUIModule());
+        SourceCheckerCommand sourceChecker = new SourceCheckerCommand();
+        injector.injectMembers(sourceChecker);
     	String product=paramMap.get("-p");
     	String version=paramMap.get("-v");
     	String scope=paramMap.get("-s");

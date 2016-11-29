@@ -54,7 +54,7 @@ public class ProductConfigImportViewController extends BaseController implements
 		if (fileChooser == null) {
 			fileChooser = new FileChooser();
 		}
-		config = StringUtil.loadConfig(product);
+		config = StringUtil.loadConfig(product,null);
 		lstConcatenation = config.getStringList(Constant.CONCATENATION_PATH);
 		lstCamelCase = config.getStringList(Constant.CAMELCASE_PATH); 
 		lstDateTimeFormat = config.getStringList(Constant.DATETIMEFORMAT_PATH); 

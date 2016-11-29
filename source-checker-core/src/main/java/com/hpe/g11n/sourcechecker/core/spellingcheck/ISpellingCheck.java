@@ -1,10 +1,6 @@
 package com.hpe.g11n.sourcechecker.core.spellingcheck;
 
-import java.io.File;
 import java.util.List;
-
-import com.hpe.g11n.sourcechecker.utils.constant.Constant;
-import com.hpe.g11n.sourcechecker.utils.constant.MessageConstant;
 
 /**
  * Created with IntelliJ IDEA.
@@ -50,14 +46,5 @@ public interface ISpellingCheck {
 		return result;
 	}
 
-    default String getDictBasePath(){
-        String baseDir=System.getProperty(Constant.SPELLING_DICT_DIR);
-        if(baseDir == null || baseDir.isEmpty()){
-            String subDir=String.format(Constant.SPELLING_DICT_DIR1, File.separator);
-            baseDir=System.getProperty(Constant.USER_DIR)+subDir;
-        }
-        return baseDir;
-    }
-    
     boolean isInDictionary(String word);
 }

@@ -121,16 +121,20 @@ public class StringUtil {
 		 }
 	}
 	
-	public static Config loadConfig(String projectName){
-		String configName = "%1$s"+projectName+".conf";
-        String preFix=String.format(Constant.PRODUCT_CONFIG_PATH,File.separator);
-        String fileName=String.format(configName,File.separator);
-        String passInDir=System.getProperty(Constant.PRODUCT_CONFIG_DIR);
-        if(passInDir == null){
-            passInDir = System.getProperty(Constant.USER_DIR);
-            fileName = preFix + fileName;
-        }
-        return ConfigFactory.parseFileAnySyntax(Paths.get(passInDir, fileName).toFile());
+	public static Config loadConfig(String projectName,String configPath){
+		if(configPath == null || "".equals(configPath)){
+			String configName = "%1$s"+projectName+".conf";
+	        String preFix=String.format(Constant.PRODUCT_CONFIG_PATH,File.separator);
+	        String fileName=String.format(configName,File.separator);
+	        String passInDir=System.getProperty(Constant.PRODUCT_CONFIG_DIR);
+	        if(passInDir == null){
+	            passInDir = System.getProperty(Constant.USER_DIR);
+	            fileName = preFix + fileName;
+	        }
+	        return ConfigFactory.parseFileAnySyntax(Paths.get(passInDir, fileName).toFile());
+		}else{
+			return ConfigFactory.parseFileAnySyntax(new File(configPath + "/productConfig/" + projectName+".conf"));
+		}
     }
 	
 	public static String getNewString(String details){

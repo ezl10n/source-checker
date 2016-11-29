@@ -24,6 +24,10 @@ public class SourceCheckerRuleManager implements ISourceChecker{
     @Inject
     @Named("sourceCheckerConfig")
     Config config;
+    
+    @Inject
+    @Named("configPath")
+    String configPath;
 
     public SourceCheckerRuleManager() {
 
@@ -38,6 +42,7 @@ public class SourceCheckerRuleManager implements ISourceChecker{
             try {
                 IRule rule= (IRule) c.newInstance();
                 rule.setConfig(config);
+                rule.setConfigPath(configPath);
                 checkRules.add((rule));
             } catch (InstantiationException e) {
                 log.error("can't instance IRule:" + c, e);

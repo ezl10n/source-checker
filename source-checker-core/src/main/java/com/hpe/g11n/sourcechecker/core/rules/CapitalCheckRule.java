@@ -39,10 +39,16 @@ public class CapitalCheckRule implements IRule{
 	private List<String> keywords;
 	private Config config;
 	private Config productConfig;
-	private HashMapDictionarySpellCheck spellingCheck = new HashMapDictionarySpellCheck();
-	
+	private String configPath;
+	 private HashMapDictionarySpellCheck spellingCheck = new HashMapDictionarySpellCheck(configPath);
 	public CapitalCheckRule(){
 
+	}
+	
+	@Override
+	public void setConfigPath(String configPath) {
+		this.configPath = configPath;
+		
 	}
 	
 	@Override
@@ -58,8 +64,9 @@ public class CapitalCheckRule implements IRule{
 	
 	@Override
 	public boolean check(List<InputData> lstIdo,String product) {
+//		HashMapDictionarySpellCheck spellingCheck = new HashMapDictionarySpellCheck(configPath);
 		List<String> whitelist=this.config.getStringList(CAPITAL_WHITELIST);
-		productConfig = StringUtil.loadConfig(product);
+		productConfig = StringUtil.loadConfig(product,configPath);
 		if(!productConfig.isEmpty()){
 			List<String> projectWhitelist = productConfig.getStringList(Constant.CAPITAL_PATH);
 			whitelist.addAll(projectWhitelist);

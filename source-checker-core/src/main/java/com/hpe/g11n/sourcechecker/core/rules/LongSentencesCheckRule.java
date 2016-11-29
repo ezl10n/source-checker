@@ -49,6 +49,10 @@ public class LongSentencesCheckRule implements IRule{
 	}
 	
 	@Override
+	public void setConfigPath(String configPath) {
+	}
+	
+	@Override
 	public boolean check(List<InputData> lstIdo,String product) {
 		Preconditions.checkNotNull(lstIdo);
 		boolean flag = false;

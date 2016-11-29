@@ -15,7 +15,7 @@ public class HashMapDictionarySpellCheckTest {
 
     @Test
     public void testIsCorrect() {
-        HashMapDictionarySpellCheck checker = new HashMapDictionarySpellCheck();
+        HashMapDictionarySpellCheck checker = new HashMapDictionarySpellCheck(null);
         Assert.assertEquals(true, checker.isCorrect("hello"));
         Assert.assertEquals(false, checker.isCorrect("hxllx"));
         Assert.assertEquals(true, checker.isCorrect("AWT"));
@@ -23,7 +23,7 @@ public class HashMapDictionarySpellCheckTest {
 
     @Test
     public void testGetSuggestions() {
-        HashMapDictionarySpellCheck checker = new HashMapDictionarySpellCheck();
+        HashMapDictionarySpellCheck checker = new HashMapDictionarySpellCheck(null);
         Assert.assertTrue(checker.getSuggestions("hellx").size() > 0);
         Assert.assertTrue(checker.getSuggestions("oy").size() > 0);
     }

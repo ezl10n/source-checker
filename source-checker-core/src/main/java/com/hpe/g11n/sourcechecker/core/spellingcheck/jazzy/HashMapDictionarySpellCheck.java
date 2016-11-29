@@ -8,13 +8,11 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.common.base.Preconditions;
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.hpe.g11n.sourcechecker.core.spellingcheck.ISpellingCheck;
+import com.hpe.g11n.sourcechecker.utils.constant.Constant;
 import com.swabunga.spell.engine.SpellDictionary;
 import com.swabunga.spell.engine.SpellDictionaryHashMap;
 import com.swabunga.spell.event.SpellChecker;
-import com.typesafe.config.Config;
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,17 +29,15 @@ public class HashMapDictionarySpellCheck implements ISpellingCheck {
     private int threshold = 0;
     
     Vector dictionaries = new Vector();
+    private String configPath;
 
-    @Inject
-    @Named("sourceCheckerConfig")
-    Config config;
-
-    public HashMapDictionarySpellCheck() {
+    public HashMapDictionarySpellCheck(String path) {
         try {
+        	this.configPath = path;
             SpellDictionaryHashMap defaultDict = new SpellDictionaryHashMap();
             spellCheck = new SpellChecker(defaultDict);
             //try to add all  file as dictionary into spellcheck.
-            File[] wordDicts = Paths.get(getDictBasePath(), dict).toFile().listFiles();
+            File[] wordDicts = Paths.get(getDictBasePath(configPath), dict).toFile().listFiles();
             for (File f : wordDicts) {
                 if (f.isFile()) {
                 	SpellDictionaryHashMap spellDictionary = new SpellDictionaryHashMap(f);
@@ -76,5 +72,19 @@ public class HashMapDictionarySpellCheck implements ISpellingCheck {
     	      if (dictionary.isCorrect(word)) return true;
     	    }
     	 return false;
+    }
+    
+    private String getDictBasePath(String configPath){
+    	if(configPath == null){
+    		String baseDir=System.getProperty(Constant.SPELLING_DICT_DIR);
+            if(baseDir == null || baseDir.isEmpty()){
+                String subDir=String.format(Constant.SPELLING_DICT_DIR1, File.separator);
+                baseDir=System.getProperty(Constant.USER_DIR)+subDir;
+            }
+            return baseDir;
+    	}else{
+    		 return configPath + "\\dict";
+    	}
+        
     }
 }

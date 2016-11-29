@@ -30,6 +30,12 @@ public class StringsMixedCheckRule implements IRule{
 	public StringsMixedCheckRule(){
 
 	}
+	
+	@Override
+	public void setConfigPath(String configPath) {
+		
+	}
+	
 	@Override
 	public List<ReportData> gatherReport() {
 		return report;

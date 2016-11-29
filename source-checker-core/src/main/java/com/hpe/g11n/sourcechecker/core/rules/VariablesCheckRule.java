@@ -44,6 +44,11 @@ public class VariablesCheckRule implements IRule{
 	public VariablesCheckRule(){
 
 	}
+	
+	@Override
+	public void setConfigPath(String configPath) {
+		
+	}
 
 	@Override
 	public List<ReportData> gatherReport() {

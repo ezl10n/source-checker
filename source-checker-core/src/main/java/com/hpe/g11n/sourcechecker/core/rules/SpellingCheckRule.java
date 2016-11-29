@@ -40,13 +40,12 @@ public class SpellingCheckRule implements IRule{
 	private List<String> spelling;
 	private Config config;
 	private Config productConfig;
+	
+	private String configPath;
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
-
+	private HashMapDictionarySpellCheck spellingCheck = new HashMapDictionarySpellCheck(configPath);
 	private List<ReportData> report =null;
-	
-	private HashMapDictionarySpellCheck spellingCheck = new HashMapDictionarySpellCheck();
-	
 	public SpellingCheckRule(){
 
 	}
@@ -59,13 +58,19 @@ public class SpellingCheckRule implements IRule{
 	}
 	
 	@Override
+	public void setConfigPath(String configPath) {
+		this.configPath = configPath;
+	}
+	
+	@Override
 	public List<ReportData> gatherReport() {
 		return report;
 	}
 	@Override
 	public boolean check(List<InputData> lstIdo,String product) {
+//		HashMapDictionarySpellCheck spellingCheck = new HashMapDictionarySpellCheck(configPath);
 		List<String> whitelist = config.getStringList(SPELLING_WHITELIST);
-		productConfig = StringUtil.loadConfig(product);
+		productConfig = StringUtil.loadConfig(product,configPath);
 		if(!productConfig.isEmpty()){
 			List<String> projectWhitelist = productConfig.getStringList(Constant.SPELLING_PATH);
 			whitelist.addAll(projectWhitelist);

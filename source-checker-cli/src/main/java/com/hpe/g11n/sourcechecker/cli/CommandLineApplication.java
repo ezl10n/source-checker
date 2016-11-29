@@ -19,7 +19,7 @@ import com.hpe.g11n.sourcechecker.gui.tasks.SourceCheckerCommand;
 
 public class CommandLineApplication {
     protected Injector injector = Guice.createInjector(new CoreModule(),
-            new ConfigModule(),new GUIModule() ,new CliModule());
+            new ConfigModule(null),new GUIModule() ,new CliModule());
     CommandOptions options = new CommandOptions();
     SourceCheckerCommand task = new SourceCheckerCommand();
     public CommandLineApplication() {

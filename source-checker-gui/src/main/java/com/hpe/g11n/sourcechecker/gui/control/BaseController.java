@@ -25,7 +25,7 @@ import com.hpe.g11n.sourcechecker.gui.guice.GUIModule;
 public abstract class BaseController {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
     protected Injector injector= Guice.createInjector(new CoreModule(),
-            new ConfigModule(), new GUIModule());
+            new ConfigModule(null), new GUIModule());
     public BaseController(){
         injector.injectMembers(this);
     }

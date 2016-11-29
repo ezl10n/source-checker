@@ -54,7 +54,7 @@ public class CoreModule extends AbstractModule {
         bind(ISourceChecker.class).to(SourceCheckerRuleManager.class);
         bind(new TypeLiteral<List<Class>>(){}).annotatedWith(Names.named("ruleClasses")).toInstance(getRules());
         bind(new TypeLiteral<List<String>>(){}).annotatedWith(Names.named("ruleNames")).toInstance(checkboxs());
-        bind(ISpellingCheck.class).to(HashMapDictionarySpellCheck.class);
+//        bind(ISpellingCheck.class).to(HashMapDictionarySpellCheck.class);
     }
 
     @Provides
