@@ -2,8 +2,6 @@ package com.hpe.g11n.sourcechecker.fileparser.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,37 +46,16 @@ public class LPUFileParser extends BaseParser {
 		log.debug("PassoloApp to read file start at:" + startTime);
 		try {
 			IPslSourceLists sourceLists = project.getSourceLists();
-//			ExecutorService service;
-//			if(sourceLists.toList().size()<100){
-				for (int i = 0; i < sourceLists.toList().size(); i++) {
-					List<IPslSourceString> lstSourceString = sourceLists.toList()
-							.get(i).getSourceStrings();
-					String sourceFileName = sourceLists.toList().get(i)
-							.getSourceFile();
+			for (int i = 0; i < sourceLists.toList().size(); i++) {
+				List<IPslSourceString> lstSourceString = sourceLists.toList()
+						.get(i).getSourceStrings();
+				String sourceFileName = sourceLists.toList().get(i)
+						.getSourceFile();
 
-					lstIdo = getInputData(filePath, scope, sourceFileName,
-							lstSourceString);
-				}
-//			}else{
-//				service = Executors.newFixedThreadPool(sourceLists.toList().size());
-//				for (int i = 0; i < sourceLists.toList().size(); i++) {
-//					List<IPslSourceString> lstSourceString = sourceLists.toList()
-//							.get(i).getSourceStrings();
-//					String sourceFileName = sourceLists.toList().get(i)
-//							.getSourceFile();
-//
-//					service.execute(new Runnable() {
-//						public void run() {
-//							lstIdo = getInputData(filePath, state, sourceFileName,
-//									lstSourceString);
-//						}
-//					});
-//				}
-//				if(service.isTerminated()){
-//					service.shutdown();
-//				}
-//			}
-			
+				lstIdo = getInputData(filePath, scope, sourceFileName,
+						lstSourceString);
+			}
+		
 			
 		} catch (Exception ex) {
 			log.debug("Failed to check, the version of Passolo is not 2011");

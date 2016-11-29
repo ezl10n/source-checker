@@ -1,7 +1,9 @@
 package com.hpe.g11n.sourcechecker.gui;
 
 
-import com.hpe.g11n.sourcechecker.gui.control.MainViewController;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,9 +13,7 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
+import com.hpe.g11n.sourcechecker.gui.control.MainViewController;
 
 
 public class Application extends javafx.application.Application {

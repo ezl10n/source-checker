@@ -20,8 +20,6 @@ import com.google.inject.name.Names;
 import com.hpe.g11n.sourcechecker.core.ISourceChecker;
 import com.hpe.g11n.sourcechecker.core.SourceCheckerRuleManager;
 import com.hpe.g11n.sourcechecker.core.annotation.RuleData;
-import com.hpe.g11n.sourcechecker.core.spellingcheck.ISpellingCheck;
-import com.hpe.g11n.sourcechecker.core.spellingcheck.jazzy.HashMapDictionarySpellCheck;
 import com.hpe.g11n.sourcechecker.utils.constant.Constant;
 
 
@@ -54,7 +52,6 @@ public class CoreModule extends AbstractModule {
         bind(ISourceChecker.class).to(SourceCheckerRuleManager.class);
         bind(new TypeLiteral<List<Class>>(){}).annotatedWith(Names.named("ruleClasses")).toInstance(getRules());
         bind(new TypeLiteral<List<String>>(){}).annotatedWith(Names.named("ruleNames")).toInstance(checkboxs());
-//        bind(ISpellingCheck.class).to(HashMapDictionarySpellCheck.class);
     }
 
     @Provides
