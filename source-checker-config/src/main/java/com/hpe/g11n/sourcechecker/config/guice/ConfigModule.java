@@ -24,7 +24,7 @@ public class ConfigModule extends AbstractModule {
     protected void configure() {
         bind(Config.class).annotatedWith(Names.named(Constant.SOURCE_INJECT_CONFIG_NAME)).toInstance(loadConfig(configPath));
         bind(Config.class).annotatedWith(Names.named(Constant.TEMPLET_INJECT_CONFIG_NAME)).toInstance(loadTempletConfig());
-        if(configPath == null || "".equals(configPath)){
+        if(configPath != null && !"".equals(configPath)){
         	bind(String.class).annotatedWith(Names.named("configPath")).toInstance(getConfigPath());	
         }else{
         	bind(String.class).annotatedWith(Names.named("configPath")).toInstance("");
