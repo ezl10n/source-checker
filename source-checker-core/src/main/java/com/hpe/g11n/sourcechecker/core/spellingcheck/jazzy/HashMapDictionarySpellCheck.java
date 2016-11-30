@@ -11,6 +11,7 @@ import com.google.common.base.Preconditions;
 import com.hpe.g11n.sourcechecker.core.spellingcheck.ISpellingCheck;
 import com.hpe.g11n.sourcechecker.utils.constant.Constant;
 import com.swabunga.spell.engine.SpellDictionary;
+import com.swabunga.spell.engine.SpellDictionaryASpell;
 import com.swabunga.spell.engine.SpellDictionaryHashMap;
 import com.swabunga.spell.event.SpellChecker;
 
@@ -68,8 +69,11 @@ public class HashMapDictionarySpellCheck implements ISpellingCheck {
     public boolean isInDictionary(String word){
     	 Preconditions.checkNotNull(dictionaries);
     	 for (Enumeration e = dictionaries.elements(); e.hasMoreElements();) {
-    	      SpellDictionary dictionary = (SpellDictionary) e.nextElement();
-    	      if (dictionary.isCorrect(word)) return true;
+    		 SpellDictionaryHashMap dictionary = (SpellDictionaryHashMap) e.nextElement();
+    	      List possible = dictionary.getWords(dictionary.getCode(word));
+       	      if(possible.contains(word)){
+       	    	 return true;
+       	      }
     	    }
     	 return false;
     }

@@ -481,6 +481,7 @@ public class MainViewController extends BaseController  implements Initializable
 //            passInDir = System.getProperty(Constant.USER_DIR);
 //        }
 //		File file = Paths.get(passInDir, preFix).toFile();
+		
 		File file = new File(getProductConfigPath());
 		File[] files = file.listFiles();
 		e_menu.getItems().clear();
