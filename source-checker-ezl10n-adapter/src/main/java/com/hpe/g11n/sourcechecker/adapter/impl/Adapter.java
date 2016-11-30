@@ -12,7 +12,6 @@ import com.hpe.g11n.sourcechecker.config.guice.ConfigModule;
 import com.hpe.g11n.sourcechecker.core.guice.CoreModule;
 import com.hpe.g11n.sourcechecker.gui.guice.GUIModule;
 import com.hpe.g11n.sourcechecker.gui.tasks.SourceCheckerCommand;
-import com.hpe.g11n.sourcechecker.utils.constant.Constant;
 
 public class Adapter implements IAdapter {
     private String configPath;
@@ -49,9 +48,7 @@ public class Adapter implements IAdapter {
 
     @Override
     public List<String> getProduct(){
-		String preFix = String.format(Constant.PRODUCT_CONFIG_PATH,
-				File.separator);
-		File file = new File(preFix);
+		File file = new File(configPath + "\\productConfig");
 		File[] files = file.listFiles();
 		List<String> lstName = new ArrayList<String>();
 		if (files.length > 0) {
