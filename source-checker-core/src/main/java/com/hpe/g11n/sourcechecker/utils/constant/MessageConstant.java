@@ -43,7 +43,7 @@ public class MessageConstant {
 	 public static final String PASSOLO_RUN_MSG1="Passolo is running. Please manually shut it down.";
 	 public static final String PASSOLO_NO_LICENSE_MSG1="No Passolo license available. Please check if Passolo is already in run.";
 	 public static final String NO_PRODUCT_MSG1="Go to Menu -> New to create a new PRODUCT";
-	 public static final String CLOSE_CLICK="Files ware processing,Do you want to cancle?";
+	 public static final String CLOSE_CLICK="Source file checking is in progress, do you really want to cancel it?";
 	 public static final String NOT_FILE="It is not file!";
 	 public static final String REFRESH_MSG1="New product configuration created, please click \"Refresh\" to load it.";
 	 public static final String UPDATE_MSG1="Update product config is success!";
