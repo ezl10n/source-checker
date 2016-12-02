@@ -40,7 +40,7 @@ public class CapitalCheckRule implements IRule{
 	private Config config;
 	private Config productConfig;
 	private String configPath;
-	 private HashMapDictionarySpellCheck spellingCheck = new HashMapDictionarySpellCheck(configPath);
+	private HashMapDictionarySpellCheck spellingCheck = new HashMapDictionarySpellCheck(configPath);
 	public CapitalCheckRule(){
 
 	}
