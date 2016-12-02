@@ -8,6 +8,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -23,6 +26,7 @@ import com.hpe.g11n.sourcechecker.pojo.SourceChecker;
 import com.hpe.g11n.sourcechecker.pojo.Summary;
 import com.hpe.g11n.sourcechecker.utils.DateUtil;
 import com.hpe.g11n.sourcechecker.utils.ExcelPoiUtils;
+import com.hpe.g11n.sourcechecker.utils.StringUtil;
 import com.hpe.g11n.sourcechecker.utils.constant.Constant;
 import com.hpe.g11n.sourcechecker.utils.constant.MessageConstant;
 import com.hpe.g11n.sourcechecker.xml.XMLHandler;
@@ -37,6 +41,7 @@ import com.hpe.g11n.sourcechecker.xml.XMLHandler;
  *
  */
 public class SourceCheckerTask extends Task<Void> {
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	private String product;
 	private String version;
 	private String scope;
@@ -65,6 +70,7 @@ public class SourceCheckerTask extends Task<Void> {
 
 	@Override
 	protected Void call() throws Exception {
+		log.debug("Source Checker "+ StringUtil.getVersion());
 		// output
 		SourceChecker sourceChecker = new SourceChecker();
 		sourceChecker.setVersion(Constant.PRODUCT_VERSION);

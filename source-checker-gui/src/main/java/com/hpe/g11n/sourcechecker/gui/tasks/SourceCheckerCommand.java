@@ -67,7 +67,7 @@ public class SourceCheckerCommand{
 	}
 
 	public Map<String,String> call() throws Exception {
-		log.debug("The product version is "+StringUtil.getVersion());
+		log.debug("Source Checker "+ StringUtil.getVersion());
 		// output
 		SourceChecker sourceChecker = new SourceChecker();
 		sourceChecker.setVersion(Constant.PRODUCT_VERSION);

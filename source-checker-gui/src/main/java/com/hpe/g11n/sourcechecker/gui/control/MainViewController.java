@@ -555,8 +555,8 @@ public class MainViewController extends BaseController  implements Initializable
 	@FXML
 	public void aboutVersion(){
 		String version = StringUtil.getVersion();
-		Alert alert=new Alert(Alert.AlertType.INFORMATION,"The product version is " + version);
-		alert.setHeaderText(Constant.INFORMATION);
+		Alert alert=new Alert(Alert.AlertType.INFORMATION,"");
+		alert.setHeaderText("Source Checker " + version);
 		alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
 			return;
 		});
