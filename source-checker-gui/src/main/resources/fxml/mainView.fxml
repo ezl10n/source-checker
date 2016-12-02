@@ -63,6 +63,7 @@
             <Menu fx:id="deleteMenu" mnemonicParsing="false" text="Delete" />
             <items>
               <MenuItem fx:id="refresh" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
+			  <MenuItem fx:id="about" mnemonicParsing="false" onAction="#aboutVersion" text="About" />
             </items>
           </Menu>
         </menus>

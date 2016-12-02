@@ -211,12 +211,6 @@ public class MainViewController extends BaseController  implements Initializable
 			sourceUrl.setText(path.substring(0,path.length()-1));
 			chooseSourcePath = getDirectoryPath(path.substring(0,path.length()-1));
 		}
-//		final DirectoryChooser directoryChooser = new DirectoryChooser();
-//	    final File selectedDirectory =
-//	            directoryChooser.showDialog(root.getScene().getWindow());
-//	    if (selectedDirectory != null) {
-//	    	sourceUrl.setText(selectedDirectory.getAbsolutePath());
-//	    }
 	}
 
 	private String getDirectoryPath(String filePath){
@@ -556,6 +550,16 @@ public class MainViewController extends BaseController  implements Initializable
 				}
 			}
 		}
+	}
+	
+	@FXML
+	public void aboutVersion(){
+		String version = StringUtil.getVersion();
+		Alert alert=new Alert(Alert.AlertType.INFORMATION,"The product version is " + version);
+		alert.setHeaderText(Constant.INFORMATION);
+		alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
+			return;
+		});
 	}
 	
 	public String getProductConfigPath(){

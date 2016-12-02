@@ -1,10 +1,13 @@
 package com.hpe.g11n.sourcechecker.utils;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -153,5 +156,22 @@ public class StringUtil {
 	    List<String> lst = new ArrayList<String>();
 	    lst.addAll(set);
 	    return lst;
+	}
+	
+	public static Properties getProperties(){
+		InputStream inputStream = StringUtil.class.getClassLoader().getResourceAsStream("version.properties");  
+		 Properties p = new Properties();  
+	        try {  
+	            p.load(inputStream);  
+	            inputStream.close();  
+	        } catch (IOException e1) {  
+	            e1.printStackTrace();  
+	        }  
+		return p;
+	}
+	
+	public static String getVersion(){
+		Properties p = getProperties();
+		return p.getProperty("version");
 	}
 }

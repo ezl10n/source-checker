@@ -24,6 +24,7 @@ import com.hpe.g11n.sourcechecker.pojo.SourceChecker;
 import com.hpe.g11n.sourcechecker.pojo.Summary;
 import com.hpe.g11n.sourcechecker.utils.DateUtil;
 import com.hpe.g11n.sourcechecker.utils.ExcelPoiUtils;
+import com.hpe.g11n.sourcechecker.utils.StringUtil;
 import com.hpe.g11n.sourcechecker.utils.constant.Constant;
 import com.hpe.g11n.sourcechecker.utils.constant.MessageConstant;
 import com.hpe.g11n.sourcechecker.xml.XMLHandler;
@@ -66,6 +67,7 @@ public class SourceCheckerCommand{
 	}
 
 	public Map<String,String> call() throws Exception {
+		log.debug("The product version is "+StringUtil.getVersion());
 		// output
 		SourceChecker sourceChecker = new SourceChecker();
 		sourceChecker.setVersion(Constant.PRODUCT_VERSION);
