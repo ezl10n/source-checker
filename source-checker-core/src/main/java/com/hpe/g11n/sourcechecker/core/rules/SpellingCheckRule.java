@@ -44,6 +44,7 @@ public class SpellingCheckRule implements IRule{
 	private String configPath;
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
+	//非ezl10n集成用时打开以下（第48行）代码，注释掉第73行代码
 	private HashMapDictionarySpellCheck spellingCheck = new HashMapDictionarySpellCheck(configPath);
 	private List<ReportData> report =null;
 	public SpellingCheckRule(){
@@ -68,6 +69,7 @@ public class SpellingCheckRule implements IRule{
 	}
 	@Override
 	public boolean check(List<InputData> lstIdo,String product) {
+		//与ezl10n集成用时打开以下（第73行）代码，注释掉第48行代码
 //		HashMapDictionarySpellCheck spellingCheck = new HashMapDictionarySpellCheck(configPath);
 		List<String> whitelist = config.getStringList(SPELLING_WHITELIST);
 		productConfig = StringUtil.loadConfig(product,configPath);

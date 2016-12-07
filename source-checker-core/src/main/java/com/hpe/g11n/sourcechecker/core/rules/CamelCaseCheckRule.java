@@ -39,6 +39,7 @@ public class CamelCaseCheckRule implements IRule{
 	private Config config;
 	private Config productConfig;
     private String configPath;
+    //非ezl10n集成用时打开以下（第43行）代码，注释掉第67行代码
     private HashMapDictionarySpellCheck spellingCheck = new HashMapDictionarySpellCheck(configPath);
 	public CamelCaseCheckRule(){
 
@@ -62,6 +63,7 @@ public class CamelCaseCheckRule implements IRule{
 
 	@Override
 	public boolean check(List<InputData> lstIdo,String product) {
+		//与ezl10n集成用时打开以下（第67行）代码，注释掉第43行代码
 //		HashMapDictionarySpellCheck spellingCheck = new HashMapDictionarySpellCheck(configPath);
 
 		List<String> whitelist=this.config.getStringList(CAMELCASE_WHITELIST);

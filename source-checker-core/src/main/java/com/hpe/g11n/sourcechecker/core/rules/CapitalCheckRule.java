@@ -40,6 +40,7 @@ public class CapitalCheckRule implements IRule{
 	private Config config;
 	private Config productConfig;
 	private String configPath;
+	//非ezl10n集成用时打开以下（第43行）代码，注释掉第69行代码
 	private HashMapDictionarySpellCheck spellingCheck = new HashMapDictionarySpellCheck(configPath);
 	public CapitalCheckRule(){
 
@@ -64,6 +65,7 @@ public class CapitalCheckRule implements IRule{
 	
 	@Override
 	public boolean check(List<InputData> lstIdo,String product) {
+		//与ezl10n集成用时打开以下（第69行）代码，注释掉第43行代码
 //		HashMapDictionarySpellCheck spellingCheck = new HashMapDictionarySpellCheck(configPath);
 		List<String> whitelist=this.config.getStringList(CAPITAL_WHITELIST);
 		productConfig = StringUtil.loadConfig(product,configPath);

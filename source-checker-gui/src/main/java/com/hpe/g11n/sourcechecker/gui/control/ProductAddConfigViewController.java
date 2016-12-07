@@ -218,6 +218,7 @@ public class ProductAddConfigViewController extends BaseController implements
 	}
 
 	public String getTempletConfigPath() {
+		//在本地eclipse中运行时打开以下第222-第229行代码，注释掉第232-第238行代码
 //		String preFix = String.format(Constant.SOURCE_CONFIG_PATH,File.separator);
 //		String fileName = String.format(Constant.TEMPLET_CONFIG_NAME,File.separator);
 //		String passInDir = System.getProperty(Constant.SOURCE_CONFIG_DIR);
@@ -227,6 +228,7 @@ public class ProductAddConfigViewController extends BaseController implements
 //		}
 //		return fileName;
 		
+		//非本地eclipse中运行时打开以下第232-第238行代码，注释掉第222-第229行代码
 		String baseDir=System.getProperty(Constant.SOURCE_CONFIG_DIR);
 		String fileName = String.format(Constant.TEMPLET_CONFIG_NAME,File.separator);
 	        if(baseDir == null || baseDir.isEmpty()){
@@ -237,6 +239,7 @@ public class ProductAddConfigViewController extends BaseController implements
 	}
 
 	public String getProductConfigPath(String productName) {
+		//在本地eclipse中运行时打开以下第243-第251行代码，注释掉第254-第261行代码
 //		String preFix = String.format(Constant.PRODUCT_CONFIG_PATH,File.separator);
 //		String path = "%1$s" + productName + ".conf";
 //		String fileName = String.format(path, File.separator);
@@ -247,6 +250,7 @@ public class ProductAddConfigViewController extends BaseController implements
 //		}
 //		return fileName;
 		
+		//非本地eclipse中运行时打开以下第254-第261行代码，注释掉第243-第251行代码
 		 String baseDir=System.getProperty(Constant.PRODUCT_CONFIG_DIR);
 		 String path = "%1$s" + productName + ".conf";
 			String fileName = String.format(path, File.separator);
@@ -254,7 +258,7 @@ public class ProductAddConfigViewController extends BaseController implements
 	            String subDir = String.format(Constant.PRODUCT_CONFIG_PATH, File.separator);
 	            baseDir=System.getProperty(Constant.USER_DIR) + subDir;
 	        }
-	        return baseDir + fileName;
+	    return baseDir + fileName;
 	}
 
 	public void copyFile(String sourcePath, String targetPath) {

@@ -105,6 +105,7 @@ public class MainViewController extends BaseController  implements Initializable
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		//在本地eclipse中运行时打开以下第109-第114行代码，注释掉第117行代码
 //		String preFix = String.format(Constant.PRODUCT_CONFIG_PATH,File.separator);
 //		String passInDir=System.getProperty(Constant.SOURCE_CONFIG_DIR);
 //        if(passInDir == null || passInDir.isEmpty()){
@@ -112,6 +113,7 @@ public class MainViewController extends BaseController  implements Initializable
 //        }
 //		File file = Paths.get(passInDir, preFix).toFile();
 		
+		//非本地eclipse中运行时打开下面这句（第117行）代码，注释掉第109-第114行代码
 		File file = new File(getProductConfigPath());
 		
 		File[] files = file.listFiles();
@@ -469,6 +471,7 @@ public class MainViewController extends BaseController  implements Initializable
 	}
 	
 	public void initialize(Menu e_menu,Menu d_menu,ChoiceBox<String> choiceBox){
+		//在本地eclipse中运行时打开以下第475-第480行代码，注释掉第483行代码
 //		String preFix = String.format(Constant.PRODUCT_CONFIG_PATH,File.separator);
 //		String passInDir=System.getProperty(Constant.SOURCE_CONFIG_DIR);
 //        if(passInDir == null){
@@ -476,6 +479,7 @@ public class MainViewController extends BaseController  implements Initializable
 //        }
 //		File file = Paths.get(passInDir, preFix).toFile();
 		
+		//在本地eclipse中运行时打开以下这句（第483行）代码，注释掉第475-第480行代码
 		File file = new File(getProductConfigPath());
 		File[] files = file.listFiles();
 		e_menu.getItems().clear();
